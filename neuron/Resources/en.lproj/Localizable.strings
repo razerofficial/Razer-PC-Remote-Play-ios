@@ -1,0 +1,144 @@
+/* 
+  Localizable.strings
+  Razer PC Remote Play
+
+  Created by Ben Lai on 2024/10/22.
+  
+*/
+// add 20241216 v0.5 //
+"Computers" = "Computers";
+"All Computers" = "All Computers";
+"To pair a PC, it must be on the same network as your %@. Ensure your PC has Razer Cortex v11.0.+ installed and signed in with your Razer ID." = "To pair a PC, it must be on the same network as your %@. Ensure your PC has Razer Cortex v11.0.+ installed and signed in with your Razer ID.";
+"Paired computers" = "Paired computers";
+"Unpaired computers" = "Unpaired computers";
+"Unpaired" = "Unpaired";
+"Available" = "Available";
+"Unavailable" = "Unavailable";
+"Add PC manually" = "Add PC manually";
+"Enter the IP address of your computer." = "Enter the IP address of your computer.";
+"Streaming Options" = "Streaming Options";
+"Frame Pacing" = "Frame Pacing";
+"Display mode" = "Display mode";
+"[iPhone/iPad] Optimized" = "[iPhone/iPad] Optimized";
+"Duplicate PC Display" = "Duplicate PC Display";
+"Duplicate" = "Duplicate";
+"Your PC will create a virtual display matching your [iPhone/iPad]’s resolution and refresh rate of %1$s at %2$sHz and stream it to your [iPhone/iPad].\n\nAny screen connected to your PC will be temporarily disabled while streaming." = "Your PC will create a virtual display matching your [iPhone/iPad]’s resolution and refresh rate of %1$s at %2$sHz and stream it to your [iPhone/iPad].\n\nAny screen connected to your PC will be temporarily disabled while streaming.";
+"Video Bitrate" = "Video Bitrate";
+"Touch Screen Control" = "Touch Screen Control";
+"Your PC’s connected display will be streamed to your [iPhone/iPad] " = "Your PC’s connected display will be streamed to your [iPhone/iPad] ";
+"Enhances visuals with better contrast, brightness, and color range." = "Enhances visuals with better contrast, brightness, and color range.";
+"Virtual Trackpad" = "Virtual Trackpad";
+"Direct Touch" = "Direct Touch";
+"Mute host PC's Speakers While Streaming" = "Mute host PC's Speakers While Streaming";
+"Advanced Settings" = "Advanced Settings";
+"Low Latency" = "Low Latency";
+"Smoothest Video" = "Smoothest Video";
+"Limit Refresh Rate To 60Hz" = "Limit Refresh Rate To 60Hz";
+"Limit Screen Resolution To Safe Area" = "Limit Screen Resolution To Safe Area";
+"Restricts display size to avoid device's front camera" = "Restricts display size to avoid device's front camera.";
+"START PLAY" = "START PLAY";
+"Allow HDR" = "Allow HDR";
+"Requires your PC’s connected display to have HDR enabled." = "Requires your PC’s connected display to have HDR enabled.";
+"Pair" = "Pair";
+"Enable Local Network Access" = "Enable Local Network Access";
+"Welcome to Remote Play" = "Welcome to Remote Play";
+"Streaming Display Mode" = "Streaming Display Mode";
+"Remote Play is designed to enhance PC gaming on your mobile device through seamless integration with Razer Nexus." = "Remote Play is designed to enhance PC gaming on your mobile device through seamless integration with Razer Nexus.";
+"Connecting…" = "Connecting…";
+"Please ensure Razer Cortex is running on the same network." = "Please ensure Razer Cortex is running on the same network.";
+"Could not connect to host" = "Could not connect to host";
+"Input PC IP address" = "Input PC IP address";
+"Pairing Request" = "Pairing Request";
+"Enter the code on \"%@\" to complete pairing with your device.\n\nPin Code" = "Enter the code on \"%@\" to complete pairing with your device.\n\nPin Code";
+"Remote Play" = "Remote Play";
+"Unpair" = "Unpair";
+"Pairing Failed" = "Pairing Failed";
+"Pairing Successful" = "Pairing Successful";
+"%@ Pairing Failed" = "%@ Pairing Failed";
+"%@ Pairing Successful" = "%@ Pairing Successful";
+"Starting %@" = "Starting %@";
+"platform initialization in progress" = "platform initialization in progress";
+"name resolution in progress" = "name resolution in progress";
+"audio stream initialization in progress" = "audio stream initialization in progress";
+"RTSP handshake in progress" = "RTSP handshake in progress";
+"control stream initialization in progress" = "control stream initialization in progress";
+"video stream initialization in progress" = "video stream initialization in progress";
+"input stream initialization in progress" = "input stream initialization in progress";
+"control stream establishment in progress" = "control stream establishment in progress";
+"video stream establishment in progress" = "video stream establishment in progress";
+"audio stream establishment in progress" = "audio stream establishment in progress";
+"input stream establishment in progress" = "input stream establishment in progress";
+"Wake computer" = "Wake computer";
+"View on home" = "View on home";
+"Missing XML element. Please try again." = "Missing XML element. Please try again.";
+"You cannot pair while a previous session is still running on the host PC. Quit any running games or reboot the host PC, then try pairing again." = "You cannot pair while a previous session is still running on the host PC. Quit any running games or reboot the host PC, then try pairing again.";
+"Pairing was declined by the host PC. Please try again." = "Pairing was declined by the host PC. Please try again.";
+"Another pairing attempt is already in progress." = "Another pairing attempt is already in progress.";
+"Pairing stage #[number] failed" = "Pairing stage #[number] failed";
+"Pairing failed. Please try again." = "Pairing failed. Please try again.";
+"Incorrect PIN. Please try again." = "Incorrect PIN. Please try again.";
+"Welcome to &applabel;" = "Welcome to &applabel;";
+"Automatically Quit Games" = "Automatically Quit Games";
+"Attempt to automatically close games when finished streaming." = "Attempt to automatically close games when finished streaming.";
+"Instantly" = "Instantly";
+"Wait 30s" = "Wait 30s";
+"Wait 5min" = "Wait 5min";
+"Never" = "Never";
+"To enable seamless streaming between your PC and Remote Play, please allow Local Network access. Go to Settings > Privacy & Security > Local Network and enable access for Remote Play." = "To enable seamless streaming between your PC and Remote Play, please allow Local Network access. Go to Settings > Privacy & Security > Local Network and enable access for Remote Play.";
+"Add" = "Add";
+// add 20241220 v0.5 missing string //
+"Connection Error" = "Connection Error";
+"Connection Terminated" = "Connection Terminated";
+"Check your firewall and port forwarding rules for port(s):" = "Check your firewall and port forwarding rules for port(s):";
+"Warning: Your active network connection is metered!" = "Warning: Your active network connection is metered!";
+"Starting %1$s" = "Starting %1$s";
+"Failed to start %1$s" = "Failed to start %1$s";
+"Gamepad type may be changed due to motion sensor emulation" = "Gamepad type may be changed due to motion sensor emulation";
+"Slow connection to host PC detected.\nReduce your streaming bitrate to improve connection." = "Slow connection to host PC detected.\nReduce your streaming bitrate to improve connection.";
+"Poor connection to host PC" = "Poor connection to host PC";
+"Establishing Connection" = "Establishing Connection";
+"Starting connection" = "Starting connection";
+"The connection was terminated" = "The connection was terminated";
+"Quit and Dismiss" = "Quit and Dismiss";
+"Would you like to quit <b>%1$s</b> first before starting <b>%2$s</b>? All unsaved data will be lost." = "Would you like to quit <b>%1$s</b> first before starting <b>%2$s</b>? All unsaved data will be lost.";
+"Start Streaming" = "Start Streaming";
+"Failed to connect to the host PC. Please check if the host PC is still streaming." = "Failed to connect to the host PC. Please check if the host PC is still streaming.";
+"No video received from host." = "No video received from host.";
+"Your network connection isn\'t performing well. Reduce your video bitrate setting or try a faster connection." = "Your network connection isn\'t performing well. Reduce your video bitrate setting or try a faster connection.";
+"Something went wrong with your host PC when starting the stream.\n\nMake sure you don\'t have any DRM-protected content open on your host PC. You can also try restarting your host PC." = "Something went wrong with your host PC when starting the stream.\n\nMake sure you don\'t have any DRM-protected content open on your host PC. You can also try restarting your host PC.";
+"The host PC reported a fatal video encoding error.\n\nTry disabling HDR mode, changing the streaming resolution, or changing your host PC\'s display resolution." = "The host PC reported a fatal video encoding error.\n\nTry disabling HDR mode, changing the streaming resolution, or changing your host PC\'s display resolution.";
+"Check your firewall and port forwarding rules for port(s):" = "Check your firewall and port forwarding rules for port(s):";
+"Tip: Swipe from the left edge to disconnect from your PC" = "Tip: Swipe from the left edge to disconnect from your PC";
+"Your device's network connection is blocking Razer PC Remote Play. Streaming may not work while connected to this network." = "Your device's network connection is blocking Razer PC Remote Play. Streaming may not work while connected to this network.";
+"Connection Failed" = "Connection Failed";
+"Error code" = "Error code";
+"%s in progress…" = "%s in progress…";
+"%s failed with error %d" = "%s failed with error %d";
+"Download &nexus;" = "Download &nexus;";
+
+//Nexus String
+"Version %1$s" = "Version %1$s";
+"Copyright © 2022 Razer Inc." = "Copyright © 2022 Razer Inc.";
+"All rights reserved." = "All rights reserved.";
+"Terms of Service" = "Terms of Service";
+"Privacy Policy" = "Privacy Policy";
+"Open Source Software Notice" = "Open Source Software Notice";
+"Continue" = "Continue";
+"Skip" = "Skip";
+"Settings" = "Settings";
+"About" = "About";
+"Cancel" = "Cancel";
+"OK" = "OK";
+"Retry" = "Retry";
+"To continue using Razer software and services you must first accept the Terms of Service and Privacy Policy agreement" = "To continue using Razer software and services you must first accept the Terms of Service and Privacy Policy agreement.";
+"Accept" = "Accept";
+
+"Allow Remote Play to access this device’s network." = "Allow Remote Play to access this device’s network.";
+"To unlock additional functionality, Razer PC Remote Play requires the following permissions:" = "To unlock additional functionality, Razer PC Remote Play requires the following permissions:";
+"Local Network" = "Local Network";
+"Enable seamless streaming between your PC and Nexus." = "Enable seamless streaming between your PC and Nexus.";
+"ALLOW" = "ALLOW";
+"Done" = "Done";
+"Home" = "Home";
+"Download" = "Download";
+
