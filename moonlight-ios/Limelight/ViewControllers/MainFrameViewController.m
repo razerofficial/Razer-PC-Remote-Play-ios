@@ -582,7 +582,8 @@ static NSMutableSet* hostList;
 //                                                                                ML_PORT_FLAG_TCP_47984 | ML_PORT_FLAG_TCP_47989);
                         unsigned int portTestResults = 1;
                         if (portTestResults != ML_TEST_RESULT_INCONCLUSIVE && portTestResults != 0) {
-                            error = [error stringByAppendingString:@"\n\nYour device's network connection is blocking Razer PC Remote Play. Streaming may not work while connected to this network."];
+                            error = [error stringByAppendingString:@"\n\n"];
+                            error = [error stringByAppendingString:Localized(@"Your device's network connection is blocking Razer PC Remote Play. Streaming may not work while connected to this network.")];
                         }
                         
                         UIAlertController* hostNotFoundAlert = [UIAlertController alertControllerWithTitle:@"Add Host Manually" message:error preferredStyle:UIAlertControllerStyleAlert];

@@ -25,7 +25,7 @@ class RZStreamFrameSettingsViewController: RZBaseVC {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        
+        NeuronFrameSettingsViewModel.shared().lastVC = self
         let contentView = NeuronFrameSettingsView(viewModel: NeuronFrameSettingsViewModel.shared())
         let hostVC = UIHostingController(rootView: contentView)
         
@@ -47,6 +47,10 @@ class RZStreamFrameSettingsViewController: RZBaseVC {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.isNavigationBarHidden = true
+    }
+    
+    func updateLastVCHandel() {
+        lastVC?.updateNextHandel(handel)
     }
 
 }

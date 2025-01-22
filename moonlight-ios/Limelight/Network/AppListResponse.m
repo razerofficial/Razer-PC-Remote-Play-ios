@@ -56,7 +56,7 @@ static const char* TAG_APP_INSTALL_PATH = "AppInstallPath";
         xmlFree(statusMsgXml);
     }
     else {
-        statusMsg = @"Server Error";
+        statusMsg = Localized(@"Server Error");
     }
     self.statusMessage = statusMsg;
     

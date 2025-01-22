@@ -94,12 +94,12 @@ enum Resolution: Int, Codable {
         case .resolution4k:
             return CGSize(width: 3840, height: 2160)
         case .resolutionSafeArea:
-            let safeAreaWidth = ((window?.frame.size.width)! - leftArea - rightArea) * screenScale
-            return CGSize(width: safeAreaWidth, height: (window?.frame.size.height)! * screenScale)
+            let safeAreaWidth = ((window?.frame.size.width ?? 0) - leftArea - rightArea) * screenScale
+            return CGSize(width: safeAreaWidth, height: (window?.frame.size.height ?? 0) * screenScale)
         case .resolutionFull:
-            return CGSize(width: (window?.frame.size.width)! * screenScale, height: (window?.frame.size.height)! * screenScale)
+            return CGSize(width: (window?.frame.size.width ?? 0) * screenScale, height: (window?.frame.size.height ?? 0) * screenScale)
         case .resolutionCustom:
-            return CGSize(width: (window?.frame.size.width)! * screenScale, height: (window?.frame.size.height)! * screenScale)
+            return CGSize(width: (window?.frame.size.width ?? 0) * screenScale, height: (window?.frame.size.height ?? 0) * screenScale)
         }
     }
     
@@ -109,7 +109,7 @@ enum Resolution: Int, Codable {
         let screenScale = window?.screen.scale ?? 1
         let leftArea = window?.safeAreaInsets.left ?? 0
         let rightArea = window?.safeAreaInsets.right ?? 0
-        let safeAreaWidth = ((window?.frame.size.width)! - leftArea - rightArea) * screenScale
+        let safeAreaWidth = ((window?.frame.size.width ?? 0) - leftArea - rightArea) * screenScale
         
         switch resolutionSize {
         case CGSize(width: 640, height: 360):
@@ -120,9 +120,9 @@ enum Resolution: Int, Codable {
             self = .resolution1080p
         case CGSize(width: 3840, height: 2160):
             self = .resolution4k
-        case CGSize(width: (window?.frame.size.width)! * screenScale, height: (window?.frame.size.height)! * screenScale):
+        case CGSize(width: (window?.frame.size.width ?? 0) * screenScale, height: (window?.frame.size.height ?? 0) * screenScale):
             self = .resolutionFull
-        case CGSize(width: safeAreaWidth, height: (window?.frame.size.height)! * screenScale):
+        case CGSize(width: safeAreaWidth, height: (window?.frame.size.height ?? 0) * screenScale):
             self = .resolutionSafeArea
         default:
             self = .resolutionCustom
@@ -517,7 +517,7 @@ enum AutoQuit: Int, Codable {
         case -1:
             self = .never
         default:
-            self = .immediately
+            self = .after30s
         }
     }
     

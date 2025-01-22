@@ -22,7 +22,9 @@ import SnapKit
 import CocoaLumberjack
 import SwiftUI
 
-let MenuViewWidth:CGFloat = IsIpad() ? 352 : 215
+let MenuViewBgWidth = CGFloat(UIScreen.main.bounds.size.width*0.343) - 70 - 10
+let MenuViewWidth:CGFloat = MenuViewBgWidth//IsIpad() ? 352 : 215
+
 class SettingsMenuVC: RZBaseVC , UITableViewDelegate , UITableViewDataSource {
     
     var selecetdIndexPath = IndexPath(row: 0, section: 0)
@@ -54,12 +56,16 @@ class SettingsMenuVC: RZBaseVC , UITableViewDelegate , UITableViewDataSource {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(true, animated: false)
+        if (nextHandel != nil) {
+            menuTable.reloadData()
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         //self.navigationController?.isNavigationBarHidden = false
         if (nextHandel != nil) {
+            menuTable.reloadData()
             let menuItem = menuArray[selecetdIndexPath.section][selecetdIndexPath.row]
             menuItem.viewController.viewDidAppear(animated)
             if let vc = menuItem.viewController as? SettingsHostDevicesVC {
@@ -145,6 +151,17 @@ class SettingsMenuVC: RZBaseVC , UITableViewDelegate , UITableViewDataSource {
 //        hideAlertView()
     }
     
+    override func updateNextHandel(_ handel:RZHandleResponder?) {
+        if (nextHandel == handel && nextHandel != nil) {
+            return
+        }
+        super.updateNextHandel(handel)
+        handel?.stopTracking()
+        nextHandel?.startTracking()
+        nextHandel?.reloadCallBack?()
+        reloadContentView()
+    }
+    
     //MARK: - tableview delegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
@@ -177,7 +194,9 @@ class SettingsMenuVC: RZBaseVC , UITableViewDelegate , UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 40.0
+        let list = menuArray[safe: indexPath.section]
+        let item = list?[safe: indexPath.row]
+        return item?.height ?? 40.0
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -232,6 +251,15 @@ class SettingsMenuVC: RZBaseVC , UITableViewDelegate , UITableViewDataSource {
         return view
     }()
     
+    //用于计算cell高度
+    lazy var titleLabel : UILabel = {
+        let label = UILabel.init()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.numberOfLines = 0
+        label.textColor = .white
+        return label
+    }()
+    
     lazy var menuArray : [[SettingsMenuItem]] = {
         let array = createMenuArray()
         return array
@@ -247,21 +275,31 @@ class SettingsMenuVC: RZBaseVC , UITableViewDelegate , UITableViewDataSource {
         
         var array:[[SettingsMenuItem]] = []
         
+        
+        let StreamingOptions = "Streaming Options".localize()
+        let Computers = "Computers".localize()
+        let About = "About".localize()
+        let DevOptions = "Dev Options".localize()
+        
         let devicesVC = SettingsHostDevicesVC()
         devicesVC.lastHandel = handel
+        devicesVC.lastVC = self
         
         let frameSettingsVC = RZStreamFrameSettingsViewController()
         frameSettingsVC.lastHandel = handel
-        array.append([SettingsMenuItem(title: "Streaming Options".localize(), viewController: frameSettingsVC, cellStyle: .topHalfRoundedRectangle, isNeedSeparator: true), SettingsMenuItem.init(title: "Computers".localize(), viewController: devicesVC, cellStyle: .bottomHalfRoundedRectangle, isNeedSeparator: false)])
+        frameSettingsVC.lastVC = self
+        array.append([SettingsMenuItem(title: StreamingOptions, viewController: frameSettingsVC, cellStyle: .topHalfRoundedRectangle, isNeedSeparator: true , height: coutingCellHeihgt(text: StreamingOptions)), SettingsMenuItem.init(title: Computers, viewController: devicesVC, cellStyle: .bottomHalfRoundedRectangle, isNeedSeparator: false, height: coutingCellHeihgt(text: Computers))])
         
         let aboutVC = AboutVC()
         aboutVC.lastHandel = handel
-        array.append([ SettingsMenuItem.init(title: "About".localize(), viewController: aboutVC, cellStyle: .roundedRectangle, isNeedSeparator: false) ])
+        aboutVC.lastVC = self
+        array.append([ SettingsMenuItem.init(title: About, viewController: aboutVC, cellStyle: .roundedRectangle, isNeedSeparator: false , height: coutingCellHeihgt(text: About)) ])
         
         if isDebugMode {
             let devOptionVC = DevOptionVC()
             devOptionVC.lastHandel = handel
-            array.append([ SettingsMenuItem.init(title: "Dev Options".localize(), viewController: devOptionVC, cellStyle: .roundedRectangle, isNeedSeparator: false) ])
+            devOptionVC.lastVC = self
+            array.append([ SettingsMenuItem.init(title: DevOptions, viewController: devOptionVC, cellStyle: .roundedRectangle, isNeedSeparator: false, height: coutingCellHeihgt(text: DevOptions)) ])
         }
         return array
     }
@@ -272,6 +310,23 @@ class SettingsMenuVC: RZBaseVC , UITableViewDelegate , UITableViewDataSource {
         let quitRequest = HttpRequest(for: quitResponse, with:hMan?.newQuitAppRequest())
         hMan?.executeRequestSynchronously(quitRequest)
         print("Requesting :\(quitRequest?.request.url?.absoluteString ?? "") -- result:\(quitResponse.isStatusOk())")
+    }
+    
+    func coutingCellHeihgt(text:String) -> CGFloat {
+        // 获取文本属性
+        let attributes: [NSAttributedString.Key: Any] = [
+            .font: titleLabel.font!
+        ]
+        // 计算文本的高度
+        let width: CGFloat = MenuViewWidth - 15.0 * 2.0 // 你想要的固定宽度
+        let size = CGSize(width: width, height: CGFloat.greatestFiniteMagnitude)
+        let options: NSStringDrawingOptions = [.usesLineFragmentOrigin, .usesFontLeading]
+        let rect = text.boundingRect(with: size, options: options, attributes: attributes, context: nil)
+        
+        if rect.height > 40.0 {
+            return 60.0
+        }
+        return 40.0
     }
 }
 
@@ -297,6 +352,12 @@ extension SettingsMenuVC : RZHandleResponderDelegate {
 extension SettingsMenuVC {
     
     func  changeSelectedItem(indexPath: IndexPath) {
+        if nextHandel != nil {
+            nextHandel?.buttonTriggered(controlTriggered :.control(button: .B, counter: 0, state: .Up))
+            nextHandel?.stopTracking()
+            nextHandel = nil
+            handel.startTracking()
+        }
         selecetdIndexPath = indexPath
         reloadContentView()
     }

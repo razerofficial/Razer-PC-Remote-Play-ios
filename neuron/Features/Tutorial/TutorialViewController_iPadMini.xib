@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="ipad7_9" orientation="landscape" layout="fullscreen" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -90,19 +90,19 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="streaming" translatesAutoresizingMaskIntoConstraints="NO" id="1Dm-SU-lGe">
-                    <rect key="frame" x="113" y="242" width="396.5" height="264"/>
+                    <rect key="frame" x="113" y="239.5" width="396.5" height="264"/>
                     <constraints>
                         <constraint firstAttribute="width" secondItem="1Dm-SU-lGe" secondAttribute="height" multiplier="3:2" id="rgn-AF-Jmu"/>
                     </constraints>
                 </imageView>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome to Remote Play" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dtp-2g-7NT">
-                    <rect key="frame" x="628.5" y="304.5" width="384.5" height="29"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome to Remote Play" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dtp-2g-7NT">
+                    <rect key="frame" x="628.5" y="302" width="424.5" height="29"/>
                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="24"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nkJ-uE-pis">
-                    <rect key="frame" x="628.5" y="333.5" width="384.5" height="57.5"/>
+                    <rect key="frame" x="628.5" y="331" width="424.5" height="57.5"/>
                     <string key="text">To continue using Razer software and services
 you must first accept the Terms of Service and
 Privacy Policy agreement.</string>
@@ -111,7 +111,7 @@ Privacy Policy agreement.</string>
                     <nil key="highlightedColor"/>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XzP-d5-qax">
-                    <rect key="frame" x="628.5" y="411" width="122" height="32"/>
+                    <rect key="frame" x="628.5" y="408.5" width="122" height="32"/>
                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                     <color key="tintColor" red="0.2666666667" green="0.83921568629999999" blue="0.17254901959999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
@@ -122,8 +122,11 @@ Privacy Policy agreement.</string>
                         <action selector="onTermsOfServiceClicked:" destination="-1" eventType="touchUpInside" id="ocw-0J-sFH"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cgu-J2-zq1">
-                    <rect key="frame" x="780" y="411" width="101" height="32"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="Cgu-J2-zq1">
+                    <rect key="frame" x="780" y="408.5" width="101" height="32"/>
+                    <constraints>
+                        <constraint firstAttribute="width" relation="lessThanOrEqual" constant="220" id="pbX-nV-s56"/>
+                    </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                     <color key="tintColor" red="0.2666666667" green="0.83921568629999999" blue="0.17254901959999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
@@ -135,14 +138,14 @@ Privacy Policy agreement.</string>
                     </connections>
                 </button>
                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="neuron_icon" translatesAutoresizingMaskIntoConstraints="NO" id="vHs-gC-rfK">
-                    <rect key="frame" x="559.5" y="322" width="54" height="54"/>
+                    <rect key="frame" x="559.5" y="319.5" width="54" height="54"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="54" id="Ic6-1q-NOE"/>
                         <constraint firstAttribute="width" constant="54" id="S8H-wx-VYt"/>
                     </constraints>
                 </imageView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UV4-7u-t8s">
-                    <rect key="frame" x="764.5" y="422" width="1.5" height="10"/>
+                    <rect key="frame" x="764.5" y="419.5" width="1.5" height="10"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="1.5" id="9yn-Pz-G7G"/>
@@ -219,14 +222,15 @@ Privacy Policy agreement.</string>
                 <constraint firstItem="dtp-2g-7NT" firstAttribute="centerY" secondItem="vHs-gC-rfK" secondAttribute="centerY" constant="-30" id="Gbc-l0-Si8"/>
                 <constraint firstItem="vHs-gC-rfK" firstAttribute="centerY" secondItem="1Dm-SU-lGe" secondAttribute="centerY" constant="-25" id="H4V-Bc-6j2"/>
                 <constraint firstItem="XzP-d5-qax" firstAttribute="leading" secondItem="nkJ-uE-pis" secondAttribute="leading" id="H7v-HK-fYd"/>
+                <constraint firstItem="Cgu-J2-zq1" firstAttribute="firstBaseline" secondItem="XzP-d5-qax" secondAttribute="firstBaseline" id="JmW-To-fuv"/>
                 <constraint firstItem="dtp-2g-7NT" firstAttribute="leading" secondItem="vHs-gC-rfK" secondAttribute="trailing" constant="15" id="Jmr-0V-scR"/>
                 <constraint firstItem="Cgu-J2-zq1" firstAttribute="leading" secondItem="UV4-7u-t8s" secondAttribute="trailing" constant="14" id="L7X-hd-h4N"/>
                 <constraint firstItem="1Dm-SU-lGe" firstAttribute="leading" secondItem="kAi-Lt-RkI" secondAttribute="leading" constant="113" id="LwI-Hq-PnZ"/>
-                <constraint firstItem="Cgu-J2-zq1" firstAttribute="centerY" secondItem="XzP-d5-qax" secondAttribute="centerY" id="QER-An-SOM"/>
                 <constraint firstAttribute="trailing" secondItem="4CC-iX-B98" secondAttribute="trailing" constant="30" id="aEN-Ih-hZf"/>
                 <constraint firstItem="XzP-d5-qax" firstAttribute="top" secondItem="nkJ-uE-pis" secondAttribute="bottom" constant="20" id="aXD-D6-rPs"/>
                 <constraint firstItem="vHs-gC-rfK" firstAttribute="leading" secondItem="1Dm-SU-lGe" secondAttribute="trailing" constant="50" id="eN0-r6-doJ"/>
-                <constraint firstItem="kAi-Lt-RkI" firstAttribute="trailing" secondItem="nkJ-uE-pis" secondAttribute="trailing" constant="120" id="hKX-gV-XfD"/>
+                <constraint firstItem="kAi-Lt-RkI" firstAttribute="trailing" secondItem="nkJ-uE-pis" secondAttribute="trailing" constant="80" id="hKX-gV-XfD"/>
+                <constraint firstItem="kAi-Lt-RkI" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Cgu-J2-zq1" secondAttribute="trailing" constant="80" id="iFs-sY-dYJ"/>
                 <constraint firstItem="UV4-7u-t8s" firstAttribute="leading" secondItem="XzP-d5-qax" secondAttribute="trailing" constant="14" id="m35-mE-Hzq"/>
                 <constraint firstAttribute="bottom" secondItem="4CC-iX-B98" secondAttribute="bottom" constant="30" id="rgs-Ut-iU7"/>
                 <constraint firstItem="dtp-2g-7NT" firstAttribute="trailing" secondItem="nkJ-uE-pis" secondAttribute="trailing" id="tTj-6n-4mT"/>
@@ -240,19 +244,19 @@ Privacy Policy agreement.</string>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="request_permission" translatesAutoresizingMaskIntoConstraints="NO" id="TB9-AW-QSp">
-                    <rect key="frame" x="113" y="267" width="396.5" height="214"/>
+                    <rect key="frame" x="113" y="264.5" width="396.5" height="214"/>
                     <constraints>
                         <constraint firstAttribute="width" secondItem="TB9-AW-QSp" secondAttribute="height" multiplier="289:156" id="Eq4-3n-kyu"/>
                     </constraints>
                 </imageView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Allow Remote Play to access this device’s network." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Inv-5H-cOG">
-                    <rect key="frame" x="113" y="486" width="396.5" height="19.5"/>
+                    <rect key="frame" x="113" y="483.5" width="396.5" height="19.5"/>
                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="m1g-Nf-K6z">
-                    <rect key="frame" x="589.5" y="270.5" width="543.5" height="207"/>
+                    <rect key="frame" x="589.5" y="268" width="543.5" height="207"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="To unlock additional functionality, Razer PC Remote Play requires the following permissions:" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MIR-id-Hbj">
                             <rect key="frame" x="0.0" y="0.0" width="443.5" height="79"/>
@@ -492,32 +496,32 @@ Privacy Policy agreement.</string>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="nexus_screenshot" translatesAutoresizingMaskIntoConstraints="NO" id="XEZ-rW-MuH">
-                    <rect key="frame" x="138" y="293" width="340" height="162"/>
+                    <rect key="frame" x="138" y="290.5" width="340" height="162"/>
                     <constraints>
                         <constraint firstAttribute="width" secondItem="XEZ-rW-MuH" secondAttribute="height" multiplier="247:118" id="PIT-xz-V6Z"/>
                     </constraints>
                 </imageView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Download Razer Nexus" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hpj-v8-ooC">
-                    <rect key="frame" x="607" y="319.5" width="376" height="29"/>
+                    <rect key="frame" x="607" y="317" width="376" height="29"/>
                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="24"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Remote Play is designed to enhance PC gaming on your mobile device through seamless integration with Razer Nexus." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gOj-UH-gHs">
-                    <rect key="frame" x="607" y="348.5" width="376" height="57.5"/>
+                    <rect key="frame" x="607" y="346" width="376" height="57.5"/>
                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                     <color key="textColor" red="0.76862745098039209" green="0.76862745098039209" blue="0.76862745098039209" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="nexus_icon" translatesAutoresizingMaskIntoConstraints="NO" id="8bS-l6-9Mq">
-                    <rect key="frame" x="538" y="327" width="54" height="54"/>
+                    <rect key="frame" x="538" y="324.5" width="54" height="54"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="54" id="1IE-Fi-H6v"/>
                         <constraint firstAttribute="height" constant="54" id="dco-2P-IV4"/>
                     </constraints>
                 </imageView>
                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="appstore" translatesAutoresizingMaskIntoConstraints="NO" id="q9m-Sf-2mA">
-                    <rect key="frame" x="607" y="426" width="118" height="40"/>
+                    <rect key="frame" x="607" y="423.5" width="118" height="40"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="40" id="A9E-rK-fpC"/>
                         <constraint firstAttribute="width" constant="118" id="Kbb-1T-CNl"/>
@@ -672,7 +676,7 @@ Privacy Policy agreement.</string>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Jgv-2A-0Jl" customClass="RZView" customModule="neuron" customModuleProvider="target">
-                    <rect key="frame" x="413.5" y="261" width="306" height="226"/>
+                    <rect key="frame" x="413.5" y="258.5" width="306" height="226"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enable Local Network Access" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rsb-ui-hcw">
                             <rect key="frame" x="40" y="25" width="226" height="19.5"/>
@@ -747,13 +751,13 @@ Privacy Policy agreement.</string>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="streaming" translatesAutoresizingMaskIntoConstraints="NO" id="Q5j-Yt-iwx">
-                    <rect key="frame" x="113" y="242" width="396.5" height="264"/>
+                    <rect key="frame" x="113" y="239.5" width="396.5" height="264"/>
                     <constraints>
                         <constraint firstAttribute="width" secondItem="Q5j-Yt-iwx" secondAttribute="height" multiplier="3:2" id="7mz-32-qp1"/>
                     </constraints>
                 </imageView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="R4o-M1-4vg">
-                    <rect key="frame" x="549.5" y="232" width="583.5" height="204.5"/>
+                    <rect key="frame" x="549.5" y="229.5" width="583.5" height="204.5"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PC display streaming mode" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RHt-8g-K9e">
                             <rect key="frame" x="0.0" y="0.0" width="583.5" height="26.5"/>
@@ -951,7 +955,7 @@ Privacy Policy agreement.</string>
                     </constraints>
                 </view>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kcd-aM-OaP">
-                    <rect key="frame" x="549.5" y="446.5" width="443.5" height="76.5"/>
+                    <rect key="frame" x="549.5" y="444" width="443.5" height="76.5"/>
                     <string key="text">Easily mirror your PC screen to your phone for convenient access to apps and content anywhere. Enjoy smooth synchronization and vibrant visuals—perfect for gaming, presentations, or multitasking on the go!</string>
                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

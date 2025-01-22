@@ -253,7 +253,7 @@
                 break;
             default:
                 NSLog(@"Unhandled HID usage: %lu", (unsigned long)key.keyCode);
-                assert(0);
+//                assert(0);
                 return false;
         }
     }

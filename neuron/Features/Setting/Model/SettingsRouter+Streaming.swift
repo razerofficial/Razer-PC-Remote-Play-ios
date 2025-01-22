@@ -222,9 +222,9 @@ extension SettingsRouter {
             self.hideAlertView()
             self.prepareNavigateToStreamViewController(app)
         }
-        
+
         alertView = RZAlertView()
-        alertView?.set(title: "Start \(app.name ?? "")?", message: "\(app.name ?? "") is already running, would you like to resume or quit existing running game? All unsaved data will be lost", confirmButtonText: "Resume", cancelButtonText: "Quit and Dismiss", confirmAction: {
+        alertView?.set(title: "Starting %@".localize().kStringByReplaceString(replaceStr:"%@",willReplaceStr:app.name ?? "")+"?", message: "%@ is already running, would you like to resume or quit the game? All unsaved data will be lost.".localize().kStringByReplaceString(replaceStr: "%@", willReplaceStr: app.name ?? ""), confirmButtonText: "Resume Session".localize(), cancelButtonText: "Quit and Dismiss".localize().localize(), confirmAction: {
             self.alertViewConfirmAction?()
         },cancelAction: {
             self.alertViewCancelAction?()

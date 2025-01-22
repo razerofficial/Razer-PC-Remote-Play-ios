@@ -115,6 +115,19 @@
 "%s in progress…" = "%s 진행 중…";
 "%s failed with error %d" = "%s 오류 %d로 실패했습니다";
 "Download &nexus;" = "&nexus; 다운로드";
+"%@ is already running, would you like to resume or quit the game? All unsaved data will be lost." = "%@이(가) 이미 실행 중입니다. 게임을 재개하시겠습니까 아니면 종료하시겠습니까? 저장되지 않은 모든 데이터는 손실됩니다.";
+"Resume Session" = "세션 재개";
+//20250114 AI
+"Failed to connect to PC" = "PC에 연결하지 못했습니다";
+"Device not paired to PC" = "장치가 PC와 연결되지 않았습니다";
+"Your host PC's GPU doesn't support streaming video resolutions over 4K." = "호스트 PC의 GPU는 4K 이상의 비디오 해상도 스트리밍을 지원하지 않습니다.";
+"Failed to launch app" = "앱을 시작할 수 없습니다";
+"Failed to resume app" = "앱을 다시 시작할 수 없습니다";
+"Razer PC Remote Play only supports adding PCs on your local network on iOS." = "Razer PC Remote Play는 iOS에서만 로컬 네트워크의 PC를 추가할 수 있습니다.";
+"Host information updated" = "호스트 정보가 업데이트되었습니다";
+"Server Error" = "서버 오류";
+"Missing audio capture device. Reinstalling Razer Cortex should resolve this error." = "오디오 캡처 장치가 없습니다. Razer Cortex를 재설치하면 이 오류를 해결할 수 있습니다.";
+"Could not connect to host.\n\nEnsure Razer Cortex is running properly.\n\nIf you're using a non-default port, you will need to include that here." = "호스트에 연결할 수 없습니다.\n\nRazer Cortex가 제대로 실행되고 있는지 확인하세요.\n\n기본 포트를 사용하지 않는 경우, 여기에 포트를 포함해야 합니다.";
 
 //Nexus String
 "Version %1$s" = "버전 %1$s";
@@ -132,7 +145,6 @@
 "Retry" = "재시도";
 "To continue using Razer software and services you must first accept the Terms of Service and Privacy Policy agreement" = "Razer 소프트웨어 및 서비스를 계속해서 사용하려면 먼저 서비스 약관 및 개인정보 보호정책을 동의해야 합니다.";
 "Accept" = "동의";
-
 "Allow Remote Play to access this device’s network." = "Nexus가 이 장치의 네트워크에 액세스하도록 허용하시겠습니까?";
 "To unlock additional functionality, Razer PC Remote Play requires the following permissions:" = "추가 기능을 활용하려면 Razer PC Remote Play에서 다음의 권한이 필요합니다.";
 "Local Network" = "로컬 네트워크";
@@ -141,3 +153,4 @@
 "Done" = "완료";
 "Home" = "홈";
 "Download" = "다운로드";
+"Help" = "도움말";

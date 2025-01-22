@@ -82,23 +82,23 @@ class SettingsAdddHostVC: RZBaseVC , PairCallback {
             make.top.equalTo(descLab.snp.bottom).offset(10)
             make.height.equalTo(44)
             if IsIpad() {
-                make.right.equalTo(-30)
+                make.right.equalTo(addButton.snp.left).offset(-30)
             }else{
                 make.width.greaterThanOrEqualTo(350)
             }
         }
         
         errorTips.snp.makeConstraints { make in
-            make.left.equalTo(DeviceLeftSpace + 50)
+            make.left.equalTo(descLab)
             make.top.equalTo(textField.snp.bottom).offset(15)
         }
         
         addButton.snp.makeConstraints { make in
             if IsIpad() {
-                make.bottom.equalTo(-30)
+                make.centerY.equalTo(descLab)
                 make.right.equalTo(-35)
             } else {
-                make.bottom.equalTo(-40)
+                make.centerY.equalTo(descLab)
                 make.right.equalTo(-50)
             }
             make.height.equalTo(44)
@@ -128,6 +128,8 @@ class SettingsAdddHostVC: RZBaseVC , PairCallback {
     }
     
     @objc func addHost() {
+        
+        textField.resignFirstResponder()
         
         if isWifiAndSameLocalAddress(textField.text ?? "") == false {
             //Forbidden pairing when not the same wifi

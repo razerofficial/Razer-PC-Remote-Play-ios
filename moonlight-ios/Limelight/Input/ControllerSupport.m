@@ -983,8 +983,10 @@ static const double MOUSE_SPEED_DIVISOR = 1.25;
             limeController.gamepad = controller;
 
             // If this is player 0, it shares state with the OSC
-            limeController.mergedWithController = _oscController;
-            _oscController.mergedWithController = limeController;
+            if (controller.playerIndex == 0) {
+                limeController.mergedWithController = _oscController;
+                _oscController.mergedWithController = limeController;
+            }
             
             if (@available(iOS 13.0, tvOS 13.0, *)) {
                 if (controller.extendedGamepad != nil &&

@@ -22,6 +22,7 @@ struct SettingsMenuItem {
     var viewController:UIViewController
     var cellStyle: SettingsMenuCellStyle
     var isNeedSeparator: Bool
+    var height:CGFloat
     var view: UIView {
         return viewController.view
     }

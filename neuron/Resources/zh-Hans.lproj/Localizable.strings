@@ -115,6 +115,19 @@
 "%s in progress…" = "%s 正在进行…";
 "%s failed with error %d" = "%s 失败，错误代码 %d";
 "Download &nexus;" = "下载 &nexus;";
+"%@ is already running, would you like to resume or quit the game? All unsaved data will be lost." = "%@ 已在运行。你想继续还是退出游戏？所有未保存的数据都将丢失。";
+"Resume Session" = "继续游戏";
+//20250114 AI
+"Failed to connect to PC" = "无法连接到PC";
+"Device not paired to PC" = "设备未与PC配对";
+"Your host PC's GPU doesn't support streaming video resolutions over 4K." = "您的主机PC的GPU不支持4K以上的流媒体视频分辨率。";
+"Failed to launch app" = "启动应用程序失败";
+"Failed to resume app" = "恢复应用程序失败";
+"Razer PC Remote Play only supports adding PCs on your local network on iOS." = "Razer PC Remote Play仅支持在iOS上添加本地网络中的PC。";
+"Host information updated" = "主机信息已更新";
+"Server Error" = "服务器错误";
+"Missing audio capture device. Reinstalling Razer Cortex should resolve this error." = "缺少音频捕捉设备。重新安装Razer Cortex 雷游应该解决此错误。";
+"Could not connect to host.\n\nEnsure Razer Cortex is running properly.\n\nIf you're using a non-default port, you will need to include that here." = "无法连接到主机。\n\n请确保Razer Cortex 雷游正常运行。\n\n如果使用非默认端口，您需要在此处包含该端口。";
 
 //Nexus String
 "Version %1$s" = "版本 %1$s";
@@ -132,7 +145,6 @@
 "Retry" = "重试";
 "To continue using Razer software and services you must first accept the Terms of Service and Privacy Policy agreement" = "要想继续使用Razer软件和服务，您必需首先接受Razer的服务条款和隐私政策。";
 "Accept" = "接受";
-
 "Allow Remote Play to access this device’s network." = "允许 Remote Play 访问此设备的网络。";
 "To unlock additional functionality, Razer PC Remote Play requires the following permissions:" = "若要解锁其他额外功能，Razer PC Remote Play 需要以下权限：";
 "Local Network" = "本地网络";
@@ -141,3 +153,4 @@
 "Done" = "完成";
 "Home" = "主页";
 "Download" = "下载";
+"Help" = "帮助";

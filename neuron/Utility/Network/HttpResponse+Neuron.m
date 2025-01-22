@@ -76,7 +76,7 @@
     
     if (self.statusCode == -1 && [self.statusMessage isEqualToString:@"Invalid"]) {
         self.statusCode = 418;
-        self.statusMessage = @"Missing audio capture device. Reinstalling GeForce Experience should resolve this error.";
+        self.statusMessage = Localized(@"Missing audio capture device. Reinstalling Razer Cortex should resolve this error.");
     }
     
     // 递归解析多层 XML

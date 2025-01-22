@@ -60,13 +60,13 @@
         return;
     }
     else if (pairStatus == NULL || appversion == NULL || serverState == NULL) {
-        [_callbacks launchFailed:@"Failed to connect to PC"];
+        [_callbacks launchFailed:Localized(@"Failed to connect to PC")];
         return;
     }
     
     if (![pairStatus isEqualToString:@"1"]) {
         // Not paired
-        [_callbacks launchFailed:@"Device not paired to PC"];
+        [_callbacks launchFailed:Localized(@"Device not paired to PC")];
         return;
     }
     
@@ -76,7 +76,7 @@
         // We can't directly identify Pascal, but we can look for HEVC Main10 which was added in the same generation.
         NSString* codecSupport = [serverInfoResp getStringTag:@"ServerCodecModeSupport"];
         if (codecSupport == nil || !([codecSupport intValue] & 0x200)) {
-            [_callbacks launchFailed:@"Your host PC's GPU doesn't support streaming video resolutions over 4K."];
+            [_callbacks launchFailed:Localized(@"Your host PC's GPU doesn't support streaming video resolutions over 4K.")];
             return;
         }
     }
@@ -128,7 +128,7 @@
         Log(LOG_E, @"Failed Launch Response: %@", launchResp.statusMessage);
         return FALSE;
     } else if (gameSession == NULL || [gameSession isEqualToString:@"0"]) {
-        [_callbacks launchFailed:@"Failed to launch app"];
+        [_callbacks launchFailed:Localized(@"Failed to launch app")];
         Log(LOG_E, @"Failed to parse game session");
         return FALSE;
     }
@@ -146,7 +146,7 @@
         Log(LOG_E, @"Failed Resume Response: %@", resumeResp.statusMessage);
         return FALSE;
     } else if (resume == NULL || [resume isEqualToString:@"0"]) {
-        [_callbacks launchFailed:@"Failed to resume app"];
+        [_callbacks launchFailed:Localized(@"Failed to resume app")];
         Log(LOG_E, @"Failed to parse resume response");
         return FALSE;
     }

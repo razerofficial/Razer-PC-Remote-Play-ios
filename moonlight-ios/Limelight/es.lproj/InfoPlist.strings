@@ -1,2 +1,2 @@
 /* Localized versions of Info.plist keys */
-
+"NSLocalNetworkUsageDescription" = "Se requiere este permiso para detectar y conectar dispositivos compatibles en tu red local, lo que permite un juego fluido en tu dispositivo móvil o PC.";

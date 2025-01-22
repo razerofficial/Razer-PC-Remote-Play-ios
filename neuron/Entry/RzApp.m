@@ -68,12 +68,13 @@
     RzTemporaryApp *app = [[ShareDataDB shared] currentLaunchGame];
     
     TemporaryApp *newApp = [app convert2TemporaryApp];
-    newApp.host.appList = [NSMutableSet setWithObject:newApp];
-    if (!app) {
+    if (!newApp) {
         Log(LOG_E, @"startStreaming: app is null...");
         [SettingsRouter.shared hideStreamLoadingView];
         return;
     }
+    
+    newApp.host.appList = [NSMutableSet setWithObject:newApp];
     //read setting data from share db
     [[ShareDataDB shared] readSettingDataFromShareDB];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -188,8 +189,6 @@
                        hostFramerate:refreshRate.integerValue > phoneRefreshRate ? phoneRefreshRate : refreshRate.integerValue
                           hostHeight:height.integerValue
                            hostWidth:width.integerValue];
-    
-    [[ShareDataDB shared] writeSettingDataToShareDB];
 }
 
 - (RZMainViewController *)getRZMainViewController {

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="landscape" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -95,14 +95,14 @@
                         <constraint firstAttribute="width" secondItem="1Dm-SU-lGe" secondAttribute="height" multiplier="3:2" id="rgn-AF-Jmu"/>
                     </constraints>
                 </imageView>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome to Remote Play" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dtp-2g-7NT">
-                    <rect key="frame" x="463.5" y="146" width="374.5" height="21"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome to Remote Play" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dtp-2g-7NT">
+                    <rect key="frame" x="463.5" y="146" width="374.5" height="21.5"/>
                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nkJ-uE-pis">
-                    <rect key="frame" x="463.5" y="167" width="374.5" height="43"/>
+                    <rect key="frame" x="463.5" y="167.5" width="374.5" height="43"/>
                     <string key="text">To continue using Razer software and services
 you must first accept the Terms of Service and
 Privacy Policy agreement.</string>
@@ -111,7 +111,7 @@ Privacy Policy agreement.</string>
                     <nil key="highlightedColor"/>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XzP-d5-qax">
-                    <rect key="frame" x="463.5" y="220" width="109" height="29"/>
+                    <rect key="frame" x="463.5" y="220.5" width="109" height="29"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <color key="tintColor" red="0.2666666667" green="0.83921568629999999" blue="0.17254901959999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
@@ -122,8 +122,11 @@ Privacy Policy agreement.</string>
                         <action selector="onTermsOfServiceClicked:" destination="-1" eventType="touchUpInside" id="ocw-0J-sFH"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cgu-J2-zq1">
-                    <rect key="frame" x="602" y="220" width="90" height="29"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="Cgu-J2-zq1">
+                    <rect key="frame" x="602" y="220.5" width="90" height="29"/>
+                    <constraints>
+                        <constraint firstAttribute="width" relation="lessThanOrEqual" constant="200" id="TRE-V7-Hij"/>
+                    </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <color key="tintColor" red="0.2666666667" green="0.83921568629999999" blue="0.17254901959999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
@@ -142,7 +145,7 @@ Privacy Policy agreement.</string>
                     </constraints>
                 </imageView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UV4-7u-t8s">
-                    <rect key="frame" x="586.5" y="229.5" width="1.5" height="10"/>
+                    <rect key="frame" x="586.5" y="230" width="1.5" height="10"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="1.5" id="9yn-Pz-G7G"/>
@@ -216,13 +219,14 @@ Privacy Policy agreement.</string>
                 <constraint firstItem="UV4-7u-t8s" firstAttribute="centerY" secondItem="XzP-d5-qax" secondAttribute="centerY" id="5UK-Sd-THA"/>
                 <constraint firstItem="1Dm-SU-lGe" firstAttribute="width" secondItem="ihR-TC-Oda" secondAttribute="width" multiplier="0.33" id="7Y3-f8-ccS"/>
                 <constraint firstItem="nkJ-uE-pis" firstAttribute="leading" secondItem="dtp-2g-7NT" secondAttribute="leading" id="9Hk-6S-0fR"/>
+                <constraint firstItem="kAi-Lt-RkI" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Cgu-J2-zq1" secondAttribute="trailing" priority="900" constant="10" id="Ffm-1i-Gpn"/>
                 <constraint firstItem="dtp-2g-7NT" firstAttribute="centerY" secondItem="vHs-gC-rfK" secondAttribute="centerY" constant="-15" id="Gbc-l0-Si8"/>
                 <constraint firstItem="vHs-gC-rfK" firstAttribute="centerY" secondItem="1Dm-SU-lGe" secondAttribute="centerY" constant="-25" id="H4V-Bc-6j2"/>
                 <constraint firstItem="XzP-d5-qax" firstAttribute="leading" secondItem="nkJ-uE-pis" secondAttribute="leading" id="H7v-HK-fYd"/>
                 <constraint firstItem="dtp-2g-7NT" firstAttribute="leading" secondItem="vHs-gC-rfK" secondAttribute="trailing" constant="15" id="Jmr-0V-scR"/>
                 <constraint firstItem="Cgu-J2-zq1" firstAttribute="leading" secondItem="UV4-7u-t8s" secondAttribute="trailing" constant="14" id="L7X-hd-h4N"/>
                 <constraint firstItem="1Dm-SU-lGe" firstAttribute="leading" secondItem="kAi-Lt-RkI" secondAttribute="leading" constant="20" id="LwI-Hq-PnZ"/>
-                <constraint firstItem="Cgu-J2-zq1" firstAttribute="centerY" secondItem="XzP-d5-qax" secondAttribute="centerY" id="QER-An-SOM"/>
+                <constraint firstItem="Cgu-J2-zq1" firstAttribute="firstBaseline" secondItem="XzP-d5-qax" secondAttribute="firstBaseline" id="Tax-Jy-BF7"/>
                 <constraint firstAttribute="trailing" secondItem="4CC-iX-B98" secondAttribute="trailing" constant="30" id="aEN-Ih-hZf"/>
                 <constraint firstItem="XzP-d5-qax" firstAttribute="top" secondItem="nkJ-uE-pis" secondAttribute="bottom" constant="10" id="aXD-D6-rPs"/>
                 <constraint firstItem="vHs-gC-rfK" firstAttribute="leading" secondItem="1Dm-SU-lGe" secondAttribute="trailing" constant="50" id="eN0-r6-doJ"/>

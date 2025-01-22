@@ -1,2 +1,2 @@
 /* Localized versions of Info.plist keys */
-
+"NSLocalNetworkUsageDescription" = "Diese Berechtigung ist erforderlich, um kompatible Geräte in deinem lokalen Netzwerk zu erkennen und eine Verbindung herzustellen, damit du nahtlos auf deinem mobilen Gerät oder PC spielen kannst.";

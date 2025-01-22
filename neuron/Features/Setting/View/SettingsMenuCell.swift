@@ -84,7 +84,7 @@ class SettingsMenuCell: UITableViewCell {
         }
         
         titleLabel.snp.makeConstraints { make in
-            make.edges.equalTo(UIEdgeInsets.init(top: 0, left: 20, bottom: 0, right: 20))
+            make.edges.equalTo(UIEdgeInsets.init(top: 0, left: 15, bottom: 0, right: 15))
         }
         
         if isNeedSeparator {
@@ -115,6 +115,7 @@ class SettingsMenuCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
         label.textColor = .white
+        label.textAlignment = .left
         return label
     }()
     

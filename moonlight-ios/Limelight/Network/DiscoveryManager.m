@@ -181,7 +181,7 @@
             }
             
             if (prohibitedAddress) {
-                callback(nil, prohibitedAddressMessage);
+                callback(nil, Localized(prohibitedAddressMessage));
                 return;
             }
             else if ([DiscoveryManager isAddressLAN:inet_addr([hostAddress UTF8String])]) {
@@ -202,14 +202,14 @@
         }
         
         if (![self addHostToDiscovery:host]) {
-            callback(host, @"Host information updated");
+            callback(host, Localized(@"Host information updated"));
         } else {
             callback(host, nil);
         }
     } else if (!prohibitedAddress) {
-        callback(nil, @"Could not connect to host.\n\nIf you're hosting using GeForce Experience, make sure you've enabled the toggle on the SHIELD tab.\n\nIf you're hosting using Razer Cortex, ensure it is running properly. If you're using a non-default port, you will need to include that here.");
+        callback(nil, Localized(@"Could not connect to host.\n\nEnsure Razer Cortex is running properly.\n\nIf you're using a non-default port, you will need to include that here."));
     } else {
-        callback(nil, prohibitedAddressMessage);
+        callback(nil, Localized(prohibitedAddressMessage));
     }
 }
 

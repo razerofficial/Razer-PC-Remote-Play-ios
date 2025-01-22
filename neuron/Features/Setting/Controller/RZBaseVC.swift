@@ -30,6 +30,7 @@ class RZBaseVC : UIViewController {
     let handel = RZHandleResponder.init()
     weak var lastHandel:RZHandleResponder?
     weak var nextHandel:RZHandleResponder?
+    weak var lastVC:RZBaseVC?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -65,6 +66,10 @@ class RZBaseVC : UIViewController {
     func handelStop() {
         handel.stopTracking()
         lastHandel?.startTracking()
+    }
+    
+    func updateNextHandel(_ handel:RZHandleResponder?) {
+        nextHandel = handel
     }
     
     @objc func handelReset() {

@@ -1,2 +1,2 @@
 /* Localized versions of Info.plist keys */
-
+"NSLocalNetworkUsageDescription" = "Denne tilladelse er nødvendig for at opdage og oprette forbindelse til kompatible enheder på dit lokale netværk, hvilket muliggør problemfri gameplay på din mobile enhed eller PC.";

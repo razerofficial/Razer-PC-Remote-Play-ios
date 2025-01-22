@@ -1,2 +1,2 @@
 /* Localized versions of Info.plist keys */
-
+"NSLocalNetworkUsageDescription" = "該權限用來檢測並連接您本地網路中的相容設備，讓您在手機或PC上能夠順暢地遊玩。";

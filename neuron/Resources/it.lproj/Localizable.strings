@@ -115,6 +115,19 @@
 "%s in progress…" = "%s in corso…";
 "%s failed with error %d" = "%s non riuscito con errore %d";
 "Download &nexus;" = "Scarica &nexus;";
+"%@ is already running, would you like to resume or quit the game? All unsaved data will be lost." = "%@ è già in esecuzione. Vuoi continuare o uscire dal gioco? Tutti i dati non salvati andranno persi.";
+"Resume Session" = "Riprendi sessione";
+//20250114 AI
+"Failed to connect to PC" = "Connessione al PC fallita";
+"Device not paired to PC" = "Dispositivo non associato al PC";
+"Your host PC's GPU doesn't support streaming video resolutions over 4K." = "La GPU del tuo PC host non supporta risoluzioni video superiori a 4K per lo streaming.";
+"Failed to launch app" = "Impossibile avviare l'app";
+"Failed to resume app" = "Impossibile riprendere l'app";
+"Razer PC Remote Play only supports adding PCs on your local network on iOS." = "Razer PC Remote Play supporta solo l'aggiunta di PC sulla tua rete locale su iOS.";
+"Host information updated" = "Informazioni sull'host aggiornate";
+"Server Error" = "Errore del server";
+"Missing audio capture device. Reinstalling Razer Cortex should resolve this error." = "Dispositivo di acquisizione audio mancante. La reinstallazione di Razer Cortex dovrebbe risolvere questo errore.";
+"Could not connect to host.\n\nEnsure Razer Cortex is running properly.\n\nIf you're using a non-default port, you will need to include that here." = "Impossibile connettersi all'host.\n\nAssicurati che Razer Cortex funzioni correttamente.\n\nSe stai utilizzando una porta non predefinita, dovrai includerla qui.";
 
 //Nexus String
 "Version %1$s" = "Versione %1$s";
@@ -132,7 +145,6 @@
 "Retry" = "Riprova";
 "To continue using Razer software and services you must first accept the Terms of Service and Privacy Policy agreement" = "Per continuare a utilizzare il software e i servizi Razer devi prima accettare i termini di servizio e le norme sulla privacy.";
 "Accept" = "Accetta";
-
 "Allow Remote Play to access this device’s network." = "Consenti a Remote Play di accedere alla rete di questo dispositivo.";
 "To unlock additional functionality, Razer PC Remote Play requires the following permissions:" = "Per sbloccare funzionalità aggiuntive, Razer PC Remote Play richiede le seguenti autorizzazioni:";
 "Local Network" = "Rete Locale";
@@ -141,3 +153,4 @@
 "Done" = "Fatto";
 "Home" = "Home";
 "Download" = "Download";
+"Help" = "Guida";

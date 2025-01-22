@@ -78,7 +78,10 @@ class NeuronFrameSettingsViewModel: NSObject, ObservableObject {
     @Published var videoRefreshRate: VideoRefreshRate = .refreshRateMatchDisplay
     @Published var limitRefreshRate: Bool = false
     @Published var MuteHostPC: Bool = true
-    @Published var autoQuit: AutoQuit = .after30s;
+    @Published var autoQuit: AutoQuit = .after30s
+    
+    //用于点击选项时候让Setting menu失去焦点
+    weak var lastVC:RZStreamFrameSettingsViewController?
     
     private override init() {
         super.init()
@@ -182,6 +185,8 @@ class NeuronFrameSettingsViewModel: NSObject, ObservableObject {
             frameSettings.displayMode = PCDisplayStreamingMode.SeparateScreenMode.rawValue
         }
         saveSettings()
+        //update menu
+        lastVC?.updateLastVCHandel()
     }
 
     func isDeviceSupportHDR() -> Bool {
@@ -332,6 +337,7 @@ class NeuronFrameSettingsViewModel: NSObject, ObservableObject {
             switch action {
             case .A:
                 frameSettings.enableHdr.toggle()
+                highlightedUIComponent = .NeuronStreamingSettingsHDRToggle
             case .B:
                 self.highlightedUIComponent = .NeuronStreamingSettings
             case .up:

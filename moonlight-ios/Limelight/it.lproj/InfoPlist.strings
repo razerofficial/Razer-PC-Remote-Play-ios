@@ -1,2 +1,2 @@
 /* Localized versions of Info.plist keys */
-
+"NSLocalNetworkUsageDescription" = "Questo permesso è necessario per rilevare e connettersi ai dispositivi compatibili sulla tua rete locale, consentendo un gioco senza interruzioni sul tuo dispositivo mobile o PC.";

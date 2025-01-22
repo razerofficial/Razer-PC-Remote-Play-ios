@@ -127,6 +127,7 @@ struct NeuronFrameSettingsView: View {
                         .cornerRadius(10, corners: .bottomRight)
                         .onTapGesture {
                             //select mode
+                            viewModel.lastVC?.updateLastVCHandel()
                             viewModel.highlightedUIComponent = mode.highlightedUIComponent()
                             viewModel.updateDisplayMode(mode)
 //                            viewModel.displayMode = mode
@@ -242,6 +243,8 @@ struct NeuronFrameSettingsView: View {
                 Spacer().frame(width: spaceBetweenView)
                 Slider(value: $viewModel.bitrate, in: 1.0...150.0, step: 0.1)
                     .onDataChange(of: viewModel.bitrate) { newValue in
+                        //update menu
+                        viewModel.lastVC?.updateLastVCHandel()
                         viewModel.frameSettings.bitrate = Int32(newValue * 1000)
                         viewModel.saveSettings()
                     }
@@ -260,6 +263,8 @@ struct NeuronFrameSettingsView: View {
             .simultaneousGesture(
                 TapGesture()
                     .onEnded{
+                        //update menu
+                        viewModel.lastVC?.updateLastVCHandel()
                         viewModel.highlightedUIComponent = .NeuronStreamingSettingsBitrateSlider
                     }
             )

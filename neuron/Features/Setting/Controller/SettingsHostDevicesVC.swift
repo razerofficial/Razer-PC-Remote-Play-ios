@@ -524,6 +524,11 @@ class SettingsHostDevicesVC : RZBaseVC { // DiscoveryCallback, PairCallback
     //MARK: - cell click
     @objc func clickLocalHost(_ sender:UIButton){
         DDLogInfo("=====enter to host menuvc (forget host) ======")
+        lastVC?.updateNextHandel(handel)
+        selectedIndex = sender.tag
+        deviceSection = .PairedSection
+        reloadContentView()
+        
         if let host = pairedHosts[safe:sender.tag] {
             let vc = SettingsHostMenuVC(host: host)
             vc.lastHandel = handel
@@ -534,6 +539,11 @@ class SettingsHostDevicesVC : RZBaseVC { // DiscoveryCallback, PairCallback
     @objc func pairNetHost(_ sender:UIButton) {
         
         DDLogInfo("=====pair host ======")
+        
+        lastVC?.updateNextHandel(handel)
+        selectedIndex = sender.tag
+        deviceSection = .NetSection
+        reloadContentView()
         
         if let host = netHosts[safe:sender.tag] {
             showLoadingView()
@@ -547,6 +557,11 @@ class SettingsHostDevicesVC : RZBaseVC { // DiscoveryCallback, PairCallback
     }
     
     @objc func gotoAddHost(){
+        lastVC?.updateNextHandel(handel)
+        selectedIndex = 0
+        deviceSection = .AddSection
+        reloadContentView()
+        
         let vc = SettingsAdddHostVC()
         vc.lastHandel = handel
         SettingsRouter.shared.navigationController?.pushViewController(vc, animated: true)

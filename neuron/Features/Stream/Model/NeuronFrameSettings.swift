@@ -49,27 +49,4 @@ import SwiftUI
         super.init()
     }
     
-//    init(settings: TemporarySettings) {
-//        
-//        super.init()
-//        
-//        bitrate = settings.bitrate.int32Value
-//        framerate = settings.framerate.int32Value
-//        height = settings.height.int32Value
-//        width = settings.width.int32Value
-//        audioConfig = settings.audioConfig.int32Value
-//        preferredCodec = RZPreferredCodec(rawValue: Int(settings.preferredCodec)) ?? .H264
-//        useFramePacing = settings.useFramePacing
-//        playAudioOnPC = settings.playAudioOnPC
-//        enableHdr = settings.enableHdr
-//        optimizeGames = settings.optimizeGames
-//        multiController = settings.multiController
-//        swapABXYButtons = settings.swapABXYButtons
-//        onscreenControls = RZOnScreenControls(rawValue: settings.onscreenControls.intValue) ?? .off
-//        btMouseSupport = settings.btMouseSupport
-//        absoluteTouchMode = settings.absoluteTouchMode
-//        statsOverlay = settings.statsOverlay
-//        uniqueId = settings.uniqueId
-//    }
-    
 }

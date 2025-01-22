@@ -1,2 +1,2 @@
 /* Localized versions of Info.plist keys */
-
+"NSLocalNetworkUsageDescription" = "この許可は、ローカルネットワーク上の互換性のあるデバイスを検出して接続するために必要です。これにより、モバイルデバイスまたはPCでシームレスなゲームプレイが可能になります。";

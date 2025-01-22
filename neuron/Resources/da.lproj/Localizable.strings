@@ -115,6 +115,19 @@
 "%s in progress…" = "%s er i gang…";
 "%s failed with error %d" = "%s mislykkedes med fejl %d";
 "Download &nexus;" = "Download &nexus;";
+"%@ is already running, would you like to resume or quit the game? All unsaved data will be lost." = "%@ kører allerede. Vil du genoptage eller afslutte spillet? Alle data, der ikke er gemt, vil gå tabt.";
+"Resume Session" = "Genoptag session";
+//20250114 AI
+"Failed to connect to PC" = "Kunne ikke oprette forbindelse til PC";
+"Device not paired to PC" = "Enheden er ikke parret med PC";
+"Your host PC's GPU doesn't support streaming video resolutions over 4K." = "Din vært-PC's GPU understøtter ikke streaming af videoopløsninger over 4K.";
+"Failed to launch app" = "Kunne ikke starte appen";
+"Failed to resume app" = "Kunne ikke genoptage appen";
+"Razer PC Remote Play only supports adding PCs on your local network on iOS." = "Razer PC Remote Play understøtter kun at tilføje PC'er på dit lokale netværk på iOS.";
+"Host information updated" = "Værtens oplysninger opdateret";
+"Server Error" = "Serverfejl";
+"Missing audio capture device. Reinstalling Razer Cortex should resolve this error." = "Manglende lydoptagelsesenhed. Geninstallation af Razer Cortex bør løse denne fejl.";
+"Could not connect to host.\n\nEnsure Razer Cortex is running properly.\n\nIf you're using a non-default port, you will need to include that here." = "Kunne ikke oprette forbindelse til værten.\n\nSørg for, at Razer Cortex kører korrekt.\n\nHvis du bruger en ikke-standard port, skal du inkludere den her.";
 
 //Nexus String
 "Version %1$s" = "Version %1$s";
@@ -132,7 +145,6 @@
 "Retry" = "Prøv igen";
 "To continue using Razer software and services you must first accept the Terms of Service and Privacy Policy agreement" = "For at fortsætte med at bruge Razer software og ydelser må du først acceptere servicevilkår og fortrolighedspolitik.";
 "Accept" = "Accepter";
-
 "Allow Remote Play to access this device’s network." = "Giv Remote Play adgang til denne enheds netværk.";
 "To unlock additional functionality, Razer PC Remote Play requires the following permissions:" = "For at låse op for yderligere funktionalitet kræver Razer PC Remote Play følgende tilladelser:";
 "Local Network" = "Lokalt Netværk";
@@ -141,3 +153,4 @@
 "Done" = "Udført";
 "Home" = "Start";
 "Download" = "Download";
+"Help" = "Hjælp";

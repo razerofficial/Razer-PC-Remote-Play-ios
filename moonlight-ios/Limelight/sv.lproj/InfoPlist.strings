@@ -1,2 +1,2 @@
 /* Localized versions of Info.plist keys */
-
+"NSLocalNetworkUsageDescription" = "Den här behörigheten krävs för att upptäcka och ansluta till kompatibla enheter på ditt lokala nätverk, vilket gör det möjligt med sömlös spelupplevelse på din mobila enhet eller PC.";

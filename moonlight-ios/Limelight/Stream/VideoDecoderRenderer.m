@@ -53,7 +53,15 @@ extern int ff_isom_write_av1c(AVIOContext *pb, const uint8_t *buf, int size,
     if (_view.bounds.size.width > _view.bounds.size.height * _streamAspectRatio) {
         videoSize = CGSizeMake(_view.bounds.size.height * _streamAspectRatio, _view.bounds.size.height);
     } else {
-        videoSize = CGSizeMake(_view.bounds.size.width, _view.bounds.size.width / _streamAspectRatio);
+        CGFloat width = _view.bounds.size.width;
+        CGFloat height = _view.bounds.size.height;
+        if (_view.bounds.size.width == 0) {
+            width = UIScreen.mainScreen.bounds.size.width;
+        }
+        if (_view.bounds.size.height == 0) {
+            height = UIScreen.mainScreen.bounds.size.height;
+        }
+        videoSize = CGSizeMake(width, height / _streamAspectRatio);
     }
     displayLayer.position = CGPointMake(CGRectGetMidX(_view.bounds), CGRectGetMidY(_view.bounds));
     displayLayer.bounds = CGRectMake(0, 0, videoSize.width, videoSize.height);
@@ -505,7 +513,10 @@ int DrSubmitDecodeUnit(PDECODE_UNIT decodeUnit);
         }
         else {
             // Unsupported codec!
-            abort();
+            Log(LOG_E, @"Unsupported codec!");
+            free(data);
+            return DR_NEED_IDR;
+//            abort();
         }
     }
     
