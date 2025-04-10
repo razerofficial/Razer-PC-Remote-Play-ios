@@ -210,9 +210,17 @@ struct DashboardView: View {
             
         }
         .edgesIgnoringSafeArea(.all)
+        .fullScreenCover(isPresented: $viewModel.isShowAddManualHostView) {
+            AddManualHostView()
+            .background(Color.clear) // 确保整个模态视图的背景是透明的
+        }
+        .valueChanged(value: viewModel.isShowAddManualHostView) { show in
+            if show == false {
+                viewModel.startTracking()
+            }
+        }
         .onAppearFix{
             viewModel.startTracking()
-            
         }
     }
     

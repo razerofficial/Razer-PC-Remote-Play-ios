@@ -33,7 +33,7 @@ struct ChangeObserver<Content: View, Value: Equatable>: View {
     @SwiftUI.State private var oldValue: Value
     
     var body: some View {
-        DDLogInfo("ChangeObserver updating view")
+        Logger.info("ChangeObserver updating view")
         if oldValue != value {
             DispatchQueue.main.async {
                 oldValue = value
@@ -41,7 +41,7 @@ struct ChangeObserver<Content: View, Value: Equatable>: View {
             }
         }
         else{
-            DDLogInfo("ChangeObserver is failing since oldValue == value")
+            Logger.info("ChangeObserver is failing since oldValue == value")
         }
         return content
     }

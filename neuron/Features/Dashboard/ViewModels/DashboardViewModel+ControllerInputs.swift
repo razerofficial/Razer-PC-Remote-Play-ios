@@ -34,6 +34,10 @@ extension DashboardViewModel: RZHandleResponderDelegate {
             return
         }
         
+        if  HostListManger.shared.conectingViewShowing == true {
+            return
+        }
+        
         if wolAlertView?.isShowing == true {
             switch action {
             case .A:

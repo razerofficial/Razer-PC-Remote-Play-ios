@@ -154,3 +154,27 @@
 "Home" = "Home";
 "Download" = "Download";
 "Help" = "Hilfe";
+//20250221 AI
+"Share" = "Teilen";
+"Specify the video codec used for streaming." = "Geben Sie den für das Streaming verwendeten Videocodec an.";
+"Streaming session in progress" = "Streaming-Sitzung läuft";
+"Tap to cancel" = "Tippen zum Abbrechen";
+"Capture" = "Aufnehmen";
+"Replace" = "Ersetzen";
+"Reconnecting to PC Streaming" = "Verbindung zu PC-Streaming wird wiederhergestellt";
+"Connection errors detected.Do you want to cancel this connection or replace the previous session?" = "Verbindungsfehler erkannt. Möchten Sie diese Verbindung abbrechen oder die vorherige Sitzung ersetzen?";
+"Please ensure the Cortex host is running and that no other device is connected to it." = "Bitte stellen Sie sicher, dass der Cortex-Host läuft und kein anderes Gerät verbunden ist.";
+"conn_error_code_5031" = "Das gleichzeitige Streaming-Limit des Hosts wurde erreicht. Stoppen Sie einen bestehenden Stream oder erhöhen Sie den 'Kanäle'-Wert in &hostlabel; Cortex-Einstellungen UI.";
+"conn_error_code_5032" = "Fehler bei der Initialisierung der Videoaufnahme/Kodierung. Ist ein Display angeschlossen und eingeschaltet?";
+"conn_error_code_5033" = "Keine laufende App zum Fortsetzen.";
+"conn_error_code_5034" = "Alle Sitzungen müssen vor dem Beenden getrennt werden.";
+"Automatic" = "Automatisch";
+"Dismiss" = "Verwerfen";
+"Video Codec" = "Videocodec";
+"&app is already streaming on &device, would you like to replace the current session or quit? All unsaved data will be lost." = "&app streamt bereits auf &device, möchten Sie die aktuelle Sitzung ersetzen oder beenden? Alle nicht gespeicherten Daten gehen verloren.";
+"conn_error_code_5037" = "Der Host-PC konnte den Video-Encoder nicht starten. Stellen Sie sicher, dass Ihre GPU- und CPU-Treiber aktualisiert sind.";
+"conn_error_code_5038" = "Der Video-Encoder konnte nicht gestartet werden. Versuchen Sie eine andere Video-Codec oder starten Sie den Host-PC neu.";
+"conn_error_code_5039" = "Es wurde kein Display gefunden, das mit Ihrem PC verbunden ist. Stellen Sie sicher, dass Ihr Monitor eingeschaltet ist oder ändern Sie den Anzeigemodus auf Nur Telefon";
+"conn_error_code_5040" = "Die Razer Virtual Display wurde nicht korrekt geladen. Bitte starten Sie Ihren Host-PC neu.";
+"e.g.51337" = "z. B. 51337";
+"Please ensure Razer Cortex is running." = "Stellen Sie sicher, dass Razer Cortex ausgeführt wird.";

@@ -51,7 +51,8 @@
             localPort = RZ_DEFAULT_HTTP_PORT;
         }
         
-        host.localAddress = [Utils addressAndPortToAddressPortString:lanAddr port:localPort];
+//        host.localAddress = [Utils addressAndPortToAddressPortString:lanAddr port:localPort];
+        host.localAddress = lanAddr;
     }
     
     // This is a Sunshine extension for WAN port remapping
@@ -66,17 +67,19 @@
             externalHttpPort = RZ_DEFAULT_HTTP_PORT;
         }
     }
+    host.httpPort = externalHttpPort;
     
     // Modern GFE versions don't actually give us a WAN address anymore
     // so we leave the one that we populated from mDNS discovery via STUN.
     NSString *wanAddr = [[self getStringTag:TAG_EXTERNAL_IP] trim];
-    if (wanAddr) {
-        host.externalAddress = [Utils addressAndPortToAddressPortString:wanAddr port:externalHttpPort];
+    if ([wanAddr length] > 0) {
+//        host.externalAddress = [Utils addressAndPortToAddressPortString:wanAddr port:externalHttpPort];
+        host.externalAddress = wanAddr;
     }
-    else if (host.externalAddress) {
-        // If we have an external address (via STUN) already, we still need to populate the port
-        host.externalAddress = [Utils addressAndPortToAddressPortString:[Utils addressPortStringToAddress:host.externalAddress] port:externalHttpPort];
-    }
+//    else if (host.externalAddress) {
+//        // If we have an external address (via STUN) already, we still need to populate the port
+//        host.externalAddress = [Utils addressAndPortToAddressPortString:[Utils addressPortStringToAddress:host.externalAddress] port:externalHttpPort];
+//    }
     
     NSString *state = [[self getStringTag:TAG_STATE] trim];
     if (![state hasSuffix:@"_SERVER_BUSY"]) {

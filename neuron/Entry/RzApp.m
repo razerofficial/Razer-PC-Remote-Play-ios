@@ -20,12 +20,18 @@
 #import "SWRevealViewController.h"
 #import "RzMainFrameViewController.h"
 #import "AppDelegate.h"
-#import "RZMainViewController.h"
 #import "HttpManager.h"
 #import "ServerInfoResponse.h"
 #import "AppListResponse.h"
 #import "Moonlight-Swift.h"
 #import "RZServerInfoResponse.h"
+
+@interface RzApp ()
+
+@property (nonatomic, strong) LocalNetworkAuthorization *networkAuthorization;
+@property (nonatomic, assign) BOOL isLaunchingDesktop;
+
+@end
 
 @implementation RzApp
 
@@ -33,6 +39,7 @@
     static RzApp *app;
     if (!app) {
         app = [RzApp new];
+        app.networkAuthorization = [[LocalNetworkAuthorization alloc] init];
     }
     return app;
 }
@@ -40,7 +47,7 @@
 - (void)maybeStartStreaming {
     //if first time launch game and tutorial hasn't been displayed yet, will show tutorial first then launch game
     [RzUtils setNeedContinueLaunchGame:true];
-    [SettingsRouter.shared setStartingStream:YES];
+    // [SettingsRouter.shared setStartingStream:YES];
     
     if (![RzUtils isAcceptedTOS] || ![RzUtils isRequestedLocalNetworkPermission]) {
         [NSNotificationCenter.defaultCenter postNotificationName:@"START_STREAMING_NEED_SHOW_TUTORIAL" object:nil];
@@ -49,22 +56,24 @@
     } else {
         [SettingsRouter.shared showStreamLoadingView];
     }
-    
-    LocalNetworkAuthorization *localNetworkAuthorization = [[LocalNetworkAuthorization alloc] init];
      
-     __weak typeof(self) weakSelf = self;
-    [localNetworkAuthorization requestAuthorizationWithCompletion:^(BOOL result) {
+    __weak typeof(self) weakSelf = self;
+    __weak SettingsRouter *weakRouter = SettingsRouter.shared;
+    [self.networkAuthorization requestAuthorizationWithIsNeedToResetCompletionBlock:true completion:^(BOOL result) {
         if (result) {
-            [SettingsRouter.shared dismissTutorialView];
+            Log(LOG_I, @"maybeStartStreaming: will start streaming.");
+            [weakRouter dismissTutorialView];
             [weakSelf startStreaming];
+            
         } else {
             [NSNotificationCenter.defaultCenter postNotificationName:@"START_STREAMING_NEED_SHOW_TUTORIAL" object:nil];
-            [SettingsRouter.shared hideStreamLoadingView];
+            [weakRouter hideStreamLoadingView];
         }
     }];
 }
 
 - (void)startStreaming {
+    
     RzTemporaryApp *app = [[ShareDataDB shared] currentLaunchGame];
     
     TemporaryApp *newApp = [app convert2TemporaryApp];
@@ -112,9 +121,12 @@
 }
 
 - (void)launchDesktopStreaming: (TemporaryHost*) host {
+    if (self.isLaunchingDesktop) {
+        return;
+    }
+    self.isLaunchingDesktop = true;
     //read setting data from share db
     [[ShareDataDB shared] readSettingDataFromShareDB];
-    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [self maybeUpdateStreamingSettingForHost:host];
         
@@ -143,6 +155,7 @@
 //            //before streaming need check PC current running game
 //            [mainVC navigateToStreamViewController:desktop shouldReturnToNexus:false];
             [SettingsRouter.shared prepareNavigateToStreamViewController:desktop shouldReturnToNexus:false];
+            self.isLaunchingDesktop = false;
         });
     });
 }
@@ -163,6 +176,13 @@
     NSString *width = displayModeDic[@"DisplayMode"][@"Width"];
     NSString *height = displayModeDic[@"DisplayMode"][@"Height"];
     NSString *refreshRate = displayModeDic[@"DisplayMode"][@"RefreshRate"];
+    
+    if (width.integerValue <= 0 || height.integerValue <= 0 || refreshRate.integerValue <= 0) {
+        width = @"1280";
+        height = @"720";
+        refreshRate = @"60";
+        Log(LOG_E, @"request host resolution and refresh rate error, will use default value instead");
+    }
     
     UIScreen *mainScreen = [UIScreen mainScreen];
     NSInteger phoneRefreshRate = mainScreen.maximumFramesPerSecond;
@@ -189,18 +209,6 @@
                        hostFramerate:refreshRate.integerValue > phoneRefreshRate ? phoneRefreshRate : refreshRate.integerValue
                           hostHeight:height.integerValue
                            hostWidth:width.integerValue];
-}
-
-- (RZMainViewController *)getRZMainViewController {
-    UINavigationController *rootNav = (UINavigationController *)[UIApplication sharedApplication].delegate.window.rootViewController;
-    RZMainViewController *mainVC = nil;
-    for (UIViewController *vc in rootNav.viewControllers) {
-        if ([vc isKindOfClass:[RZMainViewController class]]) {
-            mainVC = (RZMainViewController *)vc;
-            break;
-        }
-    }
-    return mainVC;
 }
 
 - (SettingsMenuVC *)getSettingsMenuVC {

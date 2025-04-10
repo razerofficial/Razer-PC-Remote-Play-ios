@@ -234,11 +234,11 @@ enum TouchMode: Int, Codable {
     func displayName() -> String {
         switch self {
         case .H264:
-            return "H.264"
+            return "H264"
         case .Hevc:
             return "HEVC"
         case .Auto:
-            return "Auto"
+            return "Automatic"
         case .AV1:
             return "AV1"
         }
@@ -246,15 +246,18 @@ enum TouchMode: Int, Codable {
     
     static var all: [RZPreferredCodec] {
         
-        var all: [RZPreferredCodec] = [.Auto ,.H264]
+        var all: [RZPreferredCodec] = [.Auto]
+        if #available(iOS 16.0, tvOS 16.0, *) {
+            if VTIsHardwareDecodeSupported(kCMVideoCodecType_AV1) {
+                all.append(.AV1)
+            }
+        }
         
         if VTIsHardwareDecodeSupported(kCMVideoCodecType_HEVC) {
             all.append(.Hevc)
         }
         
-        if VTIsHardwareDecodeSupported(kCMVideoCodecType_AV1) {
-            all.append(.AV1)
-        }
+        all.append(.H264)
         
         return all
     }

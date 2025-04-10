@@ -323,7 +323,10 @@ void ClLogMessage(const char* format, ...)
     va_list va;
     va_start(va, format);
     vfprintf(stderr, format, va);
+    NSString *formattedString = [[NSString alloc] initWithFormat:[[NSString alloc] initWithCString:format] arguments:va];
     va_end(va);
+    
+    [DevOptionVC log:formattedString];
 }
 
 void ClRumble(unsigned short controllerNumber, unsigned short lowFreqMotor, unsigned short highFreqMotor)

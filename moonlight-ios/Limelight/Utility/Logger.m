@@ -7,6 +7,7 @@
 //
 
 #import "Logger.h"
+#import "Moonlight-Swift.h"
 
 static LogLevel LoggerLogLevel = LOG_I;
 
@@ -16,14 +17,20 @@ void Log(LogLevel level, NSString* fmt, ...) {
     va_list args;
     va_start(args, fmt);
     LogTagv(level, NULL, fmt, args);
+    NSString *formattedString = [[NSString alloc] initWithFormat:fmt arguments:args];
     va_end(args);
+    
+    [DevOptionVC log:formattedString];
 }
 
 void LogTag(LogLevel level, NSString* tag, NSString* fmt, ...) {
     va_list args;
     va_start(args, fmt);
     LogTagv(level, tag, fmt, args);
+    NSString *formattedString = [[NSString alloc] initWithFormat:fmt arguments:args];
     va_end(args);
+    
+    [DevOptionVC log:formattedString];
 }
 
 void LogTagv(LogLevel level, NSString* tag, NSString* fmt, va_list args) {

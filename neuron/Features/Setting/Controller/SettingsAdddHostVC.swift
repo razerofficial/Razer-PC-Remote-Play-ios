@@ -38,6 +38,7 @@ class SettingsAdddHostVC: RZBaseVC , PairCallback {
         //enable keyboard auto change
         IQKeyboardManager.shared().isEnabled = true
         IQKeyboardManager.shared().shouldResignOnTouchOutside = true
+        IQKeyboardManager.shared().isEnableAutoToolbar = false
         setupView()
         setupData()
     }
@@ -94,13 +95,8 @@ class SettingsAdddHostVC: RZBaseVC , PairCallback {
         }
         
         addButton.snp.makeConstraints { make in
-            if IsIpad() {
-                make.centerY.equalTo(descLab)
-                make.right.equalTo(-35)
-            } else {
-                make.centerY.equalTo(descLab)
-                make.right.equalTo(-50)
-            }
+            make.centerY.equalTo(textFieldBg)
+            make.right.equalTo(IsIpad() ? -35 : -50)
             make.height.equalTo(44)
         }
         
@@ -114,8 +110,8 @@ class SettingsAdddHostVC: RZBaseVC , PairCallback {
         
         textField.rx.text.orEmpty
             .subscribe(onNext: { [self] text in
-                addButton.isEnabled = !text.isEmpty
-                addButton.layer.opacity = text.isEmpty ? 0.5 : 1.0
+                addButton.isEnabled = RzUtils.checkIPAddressISValid(withIP: text)
+                addButton.layer.opacity = addButton.isEnabled ? 1.0 : 0.5
             })
             .disposed(by: disposed)
         
@@ -129,17 +125,11 @@ class SettingsAdddHostVC: RZBaseVC , PairCallback {
     
     @objc func addHost() {
         
-        textField.resignFirstResponder()
-        
-        if isWifiAndSameLocalAddress(textField.text ?? "") == false {
-            //Forbidden pairing when not the same wifi
-            self.loadingView.isHidden = false
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                self.loadingView.isHidden = true
-                self.errorTips.isHidden = false
-            }
+        if addButton.isEnabled == false {
             return
         }
+        
+        textField.resignFirstResponder()
         
         loadingView.isHidden = false
         
@@ -299,7 +289,7 @@ class SettingsAdddHostVC: RZBaseVC , PairCallback {
         let title = SettingsRouter.titleLab("Connecting…".localize())
         title.font = UIFont.systemFont(ofSize: 18)
         
-        let des = SettingsRouter.desLab("Please ensure Razer Cortex is running on the same network.".localize(), 14)
+        let des = SettingsRouter.desLab("Please ensure Razer Cortex is running.".localize(), 14)
         
         let indicator = UIActivityIndicatorView.init(style: .large)
         indicator.color = .gray

@@ -26,6 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSData *)readDataFromPath:(NSString *)item;
 - (void)writeData:(NSData *)data toFile:(NSString *)item;
 - (RzTemporaryApp *)currentLaunchGame;
+- (void)resetCurrentLaunchGameData;
 - (void)readSettingDataFromShareDB;
 - (void)writeSettingDataToShareDB;
 - (void)writeSettingDataToShareDB: (TemporarySettings *)setting;

@@ -143,20 +143,22 @@ public class LocalNetworkAuthorization: NSObject {
     private var localNetworkPermission: Bool = false
     private var done: Bool = false
     private var lock: NSLock = NSLock()
+    private var isNeedToResetCompletionBlock: Bool = false
     fileprivate var bag = Set<AnyCancellable>()
     
-    @objc public func requestAuthorization(completion: @escaping (Bool) -> Void) {
+    //Since the completion block will be executed every time there is a network change, if only one execution is required, please set isNeedToResetControlBlock to true
+    @objc public func requestAuthorization(isNeedToResetCompletionBlock: Bool = false, completion: @escaping (Bool) -> Void) {
         self.networkPermission = false
         self.localNetworkPermission = false
         self.done = false
-        
+        self.isNeedToResetCompletionBlock = isNeedToResetCompletionBlock
         self.completion = completion
         
-        NetworkMonitor.shared.hasNetSubject.debounce(for: .seconds(0.5), scheduler: RunLoop.main)
-            .sink { status in
+        NetworkMonitor.shared.netSubject.debounce(for: .seconds(0.5), scheduler: RunLoop.main)
+            .sink { [weak self] (status, _) in
                 print("network status:\(status)")
-                self.networkPermission = status
-                self.updateNetworkState()
+                self?.networkPermission = status
+                self?.updateNetworkState()
             }
             .store(in: &bag)
         
@@ -174,33 +176,39 @@ public class LocalNetworkAuthorization: NSObject {
         // Browse for a custom service type.
         let browser = NWBrowser(for: .bonjour(type: "_rzstream._tcp", domain: nil), using: parameters)
         self.browser = browser
-        browser.stateUpdateHandler = { newState in
+        browser.stateUpdateHandler = {[weak self] newState in
             print("state:\(newState)")
             switch newState {
             case .failed(let error):
                 print(error.localizedDescription)
             case .ready:
                 DispatchQueue.main.asyncAfter(deadline: .now()+0.5){
-                    if self.browser != nil {
+                    if self?.browser != nil {
                         print("Local network permission has been granted")
-                        self.completion?(true)
+                        self?.completion?(true)
+                        if isNeedToResetCompletionBlock {
+                            self?.resetCompletionBlock()
+                        }
                     }
                 }
                 break
             case let .waiting(error):
                 print("Local network permission has been denied: \(error)")
-                self.reset()
-                self.completion?(false)
+                self?.reset()
+                self?.completion?(false)
+                if isNeedToResetCompletionBlock {
+                    self?.resetCompletionBlock()
+                }
             default:
                 break
             }
         }
         
-        browser.browseResultsChangedHandler = { results, changes in
+        browser.browseResultsChangedHandler = {[weak self] results, changes in
             if !results.isEmpty {
                 print("Local network services found or access granted.")
-                self.localNetworkPermission = true
-                self.updateNetworkState()
+                self?.localNetworkPermission = true
+                self?.updateNetworkState()
             }
         }
         
@@ -218,6 +226,9 @@ public class LocalNetworkAuthorization: NSObject {
         if status && !done {
             self.done = true
             self.completion?(status)
+            if self.isNeedToResetCompletionBlock {
+                self.resetCompletionBlock()
+            }
             self.reset()
         }
         self.lock.unlock()
@@ -228,6 +239,10 @@ public class LocalNetworkAuthorization: NSObject {
         self.browser = nil
         self.netService?.stop()
         self.netService = nil
+    }
+    
+    @objc func resetCompletionBlock() {
+        completion = nil
     }
 }
 

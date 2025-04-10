@@ -154,3 +154,27 @@
 "Home" = "首頁";
 "Download" = "下載";
 "Help" = "說明";
+//20250221 AI
+"Share" = "分享";
+"Specify the video codec used for streaming." = "指定用於串流的視訊編解碼器。";
+"Streaming session in progress" = "串流會話進行中";
+"Tap to cancel" = "點擊取消";
+"Capture" = "擷取";
+"Replace" = "取代";
+"Reconnecting to PC Streaming" = "重新連接到 PC 串流";
+"Connection errors detected.Do you want to cancel this connection or replace the previous session?" = "偵測到連線錯誤。您想要取消此連線還是替換先前的會話？";
+"Please ensure the Cortex host is running and that no other device is connected to it." = "請確保 Cortex 主機正在運行，並且沒有其他設備連接到它。";
+"conn_error_code_5031" = "主機的並發串流限制已達到。請停止現有的串流，或在 &hostlabel; Cortex 設定 UI 中增加「頻道」值。";
+"conn_error_code_5032" = "初始化影片擷取/編碼失敗。是否已連接顯示器並開啟電源？";
+"conn_error_code_5033" = "沒有正在運行的應用可恢復。";
+"conn_error_code_5034" = "退出前必須斷開所有會話連接。";
+"Automatic" = "自動";
+"Dismiss" = "關閉";
+"Video Codec" = "視頻編解碼器";
+"&app is already streaming on &device, would you like to replace the current session or quit? All unsaved data will be lost." = "&app 已經在 &device 上串流播放，您想要替換當前會話還是退出？所有未儲存的數據將會丟失。";
+"conn_error_code_5037" = "主機PC無法啟動視頻編碼器。請確保您的GPU和CPU驅動程式已更新。";
+"conn_error_code_5038" = "視頻編碼器啟動失敗。請嘗試使用不同的視頻編解碼器，或重新啟動主機PC。";
+"conn_error_code_5039" = "未檢測到連接到您的PC的顯示器。請確保您的顯示器已開啟，或將顯示模式更改為僅限手機。>";
+"conn_error_code_5040" = "Razer虛擬顯示未正確加載。請重新啟動您的主機PC。";
+"e.g.51337" = "例如：51337";
+"Please ensure Razer Cortex is running." = "請確保 Razer Cortex 正在執行。";

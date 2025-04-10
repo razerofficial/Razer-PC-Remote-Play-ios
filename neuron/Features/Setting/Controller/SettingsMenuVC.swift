@@ -30,8 +30,6 @@ class SettingsMenuVC: RZBaseVC , UITableViewDelegate , UITableViewDataSource {
     var selecetdIndexPath = IndexPath(row: 0, section: 0)
     var selecteView:UIView?
     
-    var localNetworkAuthorization: LocalNetworkAuthorization = LocalNetworkAuthorization()
-    var isShowDownloadOverlay: Bool = false
     var streamConfig: StreamConfiguration = StreamConfiguration()
     
     
@@ -59,6 +57,7 @@ class SettingsMenuVC: RZBaseVC , UITableViewDelegate , UITableViewDataSource {
         if (nextHandel != nil) {
             menuTable.reloadData()
         }
+        AppStoreReviewHandler.shared.checkIsStartAppReiew()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -77,7 +76,6 @@ class SettingsMenuVC: RZBaseVC , UITableViewDelegate , UITableViewDataSource {
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        dimissDownloadOverlay()
     }
     
     deinit {

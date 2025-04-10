@@ -10,6 +10,7 @@
 
 @property NSString* host;
 @property unsigned short httpsPort;
+@property unsigned short httpPort;
 @property NSString* appVersion;
 @property NSString* gfeVersion;
 @property NSString* appID;
@@ -31,5 +32,7 @@
 @property BOOL multiController;
 @property BOOL useFramePacing;
 @property NSData* serverCert;
+
+@property NSString* uuid;
 
 @end

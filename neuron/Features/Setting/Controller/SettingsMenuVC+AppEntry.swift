@@ -26,10 +26,6 @@ extension SettingsMenuVC {
             self?.retryStreaming(not)
         }
         
-        NotificationCenter.default.addObserver(forName: UIApplication.willResignActiveNotification, object: nil, queue: .main) { [weak self]  not in
-            self?.dimissDownloadOverlay()
-        }
-        
         NotificationCenter.default.addObserver(forName: .debugModeUpdateNotification, object: nil, queue: .main) { [weak self]  not in
             self?.debugModeUpdate()
         }
@@ -48,15 +44,6 @@ extension SettingsMenuVC {
         }
     }
     
-    /*
-     *case1:app resign active
-     *case2:user click on the blank space
-     *case3:view disappear
-     */
-    func dimissDownloadOverlay() {
-        DownloadOverlayManager.shared.dismissOverlay()
-    }
-    
     func debugModeUpdate() {
         updateMenuArray()
         for subview in view.subviews {
@@ -67,7 +54,6 @@ extension SettingsMenuVC {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        dimissDownloadOverlay()
     }
 
     func prepareToStreamApp( _ app: TemporaryApp) {
@@ -90,43 +76,6 @@ extension SettingsMenuVC {
             self.navigationController?.pushViewController(streamFrameVC, animated: false)
         }
     }
-
-    func showNexusNotInstalledAlert() {
-        let alertController = UIAlertController(title: "Razer recommends that users download Razer Nexus, a launcher specifically designed for gaming, to enhance the use of Razer PC Remote Play", message: "", preferredStyle: .alert)
-
-        weak var weakSelf = self
-        let okAction = UIAlertAction(title: "Download Razer Nexus", style: .default) { _ in
-            weakSelf?.showDownloadOverlay()
-        }
-        let cancelAction = UIAlertAction(title: "No Thanks", style: .cancel, handler: nil)
-
-        alertController.addAction(cancelAction)
-        alertController.addAction(okAction)
-
-        self.present(alertController, animated: true, completion: nil)
-    }
-    
-    func showDownloadOverlay() {
-        if (self.isShowDownloadOverlay) {
-            Logger.debug("isShowDownloadOverlay is YES, return...")
-            return;
-        }
-        let nexusAppId = "1565916457"
-        DownloadOverlayManager.shared.showOverlay(appid: nexusAppId, delegate: self)
-    }
     
 }
 
-extension SettingsMenuVC: DownloadOverlayDelegate {
-    func storeOverlayDidShow() {
-        isShowDownloadOverlay = true
-    }
-    
-    func storeOverlayDidFailToLoad(_ overlay: SKOverlay, error: any Error) {
-        isShowDownloadOverlay = false
-    }
-    
-    func storeOverlayDidFinishDismissal(_ overlay: SKOverlay, transitionContext: SKOverlay.TransitionContext) {
-        isShowDownloadOverlay = false
-    }
-}

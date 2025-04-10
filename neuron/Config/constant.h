@@ -26,6 +26,7 @@ static NSString *statsPath = @"stats.txt";
 static NSString *frameSettingsTXTPath = @"frameSetings.txt";
 static NSString *devOptionsPath = @"devOptions.db";
 static NSString *manuallyUnpairedHostPath = @"manuallyUnpairedHost.db";
+static NSString *shareLogPath = @"shareLog.txt";
 
 //notifications
 static NSString *kRetryStreamingNotification = @"retryStreamingNotification";

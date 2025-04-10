@@ -36,6 +36,7 @@ class DevOptionVC: RZBaseVC {
     }()
     
     var showSeparateScreenOptionTitleLabel: UILabel? = nil
+    var enableSaveLogOptionTitleLabel: UILabel? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -117,8 +118,44 @@ class DevOptionVC: RZBaseVC {
             make.top.equalTo(exportSettingsView.snp.bottom).offset(30)
             make.left.equalTo(titleLabSpaceLeft)
             make.right.equalTo(-titleLabSpaceLeft)
+        }
+        
+        
+        let enableSaveLogGesture = UITapGestureRecognizer(target: self, action: #selector(enableSaveLogOption(_:)))
+        let (enableSaveLogView, enableSaveLogLable) = DevOptionItemView.changeableItemView("Enable Log File Saving" + (isEnableSaveLogDisplayMode ? " (ON)" : " (OFF)"))
+        enableSaveLogOptionTitleLabel = enableSaveLogLable
+        enableSaveLogView.addGestureRecognizer(enableSaveLogGesture)
+        contentView.addSubview(enableSaveLogView)
+        enableSaveLogView.snp.makeConstraints { make in
+            make.top.equalTo(hideSeparateScreenOptionView.snp.bottom).offset(30)
+            make.left.equalTo(titleLabSpaceLeft)
+            make.right.equalTo(-titleLabSpaceLeft)
+        }
+
+        
+        let exportLogGesture = UITapGestureRecognizer(target: self, action: #selector(exportLogAction(_:)))
+        let exportLogView = DevOptionItemView.itemView("Export Log File".localize())
+        exportLogView.addGestureRecognizer(exportLogGesture)
+        contentView.addSubview(exportLogView)
+        exportLogView.snp.makeConstraints { make in
+            make.top.equalTo(enableSaveLogView.snp.bottom).offset(30)
+            make.left.equalTo(titleLabSpaceLeft)
+            make.right.equalTo(-titleLabSpaceLeft)
+        }
+        
+        let cleanLogGesture = UITapGestureRecognizer(target: self, action: #selector(cleanLogAction(_:)))
+        let cleanLogView = DevOptionItemView.itemView("Clean Log".localize())
+        cleanLogView.addGestureRecognizer(cleanLogGesture)
+        contentView.addSubview(cleanLogView)
+        cleanLogView.snp.makeConstraints { make in
+            make.top.equalTo(exportLogView.snp.bottom).offset(30)
+            make.left.equalTo(titleLabSpaceLeft)
+            make.right.equalTo(-titleLabSpaceLeft)
             make.bottom.equalTo(contentView.snp.bottom).offset(-50)
         }
+        
+        contentView.layoutIfNeeded()
+        scrollView.contentSize = CGSize(width: 0 , height: contentView.frame.height)
         
     }
     
@@ -178,6 +215,66 @@ class DevOptionVC: RZBaseVC {
         }
     }
     
+    @objc func enableSaveLogOption(_ sender: UITapGestureRecognizer) {
+        // is enableSaveLogDisplayMode current value is
+        let newValue = !isEnableSaveLogDisplayMode
+        setEnableSaveLogDisplayMode(value: newValue)
+        enableSaveLogOptionTitleLabel?.text = "Enable Log File Saving" + (newValue ? " (ON)" : " (OFF)")
+        SettingsRouter.shared.shareLogEnableSave = newValue
+    }
+    
+    @objc func exportLogAction(_ sender: UITapGestureRecognizer) {
+
+        if SettingsRouter.shared.shareLogExcportIng {
+            return
+        }else {
+            
+            SettingsRouter.shared.shareLogExcportIng = true
+            //加锁
+            DevLogger.shared.lock()
+            
+//            let data:Data = DevLogger.shared.getLogData() ?? Data()
+//            ShareDataDB.shared().write(data, toFile: shareLogPath)
+            let fileURL = ShareDataDB.shared().fileUrl(fromGroup: shareLogPath)
+            let activityViewController = UIActivityViewController(activityItems: [fileURL], applicationActivities: nil)
+            
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                activityViewController.popoverPresentationController?.sourceView = self.view
+                activityViewController.popoverPresentationController?.sourceRect = CGRect(x: 100, y: 100, width: 200, height: 200)
+            }
+            self.present(activityViewController, animated: true) {}
+            
+            activityViewController.completionHandler = { a , b in
+                //解锁
+                DevLogger.shared.unLock()
+                SettingsRouter.shared.shareLogExcportIng = false
+            }
+
+        }
+        
+    }
+    
+    @objc func cleanLogAction(_ sender: UITapGestureRecognizer) {
+        DevLogger.shared.cleanLog()
+    }
+    
+    @objc class func log(_ msg:String) {
+        //使用单例，避免重复读写数据库
+        if SettingsRouter.shared.shareLogEnableSave {
+            
+            if msg.isEmpty {
+                return
+            }
+            DevLogger.shared.appendLog(text: msg)
+        }
+    }
+}
+
+public func DevOptionLog(_ items: Any..., separator: String = " ", terminator: String = "\n"){
+    //使用单例，避免重复读写数据库
+    if SettingsRouter.shared.shareLogEnableSave {
+        DevLogger.shared.appendLog(text: items.description)
+    }
 }
 
 extension DevOptionVC: RZHandleResponderDelegate {

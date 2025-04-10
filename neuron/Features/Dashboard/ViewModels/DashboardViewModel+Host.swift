@@ -72,49 +72,39 @@ extension DashboardViewModel {
     
     func manuallyAddPC() {
         
-        let okButton = AlertButton(id: "ok", title: "Add".localize(), type: .confirm)
-        let cancelButton = AlertButton(id: "cancel", title: "Cancel".localize(), type: .confirm)
-        addressAlertView = SwiftAlertView(title: "Add PC manually".localize(),
-                                   message: "Input PC IP address".localize(),
-                                   alertButtons:[cancelButton,okButton],
-                                   colorScheme: SwiftUI.ColorScheme.dark)
+        isShowAddManualHostView = true
         
-        addressAlertView?.addTextField { textField in
-            textField.placeholder = "Enter the IP address of your computer.".localize()
-        }
-        
-        addressAlertView?.respondOnOkClickWhenTextFiledIsEmpty = false
-        
-        addressAlertView?.onButtonClicked { _, buttonId in
-            if( buttonId == "ok" ){
-                let address = self.addressAlertView?.textField(at: 0)?.text ?? ""
-                if address.isEmpty {
-                    return
-                }
-                self.addressAlertView?.dismiss()
-                self.onManualIpEnter(address:address)
-            }
-        }
-        addressAlertView?.show()
+//        let okButton = AlertButton(id: "ok", title: "Add".localize(), type: .confirm)
+//        let cancelButton = AlertButton(id: "cancel", title: "Cancel".localize(), type: .confirm)
+//        addressAlertView = SwiftAlertView(title: "Add PC manually".localize(),
+//                                   message: "Input PC IP address".localize(),
+//                                   alertButtons:[cancelButton,okButton],
+//                                   colorScheme: SwiftUI.ColorScheme.dark)
+//        
+//        addressAlertView?.addTextField { textField in
+//            textField.placeholder = "Enter the IP address of your computer.".localize()
+//        }
+//        
+//        addressAlertView?.respondOnOkClickWhenTextFiledIsEmpty = false
+//        addressAlertView?.isDismissOnActionButtonClicked = false
+//        
+//        addressAlertView?.onButtonClicked { _, buttonId in
+//            if( buttonId == "ok" ){
+//                let address = self.addressAlertView?.textField(at: 0)?.text ?? ""
+//                let isContainPort = RzUtils.checkIPAddressISValid(withIP: address)
+//                if isContainPort == false {
+//                    return
+//                }
+//                self.addressAlertView?.dismiss()
+//                self.onManualIpEnter(address:address)
+//            }else {
+//                self.addressAlertView?.dismiss()
+//            }
+//        }
+//        addressAlertView?.show()
     }
     
     func onManualIpEnter(address: String) {
-        
-        
-        if isWifiAndSameLocalAddress(address) == false {
-            //Forbidden pairing when not the same wifi
-            HostListManger.shared.showHostConnetingView()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                HostListManger.shared.removeHostConnectingView()
-                let alertVC = UIAlertController(title: "Could not connect to host".localize(), message: "", preferredStyle: .alert)
-                //alertVC.addAction(UIAlertAction.init(title: "OK".localize(), style: .cancel))
-                UIApplication.shared.keyWindow?.rootViewController?.present(alertVC, animated: true)
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                    alertVC.dismiss(animated: true)
-                }
-            }
-            return
-        }
         
         HostListManger.shared.showHostConnetingView()
         

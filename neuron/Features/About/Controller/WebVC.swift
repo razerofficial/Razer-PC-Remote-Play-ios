@@ -25,8 +25,8 @@ import WebKit
 
 class WebVC : RZBaseVC {
     var isLoadFileURL:Bool = false
-    var url:URL!
-    var webViewTitle = ""
+    @objc var url:URL!
+    @objc var webViewTitle = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()

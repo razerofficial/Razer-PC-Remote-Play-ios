@@ -1749,35 +1749,6 @@ enet_protocol_send_outgoing_commands (ENetHost * host, ENetEvent * event, int ch
     return 0;
 }
 
-static enet_uint32
-enet_protocol_compute_wait_timeout(ENetHost * host, enet_uint32 timeout)
-{
-    for (ENetPeer * currentPeer = host -> peers;
-         currentPeer < & host -> peers [host -> peerCount];
-         ++ currentPeer)
-    {
-        if (! ENET_TIME_LESS (currentPeer -> nextTimeout, host -> serviceTime)) {
-            timeout = ENET_MIN (timeout, ENET_TIME_DIFFERENCE (currentPeer -> nextTimeout, host -> serviceTime) + 1);
-        }
-
-        if (currentPeer -> lastReceiveTime && currentPeer -> lastSendTime) {
-            enet_uint32 timeSinceLastRecv = ENET_TIME_DIFFERENCE (host -> serviceTime, currentPeer -> lastReceiveTime);
-            enet_uint32 timeSinceLastSend = ENET_TIME_DIFFERENCE (host -> serviceTime, currentPeer -> lastSendTime);
-            enet_uint32 timeSinceLastComm = ENET_MIN(timeSinceLastSend, timeSinceLastRecv);
-            if (timeSinceLastComm >= currentPeer -> pingInterval) {
-                // Ping is due now for this peer
-                return 0;
-            } else {
-                timeout = ENET_MIN (timeout, currentPeer -> pingInterval - timeSinceLastComm);
-            }
-        } else {
-            timeout = ENET_MIN (timeout, currentPeer -> pingInterval);
-        }
-    }
-
-    return timeout;
-}
-
 /** Sends any queued packets on the host specified to its designated peers.
 
     @param host   host to flush
@@ -1935,20 +1906,14 @@ enet_host_service (ENetHost * host, ENetEvent * event, enet_uint32 timeout)
 
        do
        {
-          enet_uint32 waitTime;
-
           host -> serviceTime = enet_time_get ();
 
           if (ENET_TIME_GREATER_EQUAL (host -> serviceTime, timeout))
             return 0;
 
-          waitTime = enet_protocol_compute_wait_timeout(host, ENET_TIME_DIFFERENCE (timeout, host -> serviceTime));
-          if (waitTime == 0)
-            break;
-
           waitCondition = ENET_SOCKET_WAIT_RECEIVE | ENET_SOCKET_WAIT_INTERRUPT;
 
-          if (enet_socket_wait (host -> socket, & waitCondition, waitTime) != 0)
+          if (enet_socket_wait (host -> socket, & waitCondition, ENET_TIME_DIFFERENCE (timeout, host -> serviceTime) / 10) != 0)
             return -1;
        }
        while (waitCondition & ENET_SOCKET_WAIT_INTERRUPT);

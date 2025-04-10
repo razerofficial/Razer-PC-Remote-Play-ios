@@ -61,8 +61,6 @@ class NeuronFrameSettingsViewModel: NSObject, ObservableObject {
         }
     }
     
-    @Published var isShowDownloadOverlay = false
-    
     @Published var isShowUnavailibleToast = false
     
     var isAtFrontMost: Bool = false
@@ -79,6 +77,7 @@ class NeuronFrameSettingsViewModel: NSObject, ObservableObject {
     @Published var limitRefreshRate: Bool = false
     @Published var MuteHostPC: Bool = true
     @Published var autoQuit: AutoQuit = .after30s
+    @Published var videoEncoder: RZPreferredCodec = .Auto
     
     //用于点击选项时候让Setting menu失去焦点
     weak var lastVC:RZStreamFrameSettingsViewController?
@@ -115,19 +114,12 @@ class NeuronFrameSettingsViewModel: NSObject, ObservableObject {
         MuteHostPC = !frameSettings.playAudioOnPC
         limitRefreshRate = (frameRate == .frameRate60fps ? true : false)
         autoQuit = AutoQuit(timeToTerminateApp: frameSettings.timeToTerminateApp)
+        videoEncoder = RZPreferredCodec(rawValue: frameSettings.preferredCodec) ?? .Auto
     }
     
     func toggleShowUnAvailibleToast(status: Bool) {
         printLog("⚠️====showUnAvailibleToast====")
         self.isShowUnavailibleToast = status
-    }
-    
-    //SKOverlay
-    func dismissAppStoreOverlay() {
-        if let scene = UIApplication.shared.connectedScenes.filter({$0.activationState == .foregroundActive}).compactMap({$0 as? UIWindowScene}).first {
-            SKOverlay.dismiss(in: scene)
-        }
-        isShowDownloadOverlay = false
     }
     
     func getAllComponent() -> [FrameSettingsUIComponents.FrameSettingsHightlightedComponent] {
@@ -153,7 +145,7 @@ class NeuronFrameSettingsViewModel: NSObject, ObservableObject {
         if isNeedShowLimitScreenResolutionToSafeAreaToggle() {
             components += [.NeuronStreamingSettingsLimitScreenResolutionToSafeAreaToggle]
         }
-        components += [.NeuronStreamingSettingsFramePacingPicker]
+        components += [.NeuronStreamingSettingsFramePacingPicker, .NeuronStreamingSettingsVideoEncoderPicker]
         
         return components
     }
@@ -366,6 +358,8 @@ class NeuronFrameSettingsViewModel: NSObject, ObservableObject {
                 }else {
                     self.highlightedUIComponent = .NeuronStreamingSettingsAutoQuitPicker
                 }
+            case .down:
+                self.highlightedUIComponent = .NeuronStreamingSettingsVideoEncoderPicker
             default:
                 break
             }
@@ -433,6 +427,17 @@ class NeuronFrameSettingsViewModel: NSObject, ObservableObject {
             return
         }
         
+        if highlightedUIComponent == .NeuronStreamingSettingsVideoEncoderPicker {
+            switch action {
+            case .B:
+                SettingsRouter.shared.navigationController?.popViewController(animated: true)
+            case .up:
+                self.highlightedUIComponent = .NeuronStreamingSettingsFramePacingPicker
+            default:
+                break
+            }
+            return
+        }
     }
 
     @objc static func isDuplicateDisplayMode() -> Bool {
@@ -440,20 +445,6 @@ class NeuronFrameSettingsViewModel: NSObject, ObservableObject {
     }
 }
 
-
-extension NeuronFrameSettingsViewModel: SKOverlayDelegate {
-    
-    func storeOverlayDidFailToLoad(_ overlay: SKOverlay, error: Error) {
-        self.toggleShowUnAvailibleToast(status: true)
-        self.isShowDownloadOverlay = false
-    }
-    
-    func storeOverlayDidFinishDismissal(_ overlay: SKOverlay, transitionContext: SKOverlay.TransitionContext) {
-        self.isShowDownloadOverlay = false
-        
-    }
-    
-}
 
 class FrameSettingsUIComponents {
     
@@ -473,6 +464,6 @@ class FrameSettingsUIComponents {
         case NeuronStreamingSettingsTouchScreenPicker
         case NeuronStreamingSettingsAutoConfigureSettingsToggle
         case NeuronStreamingSettingsAutoQuitPicker
-        
+        case NeuronStreamingSettingsVideoEncoderPicker
     }
 }

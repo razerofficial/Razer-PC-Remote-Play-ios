@@ -37,11 +37,12 @@ static video_stats_t global;
 
 + (instancetype)shared {
     static DevUtils *singled;
-    if (!singled) {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
         singled = [DevUtils new];
         [singled setupNotifications];
         singled.isDebugMode = [singled isDebugModeFromUserDefault];
-    }
+    });
     return singled;
 }
 
@@ -69,6 +70,10 @@ static video_stats_t global;
     [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillResignActiveNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull notification) {
         [self saveStatsToShareDB];
     }];
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)saveStatsToShareDB {

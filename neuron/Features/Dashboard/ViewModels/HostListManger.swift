@@ -50,7 +50,10 @@ class HostListManger: NSObject {
     var selectedHost:TemporaryHost?
     var selectedIndex:Int = 0
     var hasNetwork:Bool = true
+    var isWifi:Bool = true
     var timer:Timer?
+    
+    var conectingViewShowing:Bool = false
     
     //Should snow a loading circle like Moonlight does for the first 10 seconds
     var showFirstLoading:Bool = true
@@ -73,13 +76,16 @@ class HostListManger: NSObject {
         
         NetworkMonitor.shared.startMonitoring()
         
-        NetworkMonitor.shared.hasNetSubject.debounce(for: .seconds(0.5), scheduler: RunLoop.main)
-            .sink { conneted in
+        NetworkMonitor.shared.netSubject.debounce(for: .seconds(0.5), scheduler: RunLoop.main)
+            .sink { (conneted, isWifi) in
                 
                 //update ExternalIP
                 self.updateExternalIP()
                 
+                let netStateUpdated = self.hasNetwork != conneted || self.isWifi != isWifi;
                 self.hasNetwork = conneted
+                self.isWifi = isWifi
+                
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
                     if conneted == false {
                         self.allHosts = NSMutableArray.init()
@@ -88,7 +94,7 @@ class HostListManger: NSObject {
                     }
                     
                     //Not first check network
-                    if self.firstCheckNetwork != true {
+                    if self.firstCheckNetwork != true && netStateUpdated {
                         self.restartDiscovery()
                     }
                     
@@ -96,6 +102,14 @@ class HostListManger: NSObject {
                     
                 })
 
+            }
+            .store(in: &bag)
+        
+        SettingsRouter.shared.localNetworkAuthSubject.debounce(for: .seconds(0.5), scheduler: RunLoop.main)
+            .sink { [weak self] result in
+                if result {
+                    self?.restartDiscovery()
+                }
             }
             .store(in: &bag)
         
@@ -125,7 +139,7 @@ class HostListManger: NSObject {
         let title = SettingsRouter.titleLab("Connecting…".localize())
         title.font = UIFont.systemFont(ofSize: 18)
         
-        let des = SettingsRouter.desLab("Please ensure Razer Cortex is running on the same network.".localize(), 14)
+        let des = SettingsRouter.desLab("Please ensure Razer Cortex is running.".localize(), 14)
         
         let indicator = UIActivityIndicatorView.init(style: .large)
         indicator.color = .gray
@@ -160,11 +174,13 @@ class HostListManger: NSObject {
             self.hostConnetingView.snp.makeConstraints { make in
                 make.edges.equalToSuperview()
             }
+            conectingViewShowing = true
         }
     }
     
     func removeHostConnectingView(){
         self.hostConnetingView.removeFromSuperview()
+        conectingViewShowing = false
     }
     
 }
@@ -174,7 +190,7 @@ extension HostListManger {
     
     @objc func pairNetHost(_ host:TemporaryHost) {
         
-        DDLogInfo("=====pair host ======")
+        Logger.info("=====pair host ======")
         let httpManger = HttpManager.init(host: host)
 //        let uuid:String = UIDevice.current.identifierForVendor?.uuidString ?? "" + "\(Date.timeIntervalSinceReferenceDate)"
 //        httpManger?.setuniqueId(uuid)
@@ -192,8 +208,8 @@ extension HostListManger {
         }
         isUnpairing = true
         
-        DDLogInfo("=====unpair host ======")
-        print("=====unpair host:\(host.name) ======")
+        Logger.info("=====unpair host ======")
+        Logger.info("=====unpair host:\(host.name) ======")
         ShareDataDB.shared().writeManuallyUnpairedHostDataToshareDB(host.uuid)
         host.pairState = .unpaired
         host.serverCert = Data()
@@ -462,7 +478,7 @@ extension HostListManger {
     func updateExternalIP(){
         DispatchQueue.global().async {
             if let externalIp = self.getExternalIp() {
-                DDLogInfo("==== Latest ExternalIp:\(externalIp) ==== ")
+                Logger.info("==== Latest ExternalIp:\(externalIp) ==== ")
                 UserDefaults.standard.set(externalIp, forKey: External_IP)
             }
         }

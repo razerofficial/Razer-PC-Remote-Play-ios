@@ -522,8 +522,8 @@
     [_streamMan stopStream];
 }
 
-- (void) launchFailed:(NSString*)message {
-    Log(LOG_I, @"Launch failed: %@", message);
+- (void) launchFailed:(NSString*)message errorCode:(NSInteger)code {
+    Log(LOG_I, @"Launch failed: %@ code: %d", message, code);
     
     dispatch_async(dispatch_get_main_queue(), ^{
         // Allow the display to go to sleep now

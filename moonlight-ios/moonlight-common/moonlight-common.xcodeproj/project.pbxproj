@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		66DDDCC52D5EE3AF007E2194 /* UserDefaultBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 66DDDCC42D5EE3AF007E2194 /* UserDefaultBridge.m */; };
+		66DDDCC62D5EE3AF007E2194 /* UserDefaultBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 66DDDCC42D5EE3AF007E2194 /* UserDefaultBridge.m */; };
 		983091DE24CEB69B00A0835D /* ConnectionTester.c in Sources */ = {isa = PBXBuildFile; fileRef = 983091DD24CEB69B00A0835D /* ConnectionTester.c */; };
 		983091DF24CEB69B00A0835D /* ConnectionTester.c in Sources */ = {isa = PBXBuildFile; fileRef = 983091DD24CEB69B00A0835D /* ConnectionTester.c */; };
 		9857AEF01EBE85E10084F99E /* rs.c in Sources */ = {isa = PBXBuildFile; fileRef = 9857AEEE1EBE85E10084F99E /* rs.c */; };
@@ -82,6 +84,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		66DDDCC32D5EE3AF007E2194 /* UserDefaultBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UserDefaultBridge.h; sourceTree = "<group>"; };
+		66DDDCC42D5EE3AF007E2194 /* UserDefaultBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UserDefaultBridge.m; sourceTree = "<group>"; };
 		983091DD24CEB69B00A0835D /* ConnectionTester.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ConnectionTester.c; sourceTree = "<group>"; };
 		9857AEEE1EBE85E10084F99E /* rs.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = rs.c; path = "moonlight-common-c/reedsolomon/rs.c"; sourceTree = "<group>"; };
 		9857AEEF1EBE85E10084F99E /* rs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = rs.h; path = "moonlight-common-c/reedsolomon/rs.h"; sourceTree = "<group>"; };
@@ -298,6 +302,8 @@
 				98AB2E3C1CAD423B0089BB98 /* Video.h */,
 				98AB2E3D1CAD423B0089BB98 /* VideoDepacketizer.c */,
 				98AB2E3E1CAD423B0089BB98 /* VideoStream.c */,
+				66DDDCC32D5EE3AF007E2194 /* UserDefaultBridge.h */,
+				66DDDCC42D5EE3AF007E2194 /* UserDefaultBridge.m */,
 			);
 			name = src;
 			path = "moonlight-common-c/src";
@@ -406,6 +412,7 @@
 			files = (
 				FB1A67F821324F4900507771 /* rs.c in Sources */,
 				98F145362667D847004018E3 /* RtpAudioQueue.c in Sources */,
+				66DDDCC52D5EE3AF007E2194 /* UserDefaultBridge.m in Sources */,
 				FB1A67FA21324F4900507771 /* AudioStream.c in Sources */,
 				FB1A67FB21324F4900507771 /* ByteBuffer.c in Sources */,
 				FB1A67FC21324F4900507771 /* Connection.c in Sources */,
@@ -443,6 +450,7 @@
 			files = (
 				98C1FC142184124C0023FDDF /* SimpleStun.c in Sources */,
 				98F145352667D847004018E3 /* RtpAudioQueue.c in Sources */,
+				66DDDCC62D5EE3AF007E2194 /* UserDefaultBridge.m in Sources */,
 				98AB2E401CAD425A0089BB98 /* AudioStream.c in Sources */,
 				98AB2E411CAD425A0089BB98 /* ByteBuffer.c in Sources */,
 				98AB2E421CAD425A0089BB98 /* Connection.c in Sources */,

@@ -98,13 +98,13 @@
 		10772D9E2B8ED3DA00A839D1 /* ShareDataDB.m in Sources */ = {isa = PBXBuildFile; fileRef = 10772D9D2B8ED3DA00A839D1 /* ShareDataDB.m */; };
 		108EE0E82B901AA400094A01 /* RzTemporaryHost.m in Sources */ = {isa = PBXBuildFile; fileRef = 108EE0E72B901AA400094A01 /* RzTemporaryHost.m */; };
 		108EE0EB2B901B0600094A01 /* RzTemporaryApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 108EE0EA2B901B0600094A01 /* RzTemporaryApp.m */; };
-		1095F56F2C32B1A100FB469D /* DownloadOverlayManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1095F56E2C32B1A100FB469D /* DownloadOverlayManager.swift */; };
 		10C1A2382B9088770081B01D /* AppDelegate+Neuron.m in Sources */ = {isa = PBXBuildFile; fileRef = 10C1A2372B9088770081B01D /* AppDelegate+Neuron.m */; };
 		10D990162B8DDA030023BBC6 /* RzApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 10D990152B8DDA030023BBC6 /* RzApp.m */; };
 		10D9901D2B8DDC820023BBC6 /* RzSwizzling.m in Sources */ = {isa = PBXBuildFile; fileRef = 10D9901C2B8DDC820023BBC6 /* RzSwizzling.m */; };
 		33F79F0D2C9ABDF100535FFC /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 33F79F092C9ABDF100535FFC /* libcrypto.a */; };
 		33F79F0E2C9ABDF100535FFC /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 33F79F0C2C9ABDF100535FFC /* libssl.a */; };
 		3606EDA62C58838000B34526 /* SettingsHostDevicesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3606EDA32C58838000B34526 /* SettingsHostDevicesVC.swift */; };
+		361C50C72D90EAAE00D6A3EC /* DevLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 361C50C62D90EAAE00D6A3EC /* DevLogger.swift */; };
 		362B87EA2CD07AE300F15F95 /* DashboardVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 362B87DC2CD07AE300F15F95 /* DashboardVC.swift */; };
 		362B87EB2CD07AE300F15F95 /* DashboardViewModel+ControllerInputs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 362B87E22CD07AE300F15F95 /* DashboardViewModel+ControllerInputs.swift */; };
 		362B87EC2CD07AE300F15F95 /* HostListManger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 362B87E42CD07AE300F15F95 /* HostListManger.swift */; };
@@ -149,6 +149,8 @@
 		3652DB0F2C57731300A475CB /* SettingsMenuCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3652DB0E2C57731300A475CB /* SettingsMenuCell.swift */; };
 		3652DB112C57798200A475CB /* Color+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3652DB102C57798200A475CB /* Color+Extension.swift */; };
 		3652DB132C5780DD00A475CB /* SettingsMenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3652DB122C5780DD00A475CB /* SettingsMenuItem.swift */; };
+		366D17602D83C50800B450FC /* AddManualHostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 366D175F2D83C50800B450FC /* AddManualHostView.swift */; };
+		366D17622D83C8F700B450FC /* RZTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 366D17612D83C8F700B450FC /* RZTextField.swift */; };
 		3684A25D2C65F353000517CC /* ShareDataHost.m in Sources */ = {isa = PBXBuildFile; fileRef = 3684A25C2C65F353000517CC /* ShareDataHost.m */; };
 		3689E0652C69AC3900629595 /* ButtonEventsConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3689E05F2C69AC3900629595 /* ButtonEventsConstants.swift */; };
 		3689E0662C69AC3900629595 /* ControllerInputDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3689E0602C69AC3900629595 /* ControllerInputDelegate.swift */; };
@@ -168,6 +170,7 @@
 		887C89782CC78EB7006804D0 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 887C89762CC78EB7006804D0 /* Localizable.strings */; };
 		889E10D12C7C528F00126B31 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 889E10D02C7C528F00126B31 /* Utils.swift */; };
 		88E519312C747518002B66F2 /* licenses.html in Resources */ = {isa = PBXBuildFile; fileRef = 88E519302C747518002B66F2 /* licenses.html */; };
+		88EA975E2D62D6D5003CD63F /* AppStoreReviewHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88EA975D2D62D6D5003CD63F /* AppStoreReviewHandler.swift */; };
 		88EC99A82C770CDC00398352 /* AboutVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88EC99A72C770CDC00398352 /* AboutVC.swift */; };
 		88F408302C7D7A2F00D90373 /* WebVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88F4082F2C7D7A2F00D90373 /* WebVC.swift */; };
 		88FBE80D2C4A176B005B22B3 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 88FBE80C2C4A176B005B22B3 /* Launch Screen.storyboard */; };
@@ -175,8 +178,6 @@
 		B51D87D52C5B3D2E0006CF68 /* RZWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B51D87D32C5B3D2E0006CF68 /* RZWebViewController.m */; };
 		B51D87D62C5B3D2E0006CF68 /* RZWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B51D87D42C5B3D2E0006CF68 /* RZWebViewController.xib */; };
 		B51D87E12C5C78F90006CF68 /* DiscoveryManager+Neuron.m in Sources */ = {isa = PBXBuildFile; fileRef = B51D87E02C5C78F90006CF68 /* DiscoveryManager+Neuron.m */; };
-		B560F0F82BFC836800F7A6B7 /* RZMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B560F0F62BFC836800F7A6B7 /* RZMainViewController.m */; };
-		B560F0F92BFC836800F7A6B7 /* RZMainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B560F0F72BFC836800F7A6B7 /* RZMainViewController.xib */; };
 		B560F12E2BFDBDA000F7A6B7 /* StreamFrame.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B560F12D2BFDBDA000F7A6B7 /* StreamFrame.storyboard */; };
 		B560F19A2BFEE0A800F7A6B7 /* StreamLoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = B560F1992BFEE0A800F7A6B7 /* StreamLoadingView.m */; };
 		B560F19C2BFEE0B100F7A6B7 /* StreamLoadingView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B560F19B2BFEE0B100F7A6B7 /* StreamLoadingView.xib */; };
@@ -655,7 +656,6 @@
 		108EE0E72B901AA400094A01 /* RzTemporaryHost.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RzTemporaryHost.m; sourceTree = "<group>"; };
 		108EE0E92B901B0600094A01 /* RzTemporaryApp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RzTemporaryApp.h; sourceTree = "<group>"; };
 		108EE0EA2B901B0600094A01 /* RzTemporaryApp.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RzTemporaryApp.m; sourceTree = "<group>"; };
-		1095F56E2C32B1A100FB469D /* DownloadOverlayManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadOverlayManager.swift; sourceTree = "<group>"; };
 		10983F482B8F1763004CA821 /* neuron.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = neuron.entitlements; sourceTree = "<group>"; };
 		10C1A2372B9088770081B01D /* AppDelegate+Neuron.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "AppDelegate+Neuron.m"; sourceTree = "<group>"; };
 		10D990142B8DDA030023BBC6 /* RzApp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RzApp.h; sourceTree = "<group>"; };
@@ -667,6 +667,7 @@
 		33F79F092C9ABDF100535FFC /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = "moonlight-ios/libs/OpenSSL/lib/libcrypto.a"; sourceTree = "<group>"; };
 		33F79F0C2C9ABDF100535FFC /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = "moonlight-ios/libs/OpenSSL/lib/libssl.a"; sourceTree = "<group>"; };
 		3606EDA32C58838000B34526 /* SettingsHostDevicesVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsHostDevicesVC.swift; sourceTree = "<group>"; };
+		361C50C62D90EAAE00D6A3EC /* DevLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevLogger.swift; sourceTree = "<group>"; };
 		362B87DC2CD07AE300F15F95 /* DashboardVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardVC.swift; sourceTree = "<group>"; };
 		362B87DE2CD07AE300F15F95 /* CustomBoundleTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomBoundleTool.swift; sourceTree = "<group>"; };
 		362B87E12CD07AE300F15F95 /* DashboardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewModel.swift; sourceTree = "<group>"; };
@@ -711,6 +712,8 @@
 		3652DB0E2C57731300A475CB /* SettingsMenuCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsMenuCell.swift; sourceTree = "<group>"; };
 		3652DB102C57798200A475CB /* Color+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Color+Extension.swift"; sourceTree = "<group>"; };
 		3652DB122C5780DD00A475CB /* SettingsMenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsMenuItem.swift; sourceTree = "<group>"; };
+		366D175F2D83C50800B450FC /* AddManualHostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddManualHostView.swift; sourceTree = "<group>"; };
+		366D17612D83C8F700B450FC /* RZTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RZTextField.swift; sourceTree = "<group>"; };
 		3684A25B2C65F353000517CC /* ShareDataHost.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShareDataHost.h; sourceTree = "<group>"; };
 		3684A25C2C65F353000517CC /* ShareDataHost.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShareDataHost.m; sourceTree = "<group>"; };
 		3689E05F2C69AC3900629595 /* ButtonEventsConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonEventsConstants.swift; sourceTree = "<group>"; };
@@ -761,6 +764,7 @@
 		887C89772CC78EB7006804D0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		889E10D02C7C528F00126B31 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		88E519302C747518002B66F2 /* licenses.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = licenses.html; sourceTree = "<group>"; };
+		88EA975D2D62D6D5003CD63F /* AppStoreReviewHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStoreReviewHandler.swift; sourceTree = "<group>"; };
 		88EC99A72C770CDC00398352 /* AboutVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutVC.swift; sourceTree = "<group>"; };
 		88F4082F2C7D7A2F00D90373 /* WebVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebVC.swift; sourceTree = "<group>"; };
 		88FBE80C2C4A176B005B22B3 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
@@ -771,9 +775,6 @@
 		B51D87D42C5B3D2E0006CF68 /* RZWebViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RZWebViewController.xib; sourceTree = "<group>"; };
 		B51D87DF2C5C78F90006CF68 /* DiscoveryManager+Neuron.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "DiscoveryManager+Neuron.h"; sourceTree = "<group>"; };
 		B51D87E02C5C78F90006CF68 /* DiscoveryManager+Neuron.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "DiscoveryManager+Neuron.m"; sourceTree = "<group>"; };
-		B560F0F52BFC836800F7A6B7 /* RZMainViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RZMainViewController.h; sourceTree = "<group>"; };
-		B560F0F62BFC836800F7A6B7 /* RZMainViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RZMainViewController.m; sourceTree = "<group>"; };
-		B560F0F72BFC836800F7A6B7 /* RZMainViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RZMainViewController.xib; sourceTree = "<group>"; };
 		B560F12D2BFDBDA000F7A6B7 /* StreamFrame.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = StreamFrame.storyboard; sourceTree = "<group>"; };
 		B560F1982BFEE0A800F7A6B7 /* StreamLoadingView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StreamLoadingView.h; sourceTree = "<group>"; };
 		B560F1992BFEE0A800F7A6B7 /* StreamLoadingView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StreamLoadingView.m; sourceTree = "<group>"; };
@@ -864,9 +865,6 @@
 				105D24C32C6B02EE00A6B3BD /* RZStreamFrameViewController.m */,
 				100A8B992B905BD500D90642 /* RzMainFrameViewController.h */,
 				100A8B9A2B905BD500D90642 /* RzMainFrameViewController.m */,
-				B560F0F52BFC836800F7A6B7 /* RZMainViewController.h */,
-				B560F0F62BFC836800F7A6B7 /* RZMainViewController.m */,
-				B560F0F72BFC836800F7A6B7 /* RZMainViewController.xib */,
 				B560F12D2BFDBDA000F7A6B7 /* StreamFrame.storyboard */,
 				66EAA23A2CC8A90A00E0C414 /* RZStreamFrameSettingsViewController.swift */,
 			);
@@ -914,6 +912,7 @@
 				10172AC92CA4118800B29E7B /* NetLatency.m */,
 				10172A412CA2B5DC00B29E7B /* DevUtils.h */,
 				10172A422CA2B5DC00B29E7B /* DevUtils.m */,
+				361C50C62D90EAAE00D6A3EC /* DevLogger.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1751,19 +1750,11 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
-		1095F56D2C32B19100FB469D /* DownloadOverlay */ = {
-			isa = PBXGroup;
-			children = (
-				1095F56E2C32B1A100FB469D /* DownloadOverlayManager.swift */,
-			);
-			path = DownloadOverlay;
-			sourceTree = "<group>";
-		};
 		10D9900F2B8DD1F10023BBC6 /* Utility */ = {
 			isa = PBXGroup;
 			children = (
+				88EA975D2D62D6D5003CD63F /* AppStoreReviewHandler.swift */,
 				10172B012CA6819F00B29E7B /* Toast */,
-				1095F56D2C32B19100FB469D /* DownloadOverlay */,
 				10423FEB2C0F58E1000679F8 /* Network */,
 				10423FC72C0EC2CE000679F8 /* RzUtils */,
 				10405FBE2B9171D3002030AE /* RzSwizzling */,
@@ -1852,6 +1843,8 @@
 				362B87F82CD08A4600F15F95 /* SwiftAlertView.swift */,
 				362B87E62CD07AE300F15F95 /* ActivityIndicator.swift */,
 				362B87E72CD07AE300F15F95 /* DashboardView.swift */,
+				366D17612D83C8F700B450FC /* RZTextField.swift */,
+				366D175F2D83C50800B450FC /* AddManualHostView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -2196,7 +2189,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				10736C762B838A170003EFD5 /* Assets.xcassets in Resources */,
-				B560F0F92BFC836800F7A6B7 /* RZMainViewController.xib in Resources */,
 				10736ED22B838BD00003EFD5 /* Images.xcassets in Resources */,
 				B51D87D62C5B3D2E0006CF68 /* RZWebViewController.xib in Resources */,
 				B560F19C2BFEE0B100F7A6B7 /* StreamLoadingView.xib in Resources */,
@@ -2413,6 +2405,7 @@
 				10736EAF2B838BD00003EFD5 /* Controller.m in Sources */,
 				10736EE22B838BD00003EFD5 /* Utils.m in Sources */,
 				10736EAC2B838BD00003EFD5 /* UIComputerView.m in Sources */,
+				366D17622D83C8F700B450FC /* RZTextField.swift in Sources */,
 				362B88382CD1CEC200F15F95 /* SettingsRouter+Streaming.swift in Sources */,
 				362B88012CD0C61100F15F95 /* BlurView.swift in Sources */,
 				10736EC22B838BD00003EFD5 /* AppAssetManager.m in Sources */,
@@ -2430,6 +2423,7 @@
 				3689E06F2C6B0C1500629595 /* RZHandleResponder.swift in Sources */,
 				88F408302C7D7A2F00D90373 /* WebVC.swift in Sources */,
 				3652DAF62C5745B300A475CB /* Locale+Extension.swift in Sources */,
+				88EA975E2D62D6D5003CD63F /* AppStoreReviewHandler.swift in Sources */,
 				10736EA42B838BD00003EFD5 /* AppCollectionView.m in Sources */,
 				3689E0692C6AF94A00629595 /* RZBaseVC.swift in Sources */,
 				3689E0672C69AC3900629595 /* ControllerInputTracker.swift in Sources */,
@@ -2442,7 +2436,6 @@
 				10736EB72B838BD00003EFD5 /* KeyboardSupport.m in Sources */,
 				10736EA52B838BD00003EFD5 /* TemporaryApp.m in Sources */,
 				36514A8D2C5A1DB5008793A5 /* SettingsRouter.swift in Sources */,
-				B560F0F82BFC836800F7A6B7 /* RZMainViewController.m in Sources */,
 				3689E0662C69AC3900629595 /* ControllerInputDelegate.swift in Sources */,
 				3652DB132C5780DD00A475CB /* SettingsMenuItem.swift in Sources */,
 				66EAA2612CCA371400E0C414 /* RoundedCorner.swift in Sources */,
@@ -2464,6 +2457,7 @@
 				B51D87D52C5B3D2E0006CF68 /* RZWebViewController.m in Sources */,
 				10736EAB2B838BD00003EFD5 /* CryptoManager.m in Sources */,
 				10736F382B838BE10003EFD5 /* X1Kit.swift in Sources */,
+				361C50C72D90EAAE00D6A3EC /* DevLogger.swift in Sources */,
 				10172A492CA2BAFA00B29E7B /* StatsMeta.m in Sources */,
 				3652DAF32C5745B300A475CB /* Double+Extension.swift in Sources */,
 				3652DAF52C5745B300A475CB /* KeyboardHeightPublisher.swift in Sources */,
@@ -2477,12 +2471,12 @@
 				3652DAF02C5745B300A475CB /* Data+Extension.swift in Sources */,
 				10772D9E2B8ED3DA00A839D1 /* ShareDataDB.m in Sources */,
 				10423FC42C0EC2C7000679F8 /* RzUtils.m in Sources */,
+				366D17602D83C50800B450FC /* AddManualHostView.swift in Sources */,
 				10736EB82B838BD00003EFD5 /* StreamConfiguration.m in Sources */,
 				362B87FF2CD0BEDD00F15F95 /* BottomMenuViewModel.swift in Sources */,
 				66EAA25F2CCA36A700E0C414 /* ChangeObserver.swift in Sources */,
 				3652DB0F2C57731300A475CB /* SettingsMenuCell.swift in Sources */,
 				B5F306A52CCA321D006D9BF9 /* TutorialViewController.swift in Sources */,
-				1095F56F2C32B1A100FB469D /* DownloadOverlayManager.swift in Sources */,
 				10736EB12B838BD00003EFD5 /* KeyboardInputField.m in Sources */,
 				362B87FB2CD0BE8500F15F95 /* BottomMenuView.swift in Sources */,
 				3652DB112C57798200A475CB /* Color+Extension.swift in Sources */,
@@ -2729,7 +2723,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = neuron/neuron.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 48;
+				CURRENT_PROJECT_VERSION = 184;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = R2H967U7J8;
@@ -2797,7 +2791,7 @@
 					"$(PROJECT_DIR)/moonlight-ios/libs/OpenSSL/lib/",
 					"$(PROJECT_DIR)/moonlight-ios/libs/OpenSSL/lib",
 				);
-				MARKETING_VERSION = 0.5.1;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.razer.neuron;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -2816,7 +2810,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = neuron/neuron.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 48;
+				CURRENT_PROJECT_VERSION = 184;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = R2H967U7J8;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
@@ -2860,7 +2854,7 @@
 					"$(PROJECT_DIR)/moonlight-ios/libs/FFmpeg/lib/iOS",
 					"$(PROJECT_DIR)/moonlight-ios/libs/OpenSSL/lib",
 				);
-				MARKETING_VERSION = 0.5.1;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.razer.neuron;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

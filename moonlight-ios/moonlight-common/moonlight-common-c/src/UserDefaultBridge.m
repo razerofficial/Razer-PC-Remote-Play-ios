@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024 Razer Inc.
+ * Copyright (C) 2025 Razer Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,15 +15,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#import <UIKit/UIKit.h>
-#import "TemporaryApp.h"
-#import "StreamFrameViewController.h"
+#import "UserDefaultBridge.h"
+#import <Foundation/Foundation.h>
 
-NS_ASSUME_NONNULL_BEGIN
+void saveCurrentHostSupportedCodec(const char* codec);
 
-@interface RZMainViewController : UIViewController
-//- (void) prepareToStreamApp:(TemporaryApp *)app;
-- (void) navigateToStreamViewController:(TemporaryApp *)app;
-@end
-
-NS_ASSUME_NONNULL_END
+void saveCurrentHostSupportedCodec(const char* codec) {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *nsKey = @"CurrentHostSupportedCodec";
+    NSString *nsValue = @(codec);
+    
+    NSLog(@"support codec = %@", nsValue);
+    [defaults setObject:nsValue forKey:nsKey];
+    [defaults synchronize];
+}

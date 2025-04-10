@@ -27,6 +27,7 @@ extension NSNotification.Name {
 class DashboardVC: RZBaseVC {
     
     let dashboardViewModel = DashboardViewModel()
+    let localNetworkAuthorization = LocalNetworkAuthorization()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,6 +63,9 @@ class DashboardVC: RZBaseVC {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         dashboardViewModel.isDashboardAppear = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            AppStoreReviewHandler.shared.checkIsStartAppReiew()
+        }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -83,12 +87,13 @@ class DashboardVC: RZBaseVC {
         } else if !RzUtils.isRequestedLocalNetworkPermission() {
             gotoTutorialPage()
         } else {
-            let localNetworkAuthorization = LocalNetworkAuthorization()
-            localNetworkAuthorization.requestAuthorization { [weak self] result in
+//            let localNetworkAuthorization = LocalNetworkAuthorization()
+            localNetworkAuthorization.requestAuthorization(isNeedToResetCompletionBlock: false) { [weak self] result in
                 Logger.debug("maybeGotoTutorialPage requestAuthorization result:\(result)")
                 RzUtils.setGrantedLocalNetworkPermission(result)
+                SettingsRouter.shared.localNetworkAuthSubject.send(result)
                 SettingsRouter.shared.grantedLocalNetworkPermissionCallBack?()
-                if !result || 
+                if !result ||
                     (!RzUtils.checkIsNexusInstalled() && !RzUtils.isAlreadyShowDownloadNexus()) ||
                     (!RzUtils.isAlreadySetDisplayMode() && !RzUtils.isNeedContinueLaunchGame()) {
                     self?.gotoTutorialPage()

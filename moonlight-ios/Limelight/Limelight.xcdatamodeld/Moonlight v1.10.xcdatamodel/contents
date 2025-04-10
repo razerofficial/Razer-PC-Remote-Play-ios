@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23507" systemVersion="23G93" minimumToolsVersion="Xcode 7.3" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23605" systemVersion="23G93" minimumToolsVersion="Xcode 7.3" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
     <entity name="App" representedClassName="App" syncable="YES" codeGenerationType="class">
         <attribute name="hdrSupported" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="hidden" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES" syncable="YES"/>
@@ -8,8 +8,11 @@
         <relationship name="host" maxCount="1" deletionRule="Nullify" destinationEntity="Host" inverseName="appList" inverseEntity="Host" syncable="YES"/>
     </entity>
     <entity name="Host" representedClassName="Host" syncable="YES" codeGenerationType="class">
+        <attribute name="activeAddress" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="address" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="externalAddress" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="httpPort" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="httpsPort" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="ipv6Address" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="localAddress" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="mac" optional="YES" attributeType="String" syncable="YES"/>

@@ -82,7 +82,7 @@ func isWifiAndSameLocalAddress(_ address:String) -> Bool {
     private var isMonitoring = false
     
     
-    let hasNetSubject = CurrentValueSubject<Bool, Never>(true)
+    let netSubject = CurrentValueSubject<(Bool , Bool), Never>((true,true))
     var hasNet:Bool = true
     //use for externalIP update
     @objc var isWifi:Bool = true
@@ -107,13 +107,15 @@ func isWifiAndSameLocalAddress(_ address:String) -> Bool {
                 }
                 
                 self?.hasNet = true
-                self?.hasNetSubject.send(true)
+                let netState = (true, self?.isWifi ?? false)
+                self?.netSubject.send(netState)
                 
             } else {
                 print("No internet connection")
                 self?.isWifi = false
                 self?.hasNet = false
-                self?.hasNetSubject.send(false)
+                let netState = (false, false)
+                self?.netSubject.send(netState)
             }
  
             print("Is Expensive: \(path.isExpensive)") // True if the path is using an expensive connection

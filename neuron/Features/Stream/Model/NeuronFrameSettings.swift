@@ -29,7 +29,7 @@ import SwiftUI
     @objc var onscreenControls: RZOnScreenControls = .off
     
     @objc var uniqueId: String = "\(arc4random())"
-    @objc var preferredCodec: RZPreferredCodec = .Hevc
+    @objc var preferredCodec: Int = 0
     
     @objc var useFramePacing: Bool = false
     @objc var multiController: Bool = false

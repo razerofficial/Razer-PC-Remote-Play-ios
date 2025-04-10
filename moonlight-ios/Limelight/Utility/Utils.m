@@ -11,9 +11,26 @@
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <netdb.h>
+#import <CommonCrypto/CommonDigest.h>
 
 @implementation Utils
 NSString *const deviceName = @"roth";
+
++ (NSString *)md5HashFromData:(NSData *)inputData {
+    unsigned char hash[CC_MD5_DIGEST_LENGTH]; // Array to store the MD5 result
+    
+    // Compute the MD5 hash of the inputData
+    CC_MD5([inputData bytes], (CC_LONG)[inputData length], hash);
+    
+    // Create a mutable string to hold the final MD5 hash as a string
+    NSMutableString *hashString = [NSMutableString stringWithCapacity:CC_MD5_DIGEST_LENGTH * 2];
+    for(int i = 0; i < CC_MD5_DIGEST_LENGTH; i++) {
+        [hashString appendFormat:@"%02x", hash[i]]; // Format each byte as a two-digit hexadecimal number
+    }
+    
+    return hashString; // Return the final MD5 hash string
+}
+
 
 + (NSData*) randomBytes:(NSInteger)length {
     char* bytes = malloc(length);

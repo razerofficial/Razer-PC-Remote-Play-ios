@@ -31,6 +31,10 @@ var isShowSeparateScreenDisplayMode: Bool {
     return false
 }
 
+var isEnableSaveLogDisplayMode: Bool {
+    return UserDefaults.standard.bool(forKey: "isEnableSaveLogSetting")
+}
+
 func setShowSeparateScreenDisplayMode(value: Bool) {
     if var devOption = ShareDataDB.shared().readDevOptionsDataFromShare() as? [String: Any]{
         devOption["isShowSeparateScreenInSetting"] = value
@@ -38,6 +42,11 @@ func setShowSeparateScreenDisplayMode(value: Bool) {
     } else {
         ShareDataDB.shared().writeDevOptionsDataToshareDB(["isShowSeparateScreenInSetting": value])
     }
+}
+
+func setEnableSaveLogDisplayMode(value: Bool) {
+    UserDefaults.standard.set(value, forKey: "isEnableSaveLogSetting")
+    UserDefaults.standard.synchronize()
 }
 
 func getCurrentDeviceTypeString() -> String {

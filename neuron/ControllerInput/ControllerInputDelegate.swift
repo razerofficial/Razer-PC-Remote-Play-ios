@@ -60,7 +60,7 @@ class ControllerInputDelegate : NSObject {
 extension ControllerInputDelegate : ControllerInputTrackerDelegates {
     
     func trackingStatusChanged(isTracking status: Bool) {
-        //DDLogInfo("trackingStatusChanged isTracking:\(status)")
+        //Logger.info("trackingStatusChanged isTracking:\(status)")
     }
     
     func handleFaceButtonInputs(button: GamePadButton, state: ButtonState) {
@@ -76,8 +76,8 @@ extension ControllerInputDelegate : ControllerInputTrackerDelegates {
         let newTrigger : ActionTriggered = .control(button: button, counter:counter, state: state)
         self.activeButtonControl = button.description
         
-        //DDLogInfo("\(APP_LOG_VC) ControllerInputDelegate:handleFaceButtonInputs listener:\(String(describing: self.delegate)) button:\(button.description) counter:\(counter)")
-        //DDLogInfo("ZZZ Pressed: " + button.description)
+        //Logger.info("\(APP_LOG_VC) ControllerInputDelegate:handleFaceButtonInputs listener:\(String(describing: self.delegate)) button:\(button.description) counter:\(counter)")
+        //Logger.info("ZZZ Pressed: " + button.description)
         
         guard let ret = self.delegate?.shouldTriggered(controlTriggered: newTrigger), ret == true else {
             Logger.debug("Filter Button Input: delegate:\(String(describing: self.delegate)) \(button) \(state) ")
@@ -117,7 +117,7 @@ extension ControllerInputDelegate : ControllerInputTrackerDelegates {
         //sliderValue = xAxis
         
         //guard (xAxis == 1.0 || xAxis == -1.0) else { return }
-        //DDLogInfo("\(APP_LOG_VC) handleRightJoystickValueEvents Right Stick, X = \(xAxis), y = \(yAxis)")
+        //Logger.info("\(APP_LOG_VC) handleRightJoystickValueEvents Right Stick, X = \(xAxis), y = \(yAxis)")
 
         if self.activeButtonControl ==  "RJoysStick" {
             counter = (counter + 1)

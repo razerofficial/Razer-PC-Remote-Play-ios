@@ -93,6 +93,7 @@ static const float POLL_RATE = 2.0f; // Poll every 2 seconds
 
 - (void) discoverHost {
     BOOL receivedResponse = NO;
+    
     NSArray *addresses = [self getHostAddressList];
     
     Log(LOG_D, @"%@ has %d unique addresses", _host.name, [addresses count]);
@@ -108,7 +109,8 @@ static const float POLL_RATE = 2.0f; // Poll every 2 seconds
                 return;
             }
             
-            ServerInfoResponse* serverInfoResp = [self requestInfoAtAddress:address cert:_host.serverCert];
+            Log(LOG_D, @"host:%@ address:%@ httpsPort:%d", _host.name, address, _host.httpsPort);
+            ServerInfoResponse* serverInfoResp = [self requestInfoAtAddress:address httpsPort:_host.httpsPort httpPort:_host.httpPort cert:_host.serverCert];
             
             if ([self checkIsDuplicatedHost:serverInfoResp]) {
                 if ([_delegate respondsToSelector:@selector(removeDuplicatedHost:)]) {
@@ -141,8 +143,8 @@ static const float POLL_RATE = 2.0f; // Poll every 2 seconds
     }
 }
 
-- (ServerInfoResponse*) requestInfoAtAddress:(NSString*)address cert:(NSData*)cert {
-    HttpManager* hMan = [[HttpManager alloc] initWithAddress:address httpsPort:0 serverCert:cert];
+- (ServerInfoResponse*) requestInfoAtAddress:(NSString*)address httpsPort:(NSInteger)httpsPort httpPort:(NSInteger)httpPort cert:(NSData*)cert {
+    HttpManager* hMan = [[HttpManager alloc] initWithAddress:address httpsPort:httpsPort httpPort:httpPort serverCert:cert];
     ServerInfoResponse* response = [[ServerInfoResponse alloc] init];
     [hMan executeRequestSynchronously:[HttpRequest requestForResponse:response
                                                        withUrlRequest:[hMan newServerInfoRequest:true]

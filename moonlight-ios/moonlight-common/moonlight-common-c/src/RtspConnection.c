@@ -26,6 +26,8 @@ static ENetPeer* peer;
 #define CHAR_TO_INT(x) ((x) - '0')
 #define CHAR_IS_DIGIT(x) ((x) >= '0' && (x) <= '9')
 
+void saveCurrentHostSupportedCodec(const char* codec);
+
 // Create RTSP Option
 static POPTION_ITEM createOptionItem(char* option, char* content)
 {
@@ -1059,6 +1061,22 @@ int performRtspHandshake(PSERVER_INFORMATION serverInfo) {
             ret = response.message.response.statusCode;
             goto Exit;
         }
+    
+        char supportedCodec[50] = "";
+        
+        if (strstr(response.payload, "AV1/90000")) {
+            const char newCodec[] = "--AV1";
+            strncat(supportedCodec, newCodec, sizeof(supportedCodec) - strlen(supportedCodec) - 1);
+        }
+        if (strstr(response.payload, "sprop-parameter-sets=AAAAAU")) {
+            const char newCodec[] = "--HEVC";
+            strncat(supportedCodec, newCodec, sizeof(supportedCodec) - strlen(supportedCodec) - 1);
+        }
+        
+        const char newCodec[] = "--H264";
+        strncat(supportedCodec, newCodec, sizeof(supportedCodec) - strlen(supportedCodec) - 1);
+        
+        saveCurrentHostSupportedCodec(supportedCodec);
         
         if ((StreamConfig.supportedVideoFormats & VIDEO_FORMAT_MASK_AV1) && strstr(response.payload, "AV1/90000")) {
             if ((serverInfo->serverCodecModeSupport & SCM_AV1_HIGH10_444) && (StreamConfig.supportedVideoFormats & VIDEO_FORMAT_AV1_HIGH10_444)) {

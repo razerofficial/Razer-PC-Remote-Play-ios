@@ -18,6 +18,7 @@
     NSMutableArray* services;
     BOOL scanActive;
     BOOL timerPending;
+    BOOL isMdnsRunning;
 }
 
 //static NSString* NV_SERVICE_TYPE = @"_nvstream._tcp";
@@ -29,6 +30,7 @@ static NSString* NV_SERVICE_TYPE = @"_rzstream._tcp";
     self.callback = callback;
     
     scanActive = FALSE;
+    isMdnsRunning = FALSE;
     
     mDNSBrowser = [[NSNetServiceBrowser alloc] init];
     [mDNSBrowser setDelegate:self];
@@ -62,30 +64,55 @@ static NSString* NV_SERVICE_TYPE = @"_rzstream._tcp";
     Log(LOG_I, @"Stopping mDNS discovery");
     scanActive = FALSE;
     [mDNSBrowser stop];
+    isMdnsRunning = FALSE;
 }
 
 - (void) forgetHosts {
     [services removeAllObjects];
 }
 
-+ (NSString*)sockAddrToString:(NSData*)addrData {
+//+ (NSString*)sockAddrToString:(NSData*)addrData {
+//    char addrStr[INET6_ADDRSTRLEN];
+//    struct sockaddr* addr = (struct sockaddr*)[addrData bytes];
+//    if (addr->sa_family == AF_INET) {
+//        inet_ntop(addr->sa_family, &((struct sockaddr_in*)addr)->sin_addr, addrStr, sizeof(addrStr));
+//        unsigned short port = ntohs(((struct sockaddr_in*)addr)->sin_port);
+//        return [NSString stringWithFormat: @"%s:%u", addrStr, port];
+//    }
+//    else {
+//        struct sockaddr_in6* sin6 = (struct sockaddr_in6*)addr;
+//        inet_ntop(addr->sa_family, &sin6->sin6_addr, addrStr, sizeof(addrStr));
+//        unsigned short port = ntohs(((struct sockaddr_in6*)addr)->sin6_port);
+//        if (sin6->sin6_scope_id != 0) {
+//            // Link-local addresses with scope IDs are special
+//            return [NSString stringWithFormat: @"[%s%%%u]:%u", addrStr, sin6->sin6_scope_id, port];
+//        }
+//        else {
+//            return [NSString stringWithFormat: @"[%s]:%u", addrStr, port];
+//        }
+//    }
+//}
+
++ (NSString*)sockAddrToString:(NSData*)addrData httpPort:(NSInteger *)httpPort {
     char addrStr[INET6_ADDRSTRLEN];
     struct sockaddr* addr = (struct sockaddr*)[addrData bytes];
     if (addr->sa_family == AF_INET) {
         inet_ntop(addr->sa_family, &((struct sockaddr_in*)addr)->sin_addr, addrStr, sizeof(addrStr));
         unsigned short port = ntohs(((struct sockaddr_in*)addr)->sin_port);
-        return [NSString stringWithFormat: @"%s:%u", addrStr, port];
+        *httpPort = port;
+        return [NSString stringWithFormat: @"%s", addrStr];
     }
     else {
         struct sockaddr_in6* sin6 = (struct sockaddr_in6*)addr;
         inet_ntop(addr->sa_family, &sin6->sin6_addr, addrStr, sizeof(addrStr));
         unsigned short port = ntohs(((struct sockaddr_in6*)addr)->sin6_port);
+        *httpPort = port;
         if (sin6->sin6_scope_id != 0) {
             // Link-local addresses with scope IDs are special
-            return [NSString stringWithFormat: @"[%s%%%u]:%u", addrStr, sin6->sin6_scope_id, port];
+            return [NSString stringWithFormat: @"[%s%%%u]", addrStr, sin6->sin6_scope_id];
         }
         else {
-            return [NSString stringWithFormat: @"[%s]:%u", addrStr, port];
+            return [NSString stringWithFormat: @"[%s]", addrStr];
         }
     }
 }
@@ -137,6 +164,7 @@ static NSString* NV_SERVICE_TYPE = @"_rzstream._tcp";
 }
 
 + (NSString*)getBestIpv6Address:(NSArray<NSData*>*)addresses {
+    NSInteger httpPort = 0;
     for (NSData* addrData in addresses) {
         struct sockaddr_in6* sin6 = (struct sockaddr_in6*)[addrData bytes];
         if (sin6->sin6_family != AF_INET6) {
@@ -155,7 +183,7 @@ static NSString* NV_SERVICE_TYPE = @"_rzstream._tcp";
         prefix[0] = 0x20;
         prefix[1] = 0x02;
         if ([MDNSManager isAddress:addrBytes inSubnet:prefix netmask:16]) {
-            Log(LOG_I, @"Ignoring 6to4 address: %@", [MDNSManager sockAddrToString:addrData]);
+            Log(LOG_I, @"Ignoring 6to4 address: %@", [MDNSManager sockAddrToString:addrData httpPort:&httpPort]);
             continue;
         }
         
@@ -163,11 +191,11 @@ static NSString* NV_SERVICE_TYPE = @"_rzstream._tcp";
         prefix[0] = 0x20;
         prefix[1] = 0x01;
         if ([MDNSManager isAddress:addrBytes inSubnet:prefix netmask:32]) {
-            Log(LOG_I, @"Ignoring Teredo address: %@", [MDNSManager sockAddrToString:addrData]);
+            Log(LOG_I, @"Ignoring Teredo address: %@", [MDNSManager sockAddrToString:addrData httpPort:&httpPort]);
             continue;
         }
         
-        return [MDNSManager sockAddrToString:addrData];
+        return [MDNSManager sockAddrToString:addrData httpPort:&httpPort];
     }
     
     return nil;
@@ -177,8 +205,9 @@ static NSString* NV_SERVICE_TYPE = @"_rzstream._tcp";
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSArray<NSData*>* addresses = [service addresses];
         
+        NSInteger tempPort;
         for (NSData* addrData in addresses) {
-            Log(LOG_I, @"Resolved address: %@ -> %@", [service hostName], [MDNSManager sockAddrToString: addrData]);
+            Log(LOG_I, @"Resolved address: %@ -> %@", [service hostName], [MDNSManager sockAddrToString: addrData httpPort:&tempPort]);
         }
         
         TemporaryHost* host = [[TemporaryHost alloc] init];
@@ -209,7 +238,9 @@ static NSString* NV_SERVICE_TYPE = @"_rzstream._tcp";
                 }
             }
             
-            host.localAddress = [MDNSManager sockAddrToString:addrData];
+            NSInteger httpPort = 0;
+            host.localAddress = [MDNSManager sockAddrToString:addrData httpPort:&httpPort];
+            host.httpPort = httpPort;
             Log(LOG_I, @"Local address chosen: %@ -> %@", [service hostName], host.localAddress);
             break;
         }
@@ -218,7 +249,9 @@ static NSString* NV_SERVICE_TYPE = @"_rzstream._tcp";
             // If we didn't find an IPv4 record, look for a local IPv6 record
             for (NSData* addrData in addresses) {
                 if ([MDNSManager isLocalIpv6Address:addrData]) {
-                    host.localAddress = [MDNSManager sockAddrToString:addrData];
+                    NSInteger httpPort = 0;
+                    host.localAddress = [MDNSManager sockAddrToString:addrData httpPort:&httpPort];
+                    host.httpPort = httpPort;
                     Log(LOG_I, @"Local address chosen: %@ -> %@", [service hostName], host.localAddress);
                     break;
                 }
@@ -246,10 +279,10 @@ static NSString* NV_SERVICE_TYPE = @"_rzstream._tcp";
 }
 
 - (void)netServiceBrowser:(NSNetServiceBrowser *)aNetServiceBrowser didFindService:(NSNetService *)aNetService moreComing:(BOOL)moreComing {
-    Log(LOG_D, @"Found service: %@", aNetService);
+    Log(LOG_D, @"Found service: %@, hostName:%@", aNetService,aNetService.hostName);
     
     if (![services containsObject:aNetService]) {
-        Log(LOG_I, @"Found new host: %@", aNetService.name);
+        Log(LOG_I, @"Found new name: %@ hostName: %@", aNetService.name, aNetService.hostName);
         [aNetService setDelegate:self];
         [aNetService resolveWithTimeout:5];
         [services addObject:aNetService];
@@ -274,9 +307,16 @@ static NSString* NV_SERVICE_TYPE = @"_rzstream._tcp";
         return;
     }
     
+    if (isMdnsRunning) {
+        Log(LOG_D, @"mDNS search is running...");
+        return;
+    }
+    
     Log(LOG_D, @"Restarting mDNS search");
     [mDNSBrowser stop];
     [mDNSBrowser searchForServicesOfType:NV_SERVICE_TYPE inDomain:@""];
+    [mDNSBrowser setDelegate:self];
+    isMdnsRunning = TRUE;
     
     // Search again in 5 seconds. We need to do this because
     // we want more aggressive querying than Bonjour will normally

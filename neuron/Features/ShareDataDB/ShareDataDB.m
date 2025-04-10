@@ -70,6 +70,13 @@
     return app;
 }
 
+- (void)resetCurrentLaunchGameData {
+    
+    RzTemporaryApp *app = [[RzTemporaryApp alloc] init];
+    NSData *data = [app yy_modelToJSONData];
+    [self writeData:data toFile:currentLaunchGamePath];
+}
+
 - (void)readSettingDataFromShareDB {
     NSData *data = [self readDataFromPath:frameSettingsPath];
     Log(LOG_I ,@"[read]data String: %@",[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
@@ -200,6 +207,11 @@
             if ([shareHost isEqualHost:host]) {
                 //[newArray addObject:shareHost];
                 [host setPairState:PairStatePaired];
+                [host setExternalAddress:shareHost.externalAddress];
+                [host setHttpsPort:shareHost.httpsPort];
+                [host setHttpPort:shareHost.httpPort];
+                [host setActiveAddress:shareHost.activeAddress];
+                Log(LOG_I ,@"[sharedb] host:%@ eip:%@ httpsPort:%d httpPort:%d",shareHost.name,shareHost.externalAddress, shareHost.httpsPort, shareHost.httpPort);
                 if (host.serverCert.length < 1 &&  shareHost.serverCertDataBase64.length > 0) {
                     host.serverCert = [[NSData alloc] initWithBase64EncodedString:shareHost.serverCertDataBase64 options:NSDataBase64DecodingIgnoreUnknownCharacters];
                 }

@@ -19,6 +19,7 @@
 #import "DevUtils.h"
 
 #include <Limelight.h>
+static NSMutableDictionary *riKeyDictM = NULL;
 
 @interface StreamManager ()
 @property (nonatomic, assign) BOOL isTerminated;
@@ -37,8 +38,24 @@
     _config = config;
     _renderView = view;
     _callbacks = callbacks;
-    _config.riKey = [Utils randomBytes:16];
-    _config.riKeyId = arc4random();
+    
+    if (!riKeyDictM) riKeyDictM = [NSMutableDictionary new];
+    NSString *uuid = _config.uuid;
+    NSString *key = [NSString stringWithFormat:@"%@_key",uuid];
+    NSString *keyId = [NSString stringWithFormat:@"%@_keyId",uuid];
+    NSData *oldRiKey = riKeyDictM[key];
+    int oldRiKeyId = [riKeyDictM[keyId] intValue];
+    if (riKeyDictM[key] && riKeyDictM[keyId]) {
+        _config.riKey = oldRiKey;
+        _config.riKeyId = oldRiKeyId;
+    } else {
+        _config.riKey = [Utils randomBytes:16];
+        _config.riKeyId = arc4random();
+        
+        riKeyDictM[key] = _config.riKey;
+        riKeyDictM[keyId] = @(_config.riKeyId);
+    }
+    
     return self;
 }
 
@@ -46,7 +63,7 @@
     [CryptoManager generateKeyPairUsingSSL];
     
     HttpManager* hMan = [[HttpManager alloc] initWithAddress:_config.host httpsPort:_config.httpsPort
-                                                     serverCert:_config.serverCert];
+                                                    httpPort:_config.httpPort serverCert:_config.serverCert];
     
     ServerInfoResponse* serverInfoResp = [[ServerInfoResponse alloc] init];
     [hMan executeRequestSynchronously:[HttpRequest requestForResponse:serverInfoResp withUrlRequest:[hMan newServerInfoRequest:false]
@@ -55,18 +72,29 @@
     NSString* appversion = [serverInfoResp getStringTag:@"appversion"];
     NSString* gfeVersion = [serverInfoResp getStringTag:@"GfeVersion"];
     NSString* serverState = [serverInfoResp getStringTag:@"state"];
-    if (![serverInfoResp isStatusOk]) {
-        [_callbacks launchFailed:serverInfoResp.statusMessage];
+    NSString* currentDevice = [serverInfoResp getStringTag:@"currentdevice"];
+    NSString* currentGameId = [serverInfoResp getStringTag:@"currentgame"];
+    BOOL isHostNeedToReplace = NO;
+    BOOL isOngoingStreaming = NO;
+    
+    NSLog(@">> code:%ld msg:%@",serverInfoResp.statusCode, serverInfoResp.statusMessage);
+    
+    if (serverInfoResp.statusCode == 5035) {
+        isHostNeedToReplace = YES;
+    } else if (serverInfoResp.statusCode == 5036) {
+        isOngoingStreaming = YES;
+    } else if (![serverInfoResp isStatusOk]) {
+        [_callbacks launchFailed:serverInfoResp.statusMessage errorCode:serverInfoResp.statusCode];
         return;
     }
     else if (pairStatus == NULL || appversion == NULL || serverState == NULL) {
-        [_callbacks launchFailed:Localized(@"Failed to connect to PC")];
+        [_callbacks launchFailed:Localized(@"Failed to connect to PC") errorCode:serverInfoResp.statusCode];
         return;
     }
     
     if (![pairStatus isEqualToString:@"1"]) {
         // Not paired
-        [_callbacks launchFailed:Localized(@"Device not paired to PC")];
+        [_callbacks launchFailed:Localized(@"Device not paired to PC") errorCode:serverInfoResp.statusCode];
         return;
     }
     
@@ -76,7 +104,7 @@
         // We can't directly identify Pascal, but we can look for HEVC Main10 which was added in the same generation.
         NSString* codecSupport = [serverInfoResp getStringTag:@"ServerCodecModeSupport"];
         if (codecSupport == nil || !([codecSupport intValue] & 0x200)) {
-            [_callbacks launchFailed:Localized(@"Your host PC's GPU doesn't support streaming video resolutions over 4K.")];
+            [_callbacks launchFailed:Localized(@"Your host PC's GPU doesn't support streaming video resolutions over 4K.") errorCode:serverInfoResp.statusCode];
             return;
         }
     }
@@ -87,9 +115,26 @@
     
     // resumeApp and launchApp handle calling launchFailed
     NSString* sessionUrl;
-    if ([serverState hasSuffix:@"_SERVER_BUSY"]) {
+    if (isHostNeedToReplace) {
+        // Replace app
+        if (![self replaceApp:hMan receiveSessionUrl:&sessionUrl]) {
+            return;
+        }
+    } else if(isOngoingStreaming) {
+        __weak typeof(self) weakSelf = self;
+        BOOL isSameDevice = [currentGameId isEqualToString:_config.appID] && [currentDevice isEqualToString:[RzUtils deviceName]];
+        [_callbacks launchFailed:_config.appName device:currentDevice errorCode:serverInfoResp.statusCode isSameDevice:isSameDevice  completion:^(NSInteger option) {
+            if (option == 1) {
+                NSString* replaceSessionUrl;
+                if ([weakSelf replaceApp:hMan receiveSessionUrl:&replaceSessionUrl]) {
+                    [weakSelf startStream:replaceSessionUrl];
+                }
+            }
+        }];
+        return;
+    } else if ([serverState hasSuffix:@"_SERVER_BUSY"]) {
         // App already running, resume it
-        if (![self resumeApp:hMan receiveSessionUrl:&sessionUrl]) {
+        if (![self resumeApp:hMan receiveSessionUrl:&sessionUrl currentGame:currentGameId currentDevice:currentDevice]) {
             return;
         }
     } else {
@@ -99,6 +144,10 @@
         }
     }
     
+    [self startStream:sessionUrl];
+}
+
+- (void) startStream:(NSString *)sessionUrl {
     // Populate RTSP session URL from launch/resume response
     _config.rtspSessionUrl = sessionUrl;
     
@@ -124,11 +173,11 @@
     [hMan executeRequestSynchronously:[HttpRequest requestForResponse:launchResp withUrlRequest:[hMan newLaunchOrResumeRequest:@"launch" config:_config]]];
     NSString *gameSession = [launchResp getStringTag:@"gamesession"];
     if (![launchResp isStatusOk]) {
-        [_callbacks launchFailed:launchResp.statusMessage];
+        [_callbacks launchFailed:launchResp.statusMessage errorCode:launchResp.statusCode];
         Log(LOG_E, @"Failed Launch Response: %@", launchResp.statusMessage);
         return FALSE;
     } else if (gameSession == NULL || [gameSession isEqualToString:@"0"]) {
-        [_callbacks launchFailed:Localized(@"Failed to launch app")];
+        [_callbacks launchFailed:Localized(@"Failed to launch app") errorCode:launchResp.statusCode];
         Log(LOG_E, @"Failed to parse game session");
         return FALSE;
     }
@@ -137,21 +186,56 @@
     return TRUE;
 }
 
-- (BOOL) resumeApp:(HttpManager*)hMan receiveSessionUrl:(NSString**)sessionUrl {
+- (BOOL) resumeApp:(HttpManager*)hMan receiveSessionUrl:(NSString**)sessionUrl currentGame:(NSString *)currentGameId currentDevice:(NSString *)currentDevice {
     HttpResponse* resumeResp = [[HttpResponse alloc] init];
     [hMan executeRequestSynchronously:[HttpRequest requestForResponse:resumeResp withUrlRequest:[hMan newLaunchOrResumeRequest:@"resume" config:_config]]];
     NSString* resume = [resumeResp getStringTag:@"resume"];
     if (![resumeResp isStatusOk]) {
-        [_callbacks launchFailed:resumeResp.statusMessage];
+        if (resumeResp.statusCode == 5036) {
+            __weak typeof(self) weakSelf = self;
+            BOOL isSameDevice = [currentGameId isEqualToString:_config.appID] && [currentDevice isEqualToString:[RzUtils deviceName]];
+            [_callbacks launchFailed:_config.appName device:currentDevice errorCode:resumeResp.statusCode isSameDevice:isSameDevice completion:^(NSInteger option) {
+                NSOperationQueue* opQueue = [[NSOperationQueue alloc] init];
+                [opQueue addOperationWithBlock:^{
+                    if (option == 1) {
+                        NSString* replaceSessionUrl;
+                        if ([weakSelf replaceApp:hMan receiveSessionUrl:&replaceSessionUrl]) {
+                            [weakSelf startStream:replaceSessionUrl];
+                        }
+                    }
+                }];
+            }];
+        } else {
+            [_callbacks launchFailed:resumeResp.statusMessage errorCode:resumeResp.statusCode];
+        }
         Log(LOG_E, @"Failed Resume Response: %@", resumeResp.statusMessage);
         return FALSE;
     } else if (resume == NULL || [resume isEqualToString:@"0"]) {
-        [_callbacks launchFailed:Localized(@"Failed to resume app")];
+        [_callbacks launchFailed:Localized(@"Failed to resume app") errorCode:resumeResp.statusCode];
         Log(LOG_E, @"Failed to parse resume response");
         return FALSE;
     }
     
     *sessionUrl = [resumeResp getStringTag:@"sessionUrl0"];
+    return TRUE;
+}
+
+- (BOOL) replaceApp:(HttpManager*)hMan receiveSessionUrl:(NSString**)sessionUrl {
+    HttpResponse* replaceResp = [[HttpResponse alloc] init];
+    [hMan executeRequestSynchronously:[HttpRequest requestForResponse:replaceResp withUrlRequest:[hMan newLaunchOrResumeRequest:@"replace" config:_config]]];
+    NSString* gamesession = [replaceResp getStringTag:@"gamesession"];
+    NSString* resume = [replaceResp getStringTag:@"resume"];
+    if (![replaceResp isStatusOk]) {
+        [_callbacks launchFailed:replaceResp.statusMessage errorCode:replaceResp.statusCode];
+        Log(LOG_E, @"Failed Replace Response: %@", replaceResp.statusMessage);
+        return FALSE;
+    } else if ([gamesession isEqualToString:@"0"] || [resume isEqualToString:@"0"]) {
+        [_callbacks launchFailed:Localized(@"Failed to launch app") errorCode:replaceResp.statusCode];
+        Log(LOG_E, @"Failed to parse replace response");
+        return FALSE;
+    }
+    
+    *sessionUrl = [replaceResp getStringTag:@"sessionUrl0"];
     return TRUE;
 }
 

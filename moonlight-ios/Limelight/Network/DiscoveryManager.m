@@ -124,8 +124,8 @@
 #endif
 }
 
-- (ServerInfoResponse*) getServerInfoResponseForAddress:(NSString*)address {
-    HttpManager* hMan = [[HttpManager alloc] initWithAddress:address httpsPort:0 serverCert:nil];
+- (ServerInfoResponse*) getServerInfoResponseForAddress:(NSString*)address httpPort:(NSInteger)httpPort {
+    HttpManager* hMan = [[HttpManager alloc] initWithAddress:address httpsPort:0 httpPort:httpPort serverCert:nil];
     ServerInfoResponse* serverInfoResponse = [[ServerInfoResponse alloc] init];
     [hMan executeRequestSynchronously:[HttpRequest requestForResponse:serverInfoResponse withUrlRequest:[hMan newServerInfoRequest:false] fallbackError:401 fallbackRequest:[hMan newHttpServerInfoRequest]]];
     return serverInfoResponse;
@@ -140,23 +140,42 @@
                                    "iOS"
     #endif
                              ];
-    ServerInfoResponse* serverInfoResponse = [self getServerInfoResponseForAddress:hostAddress];
+    
+    NSInteger httpPort = 0;
+    NSString *addr = hostAddress;
+    NSRange ipv6Range = [hostAddress rangeOfString:@"]:"];
+    if ([hostAddress hasPrefix:@"["] && ipv6Range.location != NSNotFound) {
+        // IPv6：[IPv6]:port
+        addr = [hostAddress substringWithRange:NSMakeRange(1, ipv6Range.location - 1)];
+        NSString *portStr = [hostAddress substringFromIndex:ipv6Range.location + 2];
+        httpPort = [portStr integerValue];
+    }
+    else if ([hostAddress containsString:@":"]) {
+        // IPv4:port
+        NSArray *addrs = [hostAddress componentsSeparatedByString:@":"];
+        if (addrs.count == 2) {
+            addr = addrs[0];
+            httpPort = [addrs[1] integerValue];
+        }
+    }
+    
+    ServerInfoResponse* serverInfoResponse = [self getServerInfoResponseForAddress:hostAddress httpPort:httpPort];
     
     TemporaryHost* host = nil;
     if ([serverInfoResponse isStatusOk]) {
         host = [[TemporaryHost alloc] init];
-        host.activeAddress = host.address = hostAddress;
+        host.activeAddress = host.address = addr;
         host.state = StateOnline;
         [serverInfoResponse populateHost:host];
         
         // Check if this is a new PC
         if (![self getHostInDiscovery:host.uuid]) {
             // Enforce LAN restriction for App Store Guideline 4.2.7a
-            if ([DiscoveryManager isProhibitedAddress:hostAddress]) {
+            if ([DiscoveryManager isProhibitedAddress:host.address]) {
                 // We have a prohibited address. This might be because the user specified their WAN address
                 // instead of their LAN address. If that's the case, we'll try their LAN address and if we
                 // can reach it through that address, we'll allow it.
-                ServerInfoResponse* lanInfo = [self getServerInfoResponseForAddress:host.localAddress];
+                ServerInfoResponse* lanInfo = [self getServerInfoResponseForAddress:host.localAddress httpPort:httpPort];
                 if ([lanInfo isStatusOk]) {
                     TemporaryHost* lanHost = [[TemporaryHost alloc] init];
                     [lanInfo populateHost:lanHost];
@@ -184,7 +203,7 @@
                 callback(nil, Localized(prohibitedAddressMessage));
                 return;
             }
-            else if ([DiscoveryManager isAddressLAN:inet_addr([hostAddress UTF8String])]) {
+            else if ([DiscoveryManager isAddressLAN:inet_addr([host.address UTF8String])]) {
                 // Don't send a STUN request if we're connected to a VPN. We'll likely get the VPN
                 // gateway's external address rather than the external address of the LAN.
                 if (![Utils isActiveNetworkVPN]) {
@@ -292,6 +311,8 @@
         }
         existingHost.activeAddress = host.activeAddress;
         existingHost.state = host.state;
+        existingHost.httpPort = host.httpPort;
+        existingHost.httpsPort = host.httpsPort;
         return NO;
     }
     else {

@@ -30,6 +30,8 @@ class BiancaLogger{
     
     public func logInfo(_ msg:String){
         DDLogInfo(msg)
+        DevOptionVC.log(msg)
+        //DevOptionLog(msg)
     }
 }
 
@@ -39,33 +41,43 @@ class BiancaLogger{
     let Log_Level: DDLogLevel = DDLogLevel.info;
 #endif
 /// Output logs for each level
-final class Logger {
+@objc final class Logger: NSObject {
     ///Verbose level log
-    static func verbose(_ msg:String) {
+    @objc static func verbose(_ msg:String) {
         DDLogVerbose("Verbose: "+msg)
+        DevOptionVC.log("Verbose: "+msg)
+        //DevOptionLog("Verbose: "+msg)
     }
     
     ///Debug level log
-    static func debug(_ msg:String) {
+    @objc static func debug(_ msg:String) {
         DDLogDebug("Debug: "+msg)
+        DevOptionVC.log("Debug: "+msg)
+        //DevOptionLog("Debug: "+msg)
     }
     
     ///Info level log
-    static func info(_ msg:String) {
+    @objc static func info(_ msg:String) {
         DDLogInfo("Info: "+msg)
         Crashlytics.crashlytics().log("Info: "+msg)
+        DevOptionVC.log("Info: "+msg)
+        //DevOptionLog("Info: "+msg)
     }
     
     ///warning level log
-    static func warning(_ msg:String) {
+    @objc static func warning(_ msg:String) {
         DDLogWarn("⚠️ Warning: "+msg)
         Crashlytics.crashlytics().log("⚠️ Warning: "+msg)
+        DevOptionVC.log("⚠️ Warning: "+msg)
+        //DevOptionLog("⚠️ Warning: "+msg)
     }
     
     ///error level log
-    static func error(_ msg:String) {
+    @objc static func error(_ msg:String) {
         DDLogError("🛑 Error: "+msg)
         Crashlytics.crashlytics().log("🛑 Error: "+msg)
+        DevOptionVC.log("🛑 Error: "+msg)
+        //DevOptionLog("🛑 Error: "+msg)
     }
 }
 

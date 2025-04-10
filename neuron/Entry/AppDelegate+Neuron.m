@@ -19,7 +19,6 @@
 #import "RzApp.h"
 #import "RzSwizzling.h"
 #import "ShareDataDB.h"
-#import "RZMainViewController.h"
 #import "FirebaseCore.h"
 #import "Moonlight-Swift.h"
 
@@ -36,6 +35,7 @@
         [RzSwizzling instanceTarget:[AppDelegate new] origSel:@selector(applicationWillEnterForeground:) swizzleSel:@selector(rz_applicationWillEnterForeground:)];
         [RzSwizzling instanceTarget:[AppDelegate new] origSel:@selector(applicationWillResignActive:) swizzleSel:@selector(rz_applicationWillResignActive:)];
         [RzSwizzling instanceTarget:[AppDelegate new] origSel:@selector(applicationWillTerminate:) swizzleSel:@selector(rz_applicationWillTerminate:)];
+        [RzSwizzling instanceTarget:[AppDelegate new] origSel:@selector(applicationDidBecomeActive:) swizzleSel:@selector(rz_applicationDidBecomeActive:)];
     });
 }
 
@@ -101,8 +101,18 @@
     [self rz_applicationWillTerminate:application];
 }
 
+- (void)rz_applicationDidBecomeActive:(UIApplication *)application {
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [AppStoreReviewHandler.shared checkIsStartAppReiew];
+    });
+}
+
 #pragma mark -- openurl
 - (BOOL)application:(UIApplication *)application openURL:(nonnull NSURL *)url options:(nonnull NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
+    
+    [AppStoreReviewHandler.shared markLuanchFromStreamingWithLaunch:true];
+    
     dispatch_async(dispatch_get_main_queue(), ^{
         //parse url from other apps here...
         [[RzApp shared] maybeStartStreaming];

@@ -48,6 +48,8 @@ class DashboardViewModel: RZHandleResponder {
     //bottom overlay button view model
     @Published var bottomMenuViewModel = BottomMenuViewModel()
     
+    let localNetworkAuthorization = LocalNetworkAuthorization()
+    
     var isDashboardAppear: Bool = false
     
     var addressAlertView:SwiftAlertView?
@@ -56,6 +58,8 @@ class DashboardViewModel: RZHandleResponder {
     @Published var noLocalNetworkPermissionAlert: SwiftAlertView? = nil
     @Published var isNeedShowNoNetworkPermissonAlert: Bool = false
     @Published var isShowWakeOnLanLoading: Bool = false
+    
+    @Published var isShowAddManualHostView:Bool = false
     
     //MARK: - init
     override init() {
@@ -131,14 +135,14 @@ class DashboardViewModel: RZHandleResponder {
     
     func requestLocalNetworkPermission() {
         
-        let localNetworkAuthorization = LocalNetworkAuthorization()
-        localNetworkAuthorization.requestAuthorization { [weak self] result in
+        localNetworkAuthorization.requestAuthorization(isNeedToResetCompletionBlock: false) { [weak self] result in
             
             if UIApplication.shared.applicationState != .active {
                 return
             }
             
             RzUtils.setGrantedLocalNetworkPermission(result)
+            SettingsRouter.shared.localNetworkAuthSubject.send(result)
             
             if let callback = SettingsRouter.shared.grantedLocalNetworkPermissionCallBack {
                 callback()

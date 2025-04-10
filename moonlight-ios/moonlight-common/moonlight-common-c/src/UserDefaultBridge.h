@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024 Razer Inc.
+ * Copyright (C) 2025 Razer Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,20 +15,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#import <UIKit/UIKit.h>
+#ifndef UserDefaultBridge_h
+#define UserDefaultBridge_h
 
-NS_ASSUME_NONNULL_BEGIN
 
-@interface StreamLoadingView : UIView
-@property (weak, nonatomic) IBOutlet UIImageView *streamAppImageView;
-@property (weak, nonatomic) IBOutlet UILabel *loadingStateLabel;
-@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
-
-- (void)updateAppIcon:(UIImage*) icon;
-- (void)updateLoadingState:(NSString*) stateString;
-- (void)streamAppImageStartAnimation;
-- (void)streamAppImageStopAnimation;
-- (void)setAsReconnectingStyle;
-@end
-
-NS_ASSUME_NONNULL_END
+#endif /* UserDefaultBridge_h */

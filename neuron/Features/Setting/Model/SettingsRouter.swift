@@ -52,7 +52,7 @@ class SettingsRouter: NSObject {
     
     //streaming
     var localNetworkAuthorization: LocalNetworkAuthorization = LocalNetworkAuthorization()
-    var isShowDownloadOverlay: Bool = false
+    let localNetworkAuthSubject = PassthroughSubject<Bool, Never>()
     var streamConfig: StreamConfiguration = StreamConfiguration()
     var alertView:RZAlertView? = nil
     var alertViewConfirmAction:(()->Void)? = nil
@@ -60,6 +60,10 @@ class SettingsRouter: NSObject {
     
     var startStreamingLoadingView : UIView? = nil
     @objc var startingStream = false
+    
+    @objc var shareLogData:Data = ShareDataDB.shared().readData(fromPath: shareLogPath)
+    @objc var shareLogEnableSave:Bool = isEnableSaveLogDisplayMode
+    @objc var shareLogExcportIng:Bool = false
     
     override init() {
         super.init()

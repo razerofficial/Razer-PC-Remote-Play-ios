@@ -104,6 +104,8 @@ class TutorialViewController: RZBaseVC, RZHandleResponderDelegate {
     
     var tutorialDismissCallBack:(()->Void)? = nil
     
+    let localNetworkAuthorization = LocalNetworkAuthorization()
+    
     let deviceType = IsIpad() ? "iPad" : "iPhone"
     
     private static let tutorialXibName = {
@@ -435,8 +437,7 @@ class TutorialViewController: RZBaseVC, RZHandleResponderDelegate {
         RzUtils.setRequestedLocalNetworkPermission()
         isRequestedLocalNetworkPermission = true
         
-        let localNetworkAuthorization = LocalNetworkAuthorization()
-        localNetworkAuthorization.requestAuthorization { [weak self] result in
+        localNetworkAuthorization.requestAuthorization(isNeedToResetCompletionBlock: false) { [weak self] result in
             guard let strongSelf = self else { return }
             
             if UIApplication.shared.applicationState != .active {
@@ -445,6 +446,7 @@ class TutorialViewController: RZBaseVC, RZHandleResponderDelegate {
             
             strongSelf.isGrantedLocalNetworkPermission = result
             RzUtils.setGrantedLocalNetworkPermission(result)
+            SettingsRouter.shared.localNetworkAuthSubject.send(result)
             
             if let callback = SettingsRouter.shared.grantedLocalNetworkPermissionCallBack {
                 callback()

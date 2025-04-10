@@ -35,6 +35,8 @@
     self.pairState = host.pairState;
     self.activeAddress = host.activeAddress;
     self.appList = host.appList;
+    self.httpPort = host.httpPort;
+    self.httpsPort = host.httpsPort;
     
 }
 

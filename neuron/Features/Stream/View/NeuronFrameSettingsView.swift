@@ -82,7 +82,6 @@ struct NeuronFrameSettingsView: View {
         })
         .onDisappear(perform: {
             viewModel.isAtFrontMost = false
-            viewModel.dismissAppStoreOverlay()
         })
     }
     
@@ -241,7 +240,9 @@ struct NeuronFrameSettingsView: View {
             
             HStack {
                 Spacer().frame(width: spaceBetweenView)
-                Slider(value: $viewModel.bitrate, in: 1.0...150.0, step: 0.1)
+                Slider(value: $viewModel.bitrate, in: 1.0...150.0, step: 0.1) { isChanging in
+                    viewModel.highlightedUIComponent = .NeuronStreamingSettingsBitrateSlider
+                }
                     .onDataChange(of: viewModel.bitrate) { newValue in
                         //update menu
                         viewModel.lastVC?.updateLastVCHandel()
@@ -304,7 +305,7 @@ struct NeuronFrameSettingsView: View {
             
             Spacer().frame(height:5)
             
-            Text("Requires your PC’s connected display to have HDR enabled.".localize())
+            Text("Enhances visuals with better contrast, brightness, and color range.".localize() + "\n" + "Requires your PC’s connected display to have HDR enabled.".localize())
                 .font(.system(size: IsIpad() ? 16 : 14, weight: .medium))
                 .foregroundStyle(Color.SettingText)
                 .fixedSize(horizontal: false, vertical: true)
@@ -392,18 +393,6 @@ struct NeuronFrameSettingsView: View {
             .cornerRadius(10, corners: .topRight)
             .cornerRadius(10, corners: .bottomLeft)
             .cornerRadius(10, corners: .bottomRight)
-            
-            Spacer().frame(height:5)
-            
-            Text("Enhances visuals with better contrast, brightness, and color range.".localize())
-                .font(.system(size: IsIpad() ? 16 : 14, weight: .medium))
-                .foregroundStyle(Color.SettingText)
-                .fixedSize(horizontal: false, vertical: true)
-                .lineSpacing(0)
-                .lineLimit(.max)
-                .multilineTextAlignment(.leading)
-                .padding(.bottom,4)
-                .padding(.leading, spaceBetweenView)
         })
     }
     
@@ -487,6 +476,48 @@ struct NeuronFrameSettingsView: View {
                 )
                 .onDataChange(of: viewModel.touchModel) { newValue in
                     viewModel.frameSettings.absoluteTouchMode = viewModel.touchModel == .touchpad ? false : true
+                    viewModel.saveSettings()
+                }
+            }
+            .frame(maxWidth: .infinity, minHeight: 40, maxHeight: .infinity)
+            .fixedSize(horizontal: false, vertical: true)
+            .background(isHighlighted ? Color.SettingMenuFocus : Color.SettingMenuBG)
+            .cornerRadius(10, corners: .topLeft)
+            .cornerRadius(10, corners: .topRight)
+            .cornerRadius(10, corners: .bottomLeft)
+            .cornerRadius(10, corners: .bottomRight)
+        })
+    }
+    
+    var videoEncoderPicker: some View {
+        
+        let isHighlighted = viewModel.highlightedUIComponent == .NeuronStreamingSettingsVideoEncoderPicker
+        return VStack(alignment: .leading, spacing: 0, content: {
+            
+            HStack {
+                Text("Video Codec".localize())
+                    .foregroundColor(Color.white)
+                    .font(.system(size: 16))
+                    .padding(.leading, spaceBetweenView)
+                    .padding(.top, 6)
+                    .padding(.bottom, 6)
+                Spacer()
+                Picker("", selection: $viewModel.videoEncoder) {
+                    ForEach(RZPreferredCodec.all, id: \.self) {type in
+                        Text(type.displayName().localize())
+                    }
+                }
+                .pickerStyle(.menu)
+                .accentColor(Color.init(red: 235/255.0, green: 245/255.0, blue: 245/255.0, opacity:0.6))
+                .background(.clear)
+                .simultaneousGesture(
+                    TapGesture()
+                        .onEnded{
+                            viewModel.highlightedUIComponent = .NeuronStreamingSettingsVideoEncoderPicker
+                        }
+                )
+                .onDataChange(of: viewModel.videoEncoder) { newValue in
+                    viewModel.frameSettings.preferredCodec = viewModel.videoEncoder.rawValue
                     viewModel.saveSettings()
                 }
             }
@@ -593,6 +624,10 @@ struct NeuronFrameSettingsView: View {
             
             framePacingPicker
             
+            Spacer().frame(height: 20)
+            
+            videoEncoderPicker
+            
         })
         .frame(
             maxWidth: .infinity,
@@ -661,7 +696,7 @@ struct NeuronFrameSettingsView: View {
             let cGPoint = CGPoint(x: 0 , y:  totalHeight - frameHeight)
             scrollView.setContentOffset(cGPoint, animated: false)
         }
-        else if(currentItemIndex+1 > maxItemCountOnScreen) {
+        else {
             // when focus on other items
             let contentEstimateHeight: CGFloat = (CGFloat)(currentItemIndex + 1) * averageItemHeight
             var scrollHeight = averageItemHeight
@@ -673,11 +708,13 @@ struct NeuronFrameSettingsView: View {
                     break
                 }
             }
-            let cGPoint = CGPoint(x: 0 , y:  scrollHeight)
-            scrollView.setContentOffset(cGPoint, animated: false)
-        } else if (currentItemIndex+1 == maxItemCountOnScreen) {
-            let cGPoint = CGPoint(x: 0 , y:  0)
-            scrollView.setContentOffset(cGPoint, animated: false)
+            let currentOffset = scrollView.contentOffset.y
+            if (currentOffset + UIScreen.screenHeight - 20) > contentEstimateHeight && contentEstimateHeight > currentOffset {
+                return
+            }else {
+                let cGPoint = CGPoint(x: 0 , y:  scrollHeight)
+                scrollView.setContentOffset(cGPoint, animated: false)
+            }
         }
     }
     

@@ -37,6 +37,7 @@ NSString *const kAlreadyShowDownloadNexus = @"KEY_ALREADY_DOWNLOAD_NEXUS";
 
 @implementation RzUtils
 static BOOL isGrantedLocalNetworkPermission;
+static TemporaryHost* currentStreamingHost;
 
 + (void)setObject:(id)obj forKey:(NSString *)key {
     [[NSUserDefaults standardUserDefaults] setObject:obj forKey:key];
@@ -112,12 +113,14 @@ static BOOL isGrantedLocalNetworkPermission;
 
 
 + (StreamConfiguration *) streamConfigForStreamApp:(TemporaryApp *)app {
+    currentStreamingHost = app.host;
     StreamConfiguration *streamConfig = [[StreamConfiguration alloc] init];
     streamConfig.host = app.host.activeAddress;
     streamConfig.httpsPort = app.host.httpsPort;
     streamConfig.appID = app.id;
     streamConfig.appName = app.name;
     streamConfig.serverCert = app.host.serverCert;
+    streamConfig.uuid = app.host.uuid;
 
     DataManager* dataMan = [[DataManager alloc] init];
     TemporarySettings* streamSettings = [dataMan getSettings];
@@ -173,6 +176,16 @@ static BOOL isGrantedLocalNetworkPermission;
     streamConfig.serverCodecModeSupport = app.host.serverCodecModeSupport;
    
     switch (streamSettings.preferredCodec) {
+       case CODEC_PREF_AUTO:
+#if defined(__IPHONE_16_0) || defined(__TVOS_16_0)
+           if (VTIsHardwareDecodeSupported(kCMVideoCodecType_AV1)) {
+               streamConfig.supportedVideoFormats |= VIDEO_FORMAT_AV1_MAIN8;
+           }
+#endif
+           streamConfig.supportedVideoFormats |= VIDEO_FORMAT_H265;
+           streamConfig.supportedVideoFormats |= VIDEO_FORMAT_H264;
+           break;
+
        case CODEC_PREF_AV1:
 #if defined(__IPHONE_16_0) || defined(__TVOS_16_0)
            if (VTIsHardwareDecodeSupported(kCMVideoCodecType_AV1)) {
@@ -180,15 +193,19 @@ static BOOL isGrantedLocalNetworkPermission;
            }
 #endif
            // Fall-through
-           
-       case CODEC_PREF_AUTO:
+           streamConfig.supportedVideoFormats &= ~VIDEO_FORMAT_H265; //when user select av1 codec, remove H265 support
+           streamConfig.supportedVideoFormats |= VIDEO_FORMAT_H264; 
+           break;
+
        case CODEC_PREF_HEVC:
 //           if (VTIsHardwareDecodeSupported(kCMVideoCodecType_HEVC)) {
 //               streamConfig.supportedVideoFormats |= VIDEO_FORMAT_H265;
 //           }
             //Since Apple released iOS 11 in 2017, HEVC codec is fully supported by newer iPhones:https://support.apple.com/en-sg/116944,so remove the VTIsHardwareDecodeSupported,because it takes time
             streamConfig.supportedVideoFormats |= VIDEO_FORMAT_H265;
-           // Fall-through
+            // Fall-through
+            streamConfig.supportedVideoFormats |= VIDEO_FORMAT_H264;
+            break;
            
        case CODEC_PREF_H264:
            streamConfig.supportedVideoFormats |= VIDEO_FORMAT_H264;
@@ -232,6 +249,48 @@ static BOOL isNeedContinueLaunchGame = NO;
 
 + (BOOL)isNeedContinueLaunchGame {
     return isNeedContinueLaunchGame;
+}
+
++ (TemporaryHost *)currentStreamingHost {
+    return currentStreamingHost;
+}
+
++ (NSString *)deviceName {
+    static NSString *encodedHostname;
+    if (encodedHostname.length == 0) {
+        NSString *hostname = [NSProcessInfo processInfo].hostName;
+        encodedHostname = [hostname stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
+        NSString *localSuffix = @".local";
+        if ([encodedHostname hasSuffix: localSuffix]) {
+            encodedHostname = [encodedHostname substringToIndex:encodedHostname.length - localSuffix.length];
+        }
+    }
+    return encodedHostname;;
+}
+
++ (BOOL)CheckIPAddressISValidWithIP: (NSString *)address {
+    
+    NSError *error = nil;
+    NSString *pattern = @"\\b(?:\\d{1,3}\\.){3}\\d{1,3}(:\\d{1,5})?\\b";
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern options:NSRegularExpressionCaseInsensitive error:&error];
+
+    if (error) {
+        NSLog(@"Invalid regex: %@", error.localizedDescription);
+        return false;
+    }
+    NSTextCheckingResult *match = [regex firstMatchInString:address options:0 range:NSMakeRange(0, [address length])];
+
+    if (match) {
+        NSRange portRange = [match rangeAtIndex:1];
+        if (portRange.location != NSNotFound) {
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        //No valid IP address found.
+        return false;
+    }
 }
 
 @end

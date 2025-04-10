@@ -154,3 +154,27 @@
 "Home" = "主页";
 "Download" = "下载";
 "Help" = "帮助";
+//20250221 AI
+"Share" = "分享";
+"Specify the video codec used for streaming." = "指定用于流媒体的视讯编解码器。";
+"Streaming session in progress" = "流媒体会话正在进行中";
+"Tap to cancel" = "点击取消";
+"Capture" = "捕获";
+"Replace" = "替换";
+"Reconnecting to PC Streaming" = "重新连接到PC流";
+"Connection errors detected.Do you want to cancel this connection or replace the previous session?" = "检测到连接错误。您想取消此连接还是替换先前的会话？";
+"Please ensure the Cortex host is running and that no other device is connected to it." = "请确保 Cortex 主机正在运行，并且没有其他设备连接到它。";
+"conn_error_code_5031" = "主机的并发流限制已达到。请停止现有的流，或在 &hostlabel; Cortex 设置 UI 中增加“通道”值。";
+"conn_error_code_5032" = "初始化视频捕获/编码失败。是否已连接显示器并打开电源？";
+"conn_error_code_5033" = "没有正在运行的应用可恢复。";
+"conn_error_code_5034" = "退出前必须断开所有会话连接。";
+"Automatic" = "自动";
+"Dismiss" = "关闭";
+"Video Codec" = "视频编解码器";
+"&app is already streaming on &device, would you like to replace the current session or quit? All unsaved data will be lost." = "&app 已在 &device 上流式传输，您想替换当前会话还是退出？所有未保存的数据将丢失。";
+"conn_error_code_5037" = "主机PC无法启动视频编码器。请确保您的GPU和CPU驱动程序已更新。";
+"conn_error_code_5038" = "视频编码器启动失败。请尝试使用不同的视频编解码器，或重新启动主机PC。";
+"conn_error_code_5039" = "未检测到连接到您的PC的显示器。请确保您的显示器已开启，或将显示模式更改为仅限手机。";
+"conn_error_code_5040" = "Razer虚拟显示未正确加载。请重新启动您的主机PC。";
+"e.g.51337" = "例如：51337";
+"Please ensure Razer Cortex is running." = "请确保 Razer Cortex 正在运行。";

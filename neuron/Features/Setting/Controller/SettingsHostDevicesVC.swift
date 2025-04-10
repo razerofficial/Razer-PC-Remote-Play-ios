@@ -22,6 +22,9 @@ import SnapKit
 import CocoaLumberjack
 import SwiftUI
 import SwiftBridging
+import IQKeyboardManager
+
+let NTCloseManualHostView = Notification.Name(rawValue: "NTCloseManualHostView")
 
 enum HostDevicesSection : Int  {
     case Unknow
@@ -68,12 +71,20 @@ class SettingsHostDevicesVC : RZBaseVC { // DiscoveryCallback, PairCallback
     
     var viewShoudResponsHandel:Bool = true
     
+    var addManualHostView:UIView?
+    
     let loaddingViewTimeout = 5
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        
+        //enable keyboard auto change
+        IQKeyboardManager.shared().isEnabled = true
+        IQKeyboardManager.shared().shouldResignOnTouchOutside = true
+        IQKeyboardManager.shared().isEnableAutoToolbar = false
+
         
         handel.reloadCallBack = { [self] in
             deviceSection = .Unknow
@@ -139,7 +150,7 @@ class SettingsHostDevicesVC : RZBaseVC { // DiscoveryCallback, PairCallback
     }
     
     deinit {
-
+        NotificationCenter.default.removeObserver(self)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -181,6 +192,14 @@ class SettingsHostDevicesVC : RZBaseVC { // DiscoveryCallback, PairCallback
             }
             .store(in: &bag)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(closeManualHostView), name: NTCloseManualHostView, object: nil)
+        
+    }
+    
+    @objc func closeManualHostView(){
+        addManualHostView?.removeFromSuperview()
+        handel.startTracking()
+        handel.delegate = self
     }
     
     //MARK: - setup
@@ -523,7 +542,7 @@ class SettingsHostDevicesVC : RZBaseVC { // DiscoveryCallback, PairCallback
         
     //MARK: - cell click
     @objc func clickLocalHost(_ sender:UIButton){
-        DDLogInfo("=====enter to host menuvc (forget host) ======")
+        Logger.info("=====enter to host menuvc (forget host) ======")
         lastVC?.updateNextHandel(handel)
         selectedIndex = sender.tag
         deviceSection = .PairedSection
@@ -538,7 +557,7 @@ class SettingsHostDevicesVC : RZBaseVC { // DiscoveryCallback, PairCallback
     
     @objc func pairNetHost(_ sender:UIButton) {
         
-        DDLogInfo("=====pair host ======")
+        Logger.info("=====pair host ======")
         
         lastVC?.updateNextHandel(handel)
         selectedIndex = sender.tag
@@ -562,9 +581,21 @@ class SettingsHostDevicesVC : RZBaseVC { // DiscoveryCallback, PairCallback
         deviceSection = .AddSection
         reloadContentView()
         
-        let vc = SettingsAdddHostVC()
-        vc.lastHandel = handel
-        SettingsRouter.shared.navigationController?.pushViewController(vc, animated: true)
+        
+        //Swift-UI
+        let contentView = AddManualHostView()
+        let hostingController = UIHostingController(rootView: contentView)
+        addManualHostView = hostingController.view
+        hostingController.view.backgroundColor = .clear
+        //UIApplication.shared.keyWindow?.addSubview(hostingController.view)
+        SettingsRouter.shared.navigationController?.view.addSubview(hostingController.view)
+        hostingController.view.snp.makeConstraints { make in
+            make.left.top.bottom.right.equalTo(0)
+        }
+        
+//        let vc = SettingsAdddHostVC()
+//        vc.lastHandel = handel
+//        SettingsRouter.shared.navigationController?.pushViewController(vc, animated: true)
     }
     
     func showLoadingView() {

@@ -60,12 +60,12 @@
     if (NetworkMonitor.shared.isWifi == false) {
         address = host.externalAddress;
     }
-    self = [self initWithAddress:address httpsPort:host.httpsPort serverCert:host.serverCert];
+    self = [self initWithAddress:address httpsPort:host.httpsPort httpPort:host.httpPort serverCert:host.serverCert];
     _host = host;
     return self;
 }
 
-- (id) initWithAddress:(NSString*) hostAddressPortString httpsPort:(unsigned short)httpsPort serverCert:(NSData*) serverCert {
+- (id) initWithAddress:(NSString*) hostAddressPortString httpsPort:(unsigned short)httpsPort httpPort:(unsigned short)httpPort serverCert:(NSData*) serverCert {
     self = [super init];
     // Use the same UID for all Moonlight clients to allow them
     // quit games started on another Moonlight client.
@@ -78,7 +78,7 @@
     _urlSession = [NSURLSession sessionWithConfiguration:config delegate:self delegateQueue:nil];
     
     NSString* address = [Utils addressPortStringToAddress:hostAddressPortString];
-    unsigned short port = [Utils addressPortStringToPort:hostAddressPortString];
+//    unsigned short port = [Utils addressPortStringToPort:hostAddressPortString];
     
     // If this is an IPv6 literal, we must properly enclose it in brackets
     if ([address containsString:@":"]) {
@@ -87,7 +87,7 @@
         _urlSafeHostName = address;
     }
     
-    _baseHTTPURL = [NSString stringWithFormat:@"http://%@:%u", _urlSafeHostName, port];
+    _baseHTTPURL = [NSString stringWithFormat:@"http://%@:%u", _urlSafeHostName, httpPort];
     
     if (httpsPort) {
         _baseHTTPSURL = [NSString stringWithFormat:@"https://%@:%u", _urlSafeHostName, httpsPort];
@@ -101,7 +101,7 @@
     if (_host != nil) {
         NSString *hostAddressPortString = _host.activeAddress;
         NSString* address = [Utils addressPortStringToAddress:hostAddressPortString];
-        unsigned short port = [Utils addressPortStringToPort:hostAddressPortString];
+//        unsigned short port = [Utils addressPortStringToPort:hostAddressPortString];
         
         // If this is an IPv6 literal, we must properly enclose it in brackets
         if ([address containsString:@":"]) {
@@ -110,7 +110,7 @@
             _urlSafeHostName = address;
         }
         
-        _baseHTTPURL = [NSString stringWithFormat:@"http://%@:%u", _urlSafeHostName, port];
+        _baseHTTPURL = [NSString stringWithFormat:@"http://%@:%u", _urlSafeHostName, _host.httpPort];
         
         if (_host.httpsPort) {
             _baseHTTPSURL = [NSString stringWithFormat:@"https://%@:%u", _urlSafeHostName, _host.httpsPort];
@@ -474,8 +474,9 @@
 // Returns the identity
 - (SecIdentityRef)getClientCertificate {
     SecIdentityRef identityApp = nil;
-    CFDataRef p12Data = (__bridge CFDataRef)[CryptoManager readP12FromFile];
-
+    NSData *p12NSData = [CryptoManager readP12FromFile];
+    CFDataRef p12Data = CFBridgingRetain(p12NSData);
+    
     CFStringRef password = CFSTR("limelight");
     const void *keys[] = { kSecImportExportPassphrase };
     const void *values[] = { password };
@@ -491,6 +492,7 @@
         Log(LOG_E, @"Error opening Certificate.");
     }
     
+    CFRetain(p12Data);
     CFRelease(options);
     CFRelease(password);
     

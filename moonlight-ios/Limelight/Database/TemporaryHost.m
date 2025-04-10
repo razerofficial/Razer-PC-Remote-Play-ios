@@ -28,17 +28,20 @@
     self.externalAddress = host.externalAddress;
     self.localAddress = host.localAddress;
     self.ipv6Address = host.ipv6Address;
+    self.activeAddress = host.activeAddress;
     self.mac = host.mac;
     self.name = host.name;
     self.uuid = host.uuid;
     self.machineIdentifier = host.machineIdentifier;
     self.serverCodecModeSupport = host.serverCodecModeSupport;
     self.serverCert = host.serverCert;
+    self.httpsPort = [host.httpsPort integerValue];
+    self.httpPort = [host.httpPort integerValue];
     
-    // Older clients stored a non-URL-escaped IPv6 string. Try to detect that and fix it up.
-    if (![self.ipv6Address containsString:@"["]) {
-        self.ipv6Address = [Utils addressAndPortToAddressPortString:self.ipv6Address port:RZ_DEFAULT_HTTP_PORT];
-    }
+//    // Older clients stored a non-URL-escaped IPv6 string. Try to detect that and fix it up.
+//    if (![self.ipv6Address containsString:@"["]) {
+//        self.ipv6Address = [Utils addressAndPortToAddressPortString:self.ipv6Address port:RZ_DEFAULT_HTTP_PORT];
+//    }
     
     // Ensure we don't use a stale cached pair state if we haven't pinned the cert yet
     self.pairState = host.serverCert ? [host.pairState intValue] : PairStateUnpaired;
@@ -71,11 +74,20 @@
     if (self.ipv6Address != nil) {
         parentHost.ipv6Address = self.ipv6Address;
     }
+    if (self.activeAddress != nil) {
+        parentHost.activeAddress = self.activeAddress;
+    }
     if (self.mac != nil) {
         parentHost.mac = self.mac;
     }
     if (self.serverCert != nil) {
         parentHost.serverCert = self.serverCert;
+    }
+    if (self.httpsPort != 0) {
+        parentHost.httpsPort = [NSNumber numberWithInt:self.httpsPort];
+    }
+    if (self.httpPort != 0) {
+        parentHost.httpPort = [NSNumber numberWithInt:self.httpPort];
     }
     parentHost.name = self.name;
     parentHost.uuid = self.uuid;

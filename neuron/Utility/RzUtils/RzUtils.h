@@ -23,6 +23,7 @@
 NS_ASSUME_NONNULL_BEGIN
 #define TermOfServiceUrl @"https://www.razer.com/legal/services-and-software-terms-of-use-mobile"
 #define PrivacyPolicyUrl @"https://www.razer.com/legal/customer-privacy-policy-mobile"
+#define FAQUrl @"https://mysupport.razer.com/app/answers/detail/a_id/14919"
 
 @interface RzUtils : NSObject
 + (void)setObject:(id)obj forKey:(NSString *)key;
@@ -58,6 +59,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void)setNeedContinueLaunchGame:(BOOL)isNeed;
 + (BOOL)isNeedContinueLaunchGame;
+
++ (TemporaryHost *)currentStreamingHost;
+
++ (NSString *)deviceName;
+
++ (BOOL)CheckIPAddressISValidWithIP: (NSString *)address;
 @end
 
 NS_ASSUME_NONNULL_END

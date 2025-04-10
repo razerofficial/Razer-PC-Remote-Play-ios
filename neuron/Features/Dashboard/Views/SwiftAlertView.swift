@@ -469,7 +469,7 @@ public class SwiftAlertView: UIView {
 extension SwiftAlertView {
 
     private func printLog(_ msg:String) {
-        DDLogInfo("SwiftAlertView > " + msg)
+        Logger.info("SwiftAlertView > " + msg)
     }
 
     private func setUpDefaultValue() {
@@ -778,7 +778,9 @@ extension SwiftAlertView {
         } else if buttonIndex == cancelButtonIndex {
             dismiss()
         }*/
-        dismiss()
+        if isDismissOnActionButtonClicked {
+            dismiss()
+        }
     }
     
     @objc func outsideTapped(_ recognizer: UITapGestureRecognizer) {
