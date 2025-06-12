@@ -21,6 +21,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class NeuronFrameSettings;
+@class NeuronEvent;
 @interface ShareDataDB : NSObject
 + (instancetype)shared;
 - (NSData *)readDataFromPath:(NSString *)item;
@@ -43,6 +44,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSArray *)readManuallyUnpairedHostDataFromShareDB;
 - (void)writeManuallyUnpairedHostDataToshareDB:(NSString *)hostUuid;
 - (void)removePairedHostFromeShareDB:(TemporaryHost *)host;
+- (void)writeNeuronInfo;
+- (void)writeNeuronEvent:(NeuronEvent *)event;
 //- (void)updateHost:(TemporaryHost *)host;
 
 @end

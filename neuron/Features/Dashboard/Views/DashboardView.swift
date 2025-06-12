@@ -51,7 +51,7 @@ struct DashboardView: View {
                     
                     if viewModel.pairedHosts.count > 0 {
                         
-                        Text("Paired computers".localize().uppercased())
+                        Text("Paired PC".localize().uppercased())
                             .padding(EdgeInsets.init(top: 0, leading: 20, bottom: 0, trailing: 10))
                             .foregroundColor(.white)
                             .font(Font.system(size: 20 ))
@@ -90,7 +90,7 @@ struct DashboardView: View {
                     
                     HStack(){
                         
-                        Text("Unpaired computers".localize().uppercased())
+                        Text("Unpaired PC".localize().uppercased())
                             .padding(EdgeInsets.init(top: 0, leading: 20, bottom: 0, trailing: 0))
                             .foregroundColor(.white)
                             .font(Font.system(size: 20))

@@ -315,7 +315,7 @@ struct AddManualHostView: View {
                     
                     var found:Bool = false
                     //errorTips.isHidden = false
-                    if message == "Host information updated".localize() {
+                    if message == "Host information updated" {
                         for netHost in HostListManger.shared.netHosts {
                             if netHost.address == address || netHost.activeAddress == address || netHost.localAddress == address{
                                 self.viewModel.viewDismissalModePublisher.send(true)

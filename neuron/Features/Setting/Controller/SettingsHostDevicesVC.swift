@@ -197,9 +197,12 @@ class SettingsHostDevicesVC : RZBaseVC { // DiscoveryCallback, PairCallback
     }
     
     @objc func closeManualHostView(){
-        addManualHostView?.removeFromSuperview()
-        handel.startTracking()
-        handel.delegate = self
+        if addManualHostView != nil {
+            addManualHostView?.removeFromSuperview()
+            addManualHostView = nil
+            handel.startTracking()
+            handel.delegate = self
+        }
     }
     
     //MARK: - setup
@@ -293,7 +296,7 @@ class SettingsHostDevicesVC : RZBaseVC { // DiscoveryCallback, PairCallback
     func addPairedDevicesUI() {
         
         if pairedHosts.count > 0 {
-            let labPairedDevices = SettingsRouter.desLab("Paired computers".localize().uppercased(), IsIpad() ? 16.0 : 14.0)
+            let labPairedDevices = SettingsRouter.desLab("Paired PC".localize().uppercased(), IsIpad() ? 16.0 : 14.0)
             contentView.addSubview(labPairedDevices)
             
             labPairedDevices.snp.makeConstraints { make in
@@ -363,7 +366,7 @@ class SettingsHostDevicesVC : RZBaseVC { // DiscoveryCallback, PairCallback
     
     func addAvailableDevicesUI() {
         
-        let labAvailableDevices = SettingsRouter.desLab("Unpaired computers".localize().uppercased(), IsIpad() ? 16.0 : 14.0)
+        let labAvailableDevices = SettingsRouter.desLab("Unpaired PC".localize().uppercased(), IsIpad() ? 16.0 : 14.0)
 
         contentView.addSubview(labAvailableDevices)
         contentView.addSubview(loading)
@@ -581,7 +584,7 @@ class SettingsHostDevicesVC : RZBaseVC { // DiscoveryCallback, PairCallback
         deviceSection = .AddSection
         reloadContentView()
         
-        
+    
         //Swift-UI
         let contentView = AddManualHostView()
         let hostingController = UIHostingController(rootView: contentView)

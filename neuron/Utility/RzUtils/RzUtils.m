@@ -293,4 +293,11 @@ static BOOL isNeedContinueLaunchGame = NO;
     }
 }
 
++ (NSString *)getAppVersion {
+    NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
+    NSString *appVersion = infoDictionary[@"CFBundleShortVersionString"];
+    NSString *buildVersion = infoDictionary[@"CFBundleVersion"];
+    return [NSString stringWithFormat:@"%@(%@)",appVersion,buildVersion];
+}
+
 @end

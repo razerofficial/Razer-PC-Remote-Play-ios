@@ -1,11 +1,11 @@
 {
   "images" : [
     {
-      "filename" : "Black tickx2.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "streaming_duplicate_screen_ipad.png",
       "idiom" : "universal",
       "scale" : "2x"
     },

@@ -182,7 +182,8 @@ class NeuronFrameSettingsViewModel: NSObject, ObservableObject {
     }
 
     func isDeviceSupportHDR() -> Bool {
-        return AVPlayer.eligibleForHDRPlayback == true && displayMode == .DuplicatePCDisplayMode
+//        return AVPlayer.eligibleForHDRPlayback == true && displayMode == .DuplicatePCDisplayMode
+        return AVPlayer.eligibleForHDRPlayback == true
     }
     
     private func printLog(_ msg:String){
@@ -465,5 +466,40 @@ class FrameSettingsUIComponents {
         case NeuronStreamingSettingsAutoConfigureSettingsToggle
         case NeuronStreamingSettingsAutoQuitPicker
         case NeuronStreamingSettingsVideoEncoderPicker
+        
+        var description: String {
+            switch self{
+            case .NeuronStreamingSettings:
+                return "NeuronStreamingSettings"
+            case .NeuronStreamingSettingsDisplayModeVideoSettingsDisplay:
+                return "NeuronStreamingSettingsDisplayModeVideoSettingsDisplay"
+            case .NeuronStreamingSettingsDisplayModeSeparateScreen:
+                return "NeuronStreamingSettingsDisplayModeSeparateScreen"
+            case .NeuronStreamingSettingsDisplayModeDeviceOptimized:
+                return "NeuronStreamingSettingsDisplayModeDeviceOptimized"
+            case .NeuronStreamingSettingsLimitScreenResolutionToSafeAreaToggle:
+                return "NeuronStreamingSettingsLimitScreenResolutionToSafeAreaToggle"
+            case .NeuronStreamingSettingsRefreshRateToggle:
+                return "NeuronStreamingSettingsRefreshRateToggle"
+            case .NeuronStreamingSettingsBitrateSlider:
+                return "NeuronStreamingSettingsBitrateSlider"
+            case .NeuronStreamingSettingsFramePacingPicker:
+                return "NeuronStreamingSettingsFramePacingPicker"
+            case .NeuronStreamingSettingsHDRToggle:
+                return "NeuronStreamingSettingsHDRToggle"
+            case .NeuronStreamingSettingsMutePCToggle:
+                return "NeuronStreamingSettingsMutePCToggle"
+            case .NeuronStreamingSettingsTouchScreenPicker:
+                return "NeuronStreamingSettingsTouchScreenPicker"
+            case .NeuronStreamingSettingsAutoConfigureSettingsToggle:
+                return "NeuronStreamingSettingsAutoConfigureSettingsToggle"
+            case .NeuronStreamingSettingsAutoQuitPicker:
+                return "NeuronStreamingSettingsAutoQuitPicker"
+            case .NeuronStreamingSettingsVideoEncoderPicker:
+                return "NeuronStreamingSettingsVideoEncoderPicker"
+
+            }
+        }
     }
+    
 }

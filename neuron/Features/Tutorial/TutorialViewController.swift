@@ -45,6 +45,8 @@ class TutorialViewController: RZBaseVC, RZHandleResponderDelegate {
     @IBOutlet weak var acceptButtonTitle: UILabel!
     @IBOutlet weak var tosButton: UIButton!
     @IBOutlet weak var privacyPolicyButton: UIButton!
+    @IBOutlet weak var welcomeImageView: UIImageView!
+    @IBOutlet weak var nexusScreenshotImageView: UIImageView!
     
     //MARK: Permission page
     @IBOutlet var permissionView: UIView!
@@ -120,10 +122,44 @@ class TutorialViewController: RZBaseVC, RZHandleResponderDelegate {
         return TutorialViewController(nibName: TutorialViewController.tutorialXibName, bundle: nil)
     }
     
+    private func setupDeviceSpecificImages() {
+        let isPad = UIDevice.current.userInterfaceIdiom == .pad
+        
+        // Setup welcome image
+        let welcomeImageName = isPad ? "streaming_ipad" : "streaming"
+        welcomeImageView.image = UIImage(named: welcomeImageName)
+        
+        // Setup nexus screenshot image
+        let nexusImageName = isPad ? "nexus_screenshot_ipad" : "nexus_screenshot"
+        nexusScreenshotImageView.image = UIImage(named: nexusImageName)
+        
+        // Setup display mode images based on current mode
+        updateDisplayModeImages()
+    }
+    
+    private func updateDisplayModeImages() {
+        let isPad = UIDevice.current.userInterfaceIdiom == .pad
+        
+        // These will be used when setting up the display mode views
+        // The actual image setting will be handled in updateDisplayModeView methods
+        switch currentDisplayMode {
+        case .separateScreen:
+            let imageName = isPad ? "streaming_separate_screen" : "streaming_separate_screen"
+            displayModeImageView.image = UIImage(named: imageName)
+        case .phoneOnly:
+            let imageName = isPad ? "streaming_phone_only_ipad" : "streaming_phone_only"
+            displayModeImageView.image = UIImage(named: imageName)
+        default:
+            // For duplicate mode or any other case, use the default image
+            let imageName = isPad ? "streaming_duplicate_screen_ipad" : "streaming_duplicate_screen"
+            displayModeImageView.image = UIImage(named: imageName)
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupLifeCycleNotification()
-        
+        setupDeviceSpecificImages()
         isRequestedLocalNetworkPermission = RzUtils.isRequestedLocalNetworkPermission()
         isAcceptedTOS = RzUtils.isAcceptedTOS()
         isDownloadNexus = RzUtils.checkIsNexusInstalled()
@@ -330,6 +366,8 @@ class TutorialViewController: RZBaseVC, RZHandleResponderDelegate {
         displayModelContentLabel.text = "Your PC’s connected display will be streamed to your [iPhone/iPad] ".localize().replacingOccurrences(of: "[iPhone/iPad]", with: deviceType)
         
         displayModeImageView.image = UIImage(named: "streaming_duplicate_screen")
+        
+        updateDisplayModeImages()
     }
     
     @IBAction func onSeparateModeButtonClicked(_ sender: Any) {
@@ -349,7 +387,8 @@ class TutorialViewController: RZBaseVC, RZHandleResponderDelegate {
         
         displayModelContentLabel.text = "Extend your PC display to your phone for seamless multitasking. Use your phone as a second screen to view different content, ideal for productivity and gaming on the go.".localize()
         
-        displayModeImageView.image = UIImage(named: "streaming_separate_screen")
+        //update the display mode images
+        updateDisplayModeImages()
     }
     
     @IBAction func onPhoneOnlyModeButtonClicked(_ sender: Any) {
@@ -371,8 +410,14 @@ class TutorialViewController: RZBaseVC, RZHandleResponderDelegate {
             .localize().replacingOccurrences(of: "[iPhone/iPad]", with: deviceType)
             .localize().replacingOccurrences(of: "%1$s", with: PCDisplayStreamingMode.DeviceOptimized.resolutionRate())
             .localize().replacingOccurrences(of: "%2$s", with: PCDisplayStreamingMode.DeviceOptimized.refreshRate())
+
+        // Update display mode image based on device type
+        let isPad = UIDevice.current.userInterfaceIdiom == .pad
+        let imageName = isPad ? "streaming_phone_only_ipad" : "streaming_phone_only"
+        displayModeImageView.image = UIImage(named: imageName)
         
-        displayModeImageView.image = UIImage(named: "streaming_phone_only")
+        // Also update the display mode images
+        updateDisplayModeImages()
     }
     
     @IBAction func onDisplayModeDoneButtonClicked(_ sender: Any) {

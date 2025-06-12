@@ -92,6 +92,6 @@
     _streamAppImageView.image = [_streamAppImageView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     _streamAppImageView.tintColor = [UIColor whiteColor];
     _loadingStateLabel.textColor = [UIColor whiteColor];
-    _loadingStateLabel.text = @"Reconnecting to PC Streaming...";
+    _loadingStateLabel.text = [NSString stringWithFormat:@"%@...", Localized(@"Reconnecting to PC Streaming")];
 }
 @end

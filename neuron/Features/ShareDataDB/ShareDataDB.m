@@ -367,6 +367,34 @@
     return setting;
 }
 
+- (void)writeNeuronInfo {
+    
+    NSDictionary *neuronInfo = @{@"neuronVersion": [RzUtils getAppVersion]};
+    NSError *error;
+    NSData *neuronInfoData = [NSJSONSerialization dataWithJSONObject:neuronInfo
+        options:kNilOptions
+        error:&error];
+    
+    if (error) {
+        Log(LOG_E ,@"writeNeuronInfo error: %@",error);
+    } else {
+        [self writeData:neuronInfoData toFile:neuronInfoPath];
+    }
+}
+
+- (NSArray *)readNeuronEvent {
+    NSData *data = [self readDataFromPath:neuronEventPath];
+    NSArray *eventArray = [NSArray yy_modelArrayWithClass:NeuronEvent.class json:data];
+    return eventArray;
+}
+
+- (void)writeNeuronEvent:(NeuronEvent *)event {
+    NSMutableArray *eventArray = [[NSMutableArray alloc] initWithArray:[self readNeuronEvent]];
+    [eventArray addObject:event];
+    
+    NSData *data = [eventArray yy_modelToJSONData];
+    [self writeData:data toFile:neuronEventPath];
+}
 //- (void)updateHost:(TemporaryHost *)host {
 //    NSMutableArray *hosts = [[self getShareHostList] mutableCopy];
 //    for (TemporaryHost *old in hosts) {

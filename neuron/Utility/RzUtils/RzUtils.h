@@ -65,6 +65,8 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSString *)deviceName;
 
 + (BOOL)CheckIPAddressISValidWithIP: (NSString *)address;
+
++ (NSString *)getAppVersion;
 @end
 
 NS_ASSUME_NONNULL_END

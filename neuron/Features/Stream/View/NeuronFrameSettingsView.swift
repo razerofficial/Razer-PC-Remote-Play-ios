@@ -29,6 +29,13 @@ struct NeuronFrameSettingsView: View {
     private let PCDisplayStreamingModeItemDefaultWidth: CGFloat = IsIpad() ? 155 : 145
     @SwiftUI.State var remotePlay: Bool = false
     
+    let scrollViewCoordinateSpaceName: String = "NeuronFrameSettingsScrollView"
+    
+    @SwiftUI.State private var viewPositions: [String: CGRect] = [:]
+    @SwiftUI.State private var scrollViewSize: CGSize = .zero
+    @SwiftUI.State private var scrollViewContentOffset: CGPoint = .zero
+    @SwiftUI.State private var navbarHeight: CGFloat = 44.0
+    
     init(viewModel: NeuronFrameSettingsViewModel) {
         self.viewModel = viewModel
         remotePlay = viewModel.remotePlayToggle
@@ -37,12 +44,13 @@ struct NeuronFrameSettingsView: View {
     var body: some View {
         
         return ZStack {
-            ScrollView(.vertical, showsIndicators: false, content: {
-                
-                VStack(alignment: .leading, spacing: 20) {
+            ScrollViewReader { proxy in
+                ScrollView(.vertical, showsIndicators: false, content: {
                     
-                    Spacer()
-                        .frame(minHeight: topPaddingValue)
+                    VStack(alignment: .leading, spacing: 0) {
+                        
+                        Spacer()
+                            .frame(minHeight: topPaddingValue + 20)
                         
                         displayModeSelectView
                         
@@ -58,24 +66,41 @@ struct NeuronFrameSettingsView: View {
                         
                         touchScreenControlPicker
                         
-                        advancedSettingsView
+                        advancedSettingsTextView
+                        
+                        autoQuitPicker
+                        
+                        limtRefreshRateAndScreenResolutionToggle
+                        
+                        framePacingPicker
+                        
+                        videoEncoderPicker
                         
                         Spacer()
                             .frame(height: 30)
+                    }
+                    .frame(
+                        maxWidth: .infinity,
+                        maxHeight: .infinity,
+                        alignment: .topLeading
+                    )
+                    .padding(.trailing, 10)
+                    
+                })
+                .introspectScrollView(customize: { scrollView in
+                    scrollViewContentOffset = scrollView.contentOffset
+                })
+                .coordinateSpace(name: scrollViewCoordinateSpaceName)
+                .onPreferenceChange(ViewPositionKey.self) { rects in
+                    viewPositions.merge(rects) { _, new in new }
                 }
-                .frame(
-                    maxWidth: .infinity,
-                    maxHeight: .infinity,
-                    alignment: .topLeading
-                )
-                .padding(.trailing, 10)
-            })
-            .introspectScrollView(customize: { scrollView in
-                self.updateScrollViewOffset(scrollView)
-            })
+                .onDataChange(of: viewModel.highlightedUIComponent, perform: { newValue in
+                    scrollToIfNeeded(proxy: proxy, targetID: viewModel.highlightedUIComponent.description)
+                })
+            }
+            .padding(.leading, 20)
+            .background(Color.black)
         }
-        .padding(.leading, 20)
-        .background(Color.black)
         .onAppear(perform: {
             viewModel.isAtFrontMost = true
             viewModel.reloadSettings()
@@ -83,6 +108,26 @@ struct NeuronFrameSettingsView: View {
         .onDisappear(perform: {
             viewModel.isAtFrontMost = false
         })
+    }
+    
+    private func scrollToIfNeeded(proxy: ScrollViewProxy, targetID: String) {
+        guard let rect = viewPositions[targetID], let visibleRect = getVisibleRect() else { return }
+        
+        if isRectMostlyVisible(rect, within: visibleRect) {
+            proxy.scrollTo(targetID, anchor: .center)
+        }
+    }
+
+    private func getVisibleRect() -> CGRect? {
+        return CGRect(x: scrollViewContentOffset.x,
+                      y: scrollViewContentOffset.y,
+                      width: UIScreen.screenSize.width,
+                      height: UIScreen.screenSize.height)
+    }
+    
+    private func isRectMostlyVisible(_ rect: CGRect, within visibleRect: CGRect) -> Bool {
+        let minY = visibleRect.minY + navbarHeight
+        return !(rect.minY > minY && rect.maxY < (minY + UIScreen.screenSize.height - navbarHeight))
     }
     
     var displayModeSelectView: some View {
@@ -120,6 +165,7 @@ struct NeuronFrameSettingsView: View {
                         .frame(alignment: .leading)
                         .fixedSize(horizontal: false, vertical: true)
                         .background(highlighted == mode.highlightedUIComponent() ? Color.SettingMenuFocus : Color.SettingMenuBG)
+                        .autoScrollingWith(id: mode.highlightedUIComponent().description, scrollViewCoordinateSpaceName: scrollViewCoordinateSpaceName, positions: $viewPositions)
                         .cornerRadius(10, corners: .topLeft)
                         .cornerRadius(10, corners: .topRight)
                         .cornerRadius(10, corners: .bottomLeft)
@@ -129,9 +175,6 @@ struct NeuronFrameSettingsView: View {
                             viewModel.lastVC?.updateLastVCHandel()
                             viewModel.highlightedUIComponent = mode.highlightedUIComponent()
                             viewModel.updateDisplayMode(mode)
-//                            viewModel.displayMode = mode
-//                            viewModel.frameSettings.displayMode = mode.rawValue
-//                            viewModel.saveSettings()
                         }
                     Spacer()
                         .frame(width: 10)
@@ -146,6 +189,9 @@ struct NeuronFrameSettingsView: View {
                 .multilineTextAlignment(.leading)
                 .padding(.vertical,4)
                 .padding(.leading, spaceBetweenView)
+            
+            Spacer()
+                .frame(height:20)
         })
     }
     
@@ -180,6 +226,7 @@ struct NeuronFrameSettingsView: View {
                     }
             )
         }
+        .autoScrollingWith(id: FrameSettingsUIComponents.FrameSettingsHightlightedComponent.NeuronStreamingSettingsLimitScreenResolutionToSafeAreaToggle.description, scrollViewCoordinateSpaceName: scrollViewCoordinateSpaceName, positions: $viewPositions)
     }
     
     var limitRefreshRateToggle: some View {
@@ -215,6 +262,7 @@ struct NeuronFrameSettingsView: View {
                 viewModel.saveSettings()
             }
         }
+        .autoScrollingWith(id: FrameSettingsUIComponents.FrameSettingsHightlightedComponent.NeuronStreamingSettingsRefreshRateToggle.description, scrollViewCoordinateSpaceName: scrollViewCoordinateSpaceName, positions: $viewPositions)
     }
     
     var bitrateSlider: some View {
@@ -269,7 +317,10 @@ struct NeuronFrameSettingsView: View {
                         viewModel.highlightedUIComponent = .NeuronStreamingSettingsBitrateSlider
                     }
             )
+            Spacer()
+                .frame(height:20)
         })
+        .autoScrollingWith(id: FrameSettingsUIComponents.FrameSettingsHightlightedComponent.NeuronStreamingSettingsBitrateSlider.description, scrollViewCoordinateSpaceName: scrollViewCoordinateSpaceName, positions: $viewPositions)
     }
     
     var HDRToggle: some View {
@@ -314,12 +365,16 @@ struct NeuronFrameSettingsView: View {
                 .multilineTextAlignment(.leading)
                 .padding(.bottom,4)
                 .padding(.leading, spaceBetweenView)
+            
+            Spacer()
+                .frame(height:20)
         }
         .frame(
             maxWidth: .infinity,
             maxHeight: .infinity,
             alignment: .topLeading
         )
+        .autoScrollingWith(id: FrameSettingsUIComponents.FrameSettingsHightlightedComponent.NeuronStreamingSettingsHDRToggle.description, scrollViewCoordinateSpaceName: scrollViewCoordinateSpaceName, positions: $viewPositions)
     }
     
     var framePacingPicker: some View {
@@ -359,7 +414,11 @@ struct NeuronFrameSettingsView: View {
             .cornerRadius(10, corners: .topRight)
             .cornerRadius(10, corners: .bottomLeft)
             .cornerRadius(10, corners: .bottomRight)
+            
+            Spacer()
+                .frame(height:20)
         })
+        .autoScrollingWith(id: FrameSettingsUIComponents.FrameSettingsHightlightedComponent.NeuronStreamingSettingsFramePacingPicker.description, scrollViewCoordinateSpaceName: scrollViewCoordinateSpaceName, positions: $viewPositions)
     }
     
     var MuteHostPCToggle: some View {
@@ -393,7 +452,11 @@ struct NeuronFrameSettingsView: View {
             .cornerRadius(10, corners: .topRight)
             .cornerRadius(10, corners: .bottomLeft)
             .cornerRadius(10, corners: .bottomRight)
+            
+            Spacer()
+                .frame(height:20)
         })
+        .autoScrollingWith(id: FrameSettingsUIComponents.FrameSettingsHightlightedComponent.NeuronStreamingSettingsMutePCToggle.description, scrollViewCoordinateSpaceName: scrollViewCoordinateSpaceName, positions: $viewPositions)
     }
     
     var autoQuitPicker: some View {
@@ -445,7 +508,11 @@ struct NeuronFrameSettingsView: View {
                 .multilineTextAlignment(.leading)
                 .padding(.bottom,4)
                 .padding(.leading, spaceBetweenView)
+            
+            Spacer()
+                .frame(height:20)
         })
+        .autoScrollingWith(id: FrameSettingsUIComponents.FrameSettingsHightlightedComponent.NeuronStreamingSettingsAutoQuitPicker.description, scrollViewCoordinateSpaceName: scrollViewCoordinateSpaceName, positions: $viewPositions)
     }
     
     var touchScreenControlPicker: some View {
@@ -486,7 +553,11 @@ struct NeuronFrameSettingsView: View {
             .cornerRadius(10, corners: .topRight)
             .cornerRadius(10, corners: .bottomLeft)
             .cornerRadius(10, corners: .bottomRight)
+            
+            Spacer()
+                .frame(height:20)
         })
+        .autoScrollingWith(id: FrameSettingsUIComponents.FrameSettingsHightlightedComponent.NeuronStreamingSettingsTouchScreenPicker.description, scrollViewCoordinateSpaceName: scrollViewCoordinateSpaceName, positions: $viewPositions)
     }
     
     var videoEncoderPicker: some View {
@@ -528,14 +599,16 @@ struct NeuronFrameSettingsView: View {
             .cornerRadius(10, corners: .topRight)
             .cornerRadius(10, corners: .bottomLeft)
             .cornerRadius(10, corners: .bottomRight)
+            
+            Spacer()
+                .frame(height:20)
         })
+        .autoScrollingWith(id: FrameSettingsUIComponents.FrameSettingsHightlightedComponent.NeuronStreamingSettingsVideoEncoderPicker.description, scrollViewCoordinateSpaceName: scrollViewCoordinateSpaceName, positions: $viewPositions)
     }
     
-    var advancedSettingsView: some View {
-        let isRefreshRateHighlighted = viewModel.highlightedUIComponent == .NeuronStreamingSettingsRefreshRateToggle
-        let isSafeAreaHighlighted = viewModel.highlightedUIComponent == .NeuronStreamingSettingsLimitScreenResolutionToSafeAreaToggle
-        return VStack(alignment: .leading, spacing: 0, content: {
-            
+    var advancedSettingsTextView: some View {
+     
+        return VStack(alignment: .leading, spacing:0) {
             Text("Advanced Settings".localize().uppercased())
                 .font(.system(size: 14, weight: .medium))
                 .foregroundStyle(Color.SettingText)
@@ -543,180 +616,192 @@ struct NeuronFrameSettingsView: View {
                 .padding(.leading, spaceBetweenView)
             Spacer()
                 .frame(width: 10)
-            
-            VStack(alignment: .leading, spacing: 0, content: {
-                
-                autoQuitPicker
-                
-                Spacer()
-                    .frame(height: 20)
-                
-                if viewModel.isNeedShowLimitRefreshRateToggle() && viewModel.isNeedShowLimitScreenResolutionToSafeAreaToggle() {
-                    limitRefreshRateToggle
-                        .frame(maxWidth: .infinity, minHeight: 40, maxHeight: .infinity)
-                        .frame(alignment: .leading)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .background(isRefreshRateHighlighted ? Color.SettingMenuFocus : Color.SettingMenuBG)
-                        .cornerRadius(10, corners: .topLeft)
-                        .cornerRadius(10, corners: .topRight)
-                    
-                    Color.SettingsLine.frame(maxWidth: .infinity).frame(height: 1 / UIScreen.main.scale)
-                    
-                    LimitScreenResolutionTtoSafeAreaToggle
-                        .frame(maxWidth: .infinity, minHeight: 40, maxHeight: .infinity)
-                        .frame(alignment: .leading)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .background(isSafeAreaHighlighted ? Color.SettingMenuFocus : Color.SettingMenuBG)
-                        .cornerRadius(10, corners: .bottomLeft)
-                        .cornerRadius(10, corners: .bottomRight)
-                    
-                    Spacer().frame(height:5)
-        
-                    Text("Restricts display size to avoid device's front camera".localize())
-                        .font(.system(size: IsIpad() ? 16 : 14, weight: .medium))
-                        .foregroundStyle(Color.SettingText)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .lineSpacing(0)
-                        .lineLimit(.max)
-                        .multilineTextAlignment(.leading)
-                        .padding(.bottom,4)
-                        .padding(.leading, spaceBetweenView)
-                    
-                    Spacer().frame(height: 10)
-                }else if viewModel.isNeedShowLimitRefreshRateToggle() {
-                    limitRefreshRateToggle
-                        .frame(maxWidth: .infinity, minHeight: 40, maxHeight: .infinity)
-                        .frame(alignment: .leading)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .background(isRefreshRateHighlighted ? Color.SettingMenuFocus : Color.SettingMenuBG)
-                        .cornerRadius(10, corners: .topLeft)
-                        .cornerRadius(10, corners: .topRight)
-                        .cornerRadius(10, corners: .bottomLeft)
-                        .cornerRadius(10, corners: .bottomRight)
-                    
-                    Spacer().frame(height: 10)
-                }else if viewModel.isNeedShowLimitScreenResolutionToSafeAreaToggle() {
-                    LimitScreenResolutionTtoSafeAreaToggle
-                        .frame(maxWidth: .infinity, minHeight: 40, maxHeight: .infinity)
-                        .frame(alignment: .leading)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .background(isSafeAreaHighlighted ? Color.SettingMenuFocus : Color.SettingMenuBG)
-                        .cornerRadius(10, corners: .topLeft)
-                        .cornerRadius(10, corners: .topRight)
-                        .cornerRadius(10, corners: .bottomLeft)
-                        .cornerRadius(10, corners: .bottomRight)
-                    
-                    Spacer().frame(height:5)
-        
-                    Text("Restricts display size to avoid device's front camera".localize())
-                        .font(.system(size: IsIpad() ? 16 : 14, weight: .medium))
-                        .foregroundStyle(Color.SettingText)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .lineSpacing(0)
-                        .lineLimit(.max)
-                        .multilineTextAlignment(.leading)
-                        .padding(.bottom,4)
-                        .padding(.leading, spaceBetweenView)
-                    
-                    Spacer().frame(height: 10)
-                }
-            })
-            
-            framePacingPicker
-            
-            Spacer().frame(height: 20)
-            
-            videoEncoderPicker
-            
-        })
-        .frame(
-            maxWidth: .infinity,
-            maxHeight: .infinity,
-            alignment: .topLeading
-        )
+        }
     }
     
-    private func updateScrollViewOffset(_ scrollView : UIScrollView) {
+    var limtRefreshRateAndScreenResolutionToggle: some View {
         
-        // enable auto-scroll only when controller is attached
-        if( ControllerInputTracker.shared.isConnected == false ){
-            printLog("scrollView Controller is not connected")
-            return
-        }
-        
-        let displayModeSelectedIndex = viewModel.getCurrentIndex(currentComponent: .NeuronStreamingSettingsDisplayModeSeparateScreen)
-        let isDevceOptimizedSelected = viewModel.displayMode == .DeviceOptimized
-        let totalItemCount = isDevceOptimizedSelected ? viewModel.getAllComponent().count + 2 : viewModel.getAllComponent().count
-        // get the count of items that can be shown on screen at any given time
-        let totalHeight: CGFloat = scrollView.contentSize.height // height sum
-        
-        //avoid unexpected crash
-        if totalItemCount <= 0 || totalHeight <= 0 {
-            printLog("scrollView unexpected error: itemCount <= 0 || totalHeight <= 0")
-            return
-        }
-        
-        let averageItemHeight: CGFloat = totalHeight/(CGFloat)(totalItemCount) // 估算的每個item的高度 (還不準確)
-        let frameHeight = scrollView.frame.height
-        
-        //avoid unexpected crash
-        if frameHeight <= 0 {
-            printLog("scrollView unexpected error: frameHeight <= 0")
-            return
-        }
-        
-        let maxItemCountOnScreenTmp:CGFloat = frameHeight / averageItemHeight
-
-        //Fix BIA-622
-        //if Float is isNaN or isInfinite, it convert to Int will crash
-        if maxItemCountOnScreenTmp.isNaN || maxItemCountOnScreenTmp.isInfinite {
-            printLog("scrollView unexpected error: maxItemCountOnScreenTmp.isNaN || maxItemCountOnScreenTmp.isInfinite")
-            return
-        }
-        
-        let maxItemCountOnScreen:Int = (Int)(maxItemCountOnScreenTmp)
-        
-        printLog("scrollView.contentOffset:\(scrollView.contentOffset.debugDescription)")
-        // do auto-scrolling
-        var currentItemIndex = viewModel.getCurrentIndex(currentComponent: viewModel.highlightedUIComponent)
-        if isDevceOptimizedSelected && currentItemIndex > displayModeSelectedIndex {
-            currentItemIndex += 2
-        }
-        if(currentItemIndex == 0) {
-            // when focus on first item
-            let cGPoint = CGPoint(x: 0 , y:  0)
-            scrollView.setContentOffset(cGPoint, animated: false)
-        }
-        else if(currentItemIndex == totalItemCount - 1) {
-            // when focus on last item
-            if currentItemIndex < maxItemCountOnScreen {
-                //if data count is small than maxItemCountOnScreen. No need to change position
-                return
-            }
-            let cGPoint = CGPoint(x: 0 , y:  totalHeight - frameHeight)
-            scrollView.setContentOffset(cGPoint, animated: false)
-        }
-        else {
-            // when focus on other items
-            let contentEstimateHeight: CGFloat = (CGFloat)(currentItemIndex + 1) * averageItemHeight
-            var scrollHeight = averageItemHeight
-            while scrollHeight + frameHeight < contentEstimateHeight {
-                scrollHeight += averageItemHeight
-                let estimateHeight = scrollHeight + frameHeight
-                if estimateHeight > contentEstimateHeight {
-                    scrollHeight -= (estimateHeight - contentEstimateHeight)
-                    break
-                }
-            }
-            let currentOffset = scrollView.contentOffset.y
-            if (currentOffset + UIScreen.screenHeight - 20) > contentEstimateHeight && contentEstimateHeight > currentOffset {
-                return
-            }else {
-                let cGPoint = CGPoint(x: 0 , y:  scrollHeight)
-                scrollView.setContentOffset(cGPoint, animated: false)
+        let isRefreshRateHighlighted = viewModel.highlightedUIComponent == .NeuronStreamingSettingsRefreshRateToggle
+        let isSafeAreaHighlighted = viewModel.highlightedUIComponent == .NeuronStreamingSettingsLimitScreenResolutionToSafeAreaToggle
+        return VStack(alignment: .leading, spacing: 0) {
+            if viewModel.isNeedShowLimitRefreshRateToggle() && viewModel.isNeedShowLimitScreenResolutionToSafeAreaToggle() {
+                limitRefreshRateToggle
+                    .frame(maxWidth: .infinity, minHeight: 40, maxHeight: .infinity)
+                    .frame(alignment: .leading)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .background(isRefreshRateHighlighted ? Color.SettingMenuFocus : Color.SettingMenuBG)
+                    .cornerRadius(10, corners: .topLeft)
+                    .cornerRadius(10, corners: .topRight)
+                
+                Color.SettingsLine.frame(maxWidth: .infinity).frame(height: 1 / UIScreen.main.scale)
+                
+                LimitScreenResolutionTtoSafeAreaToggle
+                    .frame(maxWidth: .infinity, minHeight: 40, maxHeight: .infinity)
+                    .frame(alignment: .leading)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .background(isSafeAreaHighlighted ? Color.SettingMenuFocus : Color.SettingMenuBG)
+                    .cornerRadius(10, corners: .bottomLeft)
+                    .cornerRadius(10, corners: .bottomRight)
+                
+                Spacer().frame(height:5)
+                
+                Text("Restricts display size to avoid device's front camera".localize())
+                    .font(.system(size: IsIpad() ? 16 : 14, weight: .medium))
+                    .foregroundStyle(Color.SettingText)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .lineSpacing(0)
+                    .lineLimit(.max)
+                    .multilineTextAlignment(.leading)
+                    .padding(.bottom,4)
+                    .padding(.leading, spaceBetweenView)
+                
+                Spacer().frame(height: 20)
+            }else if viewModel.isNeedShowLimitRefreshRateToggle() {
+                limitRefreshRateToggle
+                    .frame(maxWidth: .infinity, minHeight: 40, maxHeight: .infinity)
+                    .frame(alignment: .leading)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .background(isRefreshRateHighlighted ? Color.SettingMenuFocus : Color.SettingMenuBG)
+                    .cornerRadius(10, corners: .topLeft)
+                    .cornerRadius(10, corners: .topRight)
+                    .cornerRadius(10, corners: .bottomLeft)
+                    .cornerRadius(10, corners: .bottomRight)
+                
+                Spacer().frame(height: 20)
+            }else if viewModel.isNeedShowLimitScreenResolutionToSafeAreaToggle() {
+                LimitScreenResolutionTtoSafeAreaToggle
+                    .frame(maxWidth: .infinity, minHeight: 40, maxHeight: .infinity)
+                    .frame(alignment: .leading)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .background(isSafeAreaHighlighted ? Color.SettingMenuFocus : Color.SettingMenuBG)
+                    .cornerRadius(10, corners: .topLeft)
+                    .cornerRadius(10, corners: .topRight)
+                    .cornerRadius(10, corners: .bottomLeft)
+                    .cornerRadius(10, corners: .bottomRight)
+                
+                Spacer().frame(height:5)
+                
+                Text("Restricts display size to avoid device's front camera".localize())
+                    .font(.system(size: IsIpad() ? 16 : 14, weight: .medium))
+                    .foregroundStyle(Color.SettingText)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .lineSpacing(0)
+                    .lineLimit(.max)
+                    .multilineTextAlignment(.leading)
+                    .padding(.bottom,4)
+                    .padding(.leading, spaceBetweenView)
+                
+                Spacer().frame(height: 20)
             }
         }
     }
+    
+    
+//    var advancedSettingsView: some View {
+//        let isRefreshRateHighlighted = viewModel.highlightedUIComponent == .NeuronStreamingSettingsRefreshRateToggle
+//        let isSafeAreaHighlighted = viewModel.highlightedUIComponent == .NeuronStreamingSettingsLimitScreenResolutionToSafeAreaToggle
+//        return VStack(alignment: .leading, spacing: 0, content: {
+//            
+//            Text("Advanced Settings".localize().uppercased())
+//                .font(.system(size: 14, weight: .medium))
+//                .foregroundStyle(Color.SettingText)
+//                .padding(.bottom,4)
+//                .padding(.leading, spaceBetweenView)
+//            Spacer()
+//                .frame(width: 10)
+//            
+//            VStack(alignment: .leading, spacing: 0, content: {
+//                
+//                autoQuitPicker
+//                
+//                Spacer()
+//                    .frame(height: 20)
+//                
+//                if viewModel.isNeedShowLimitRefreshRateToggle() && viewModel.isNeedShowLimitScreenResolutionToSafeAreaToggle() {
+//                    limitRefreshRateToggle
+//                        .frame(maxWidth: .infinity, minHeight: 40, maxHeight: .infinity)
+//                        .frame(alignment: .leading)
+//                        .fixedSize(horizontal: false, vertical: true)
+//                        .background(isRefreshRateHighlighted ? Color.SettingMenuFocus : Color.SettingMenuBG)
+//                        .cornerRadius(10, corners: .topLeft)
+//                        .cornerRadius(10, corners: .topRight)
+//                    
+//                    Color.SettingsLine.frame(maxWidth: .infinity).frame(height: 1 / UIScreen.main.scale)
+//                    
+//                    LimitScreenResolutionTtoSafeAreaToggle
+//                        .frame(maxWidth: .infinity, minHeight: 40, maxHeight: .infinity)
+//                        .frame(alignment: .leading)
+//                        .fixedSize(horizontal: false, vertical: true)
+//                        .background(isSafeAreaHighlighted ? Color.SettingMenuFocus : Color.SettingMenuBG)
+//                        .cornerRadius(10, corners: .bottomLeft)
+//                        .cornerRadius(10, corners: .bottomRight)
+//                    
+//                    Spacer().frame(height:5)
+//        
+//                    Text("Restricts display size to avoid device's front camera".localize())
+//                        .font(.system(size: IsIpad() ? 16 : 14, weight: .medium))
+//                        .foregroundStyle(Color.SettingText)
+//                        .fixedSize(horizontal: false, vertical: true)
+//                        .lineSpacing(0)
+//                        .lineLimit(.max)
+//                        .multilineTextAlignment(.leading)
+//                        .padding(.bottom,4)
+//                        .padding(.leading, spaceBetweenView)
+//                    
+//                    Spacer().frame(height: 10)
+//                }else if viewModel.isNeedShowLimitRefreshRateToggle() {
+//                    limitRefreshRateToggle
+//                        .frame(maxWidth: .infinity, minHeight: 40, maxHeight: .infinity)
+//                        .frame(alignment: .leading)
+//                        .fixedSize(horizontal: false, vertical: true)
+//                        .background(isRefreshRateHighlighted ? Color.SettingMenuFocus : Color.SettingMenuBG)
+//                        .cornerRadius(10, corners: .topLeft)
+//                        .cornerRadius(10, corners: .topRight)
+//                        .cornerRadius(10, corners: .bottomLeft)
+//                        .cornerRadius(10, corners: .bottomRight)
+//                    
+//                    Spacer().frame(height: 10)
+//                }else if viewModel.isNeedShowLimitScreenResolutionToSafeAreaToggle() {
+//                    LimitScreenResolutionTtoSafeAreaToggle
+//                        .frame(maxWidth: .infinity, minHeight: 40, maxHeight: .infinity)
+//                        .frame(alignment: .leading)
+//                        .fixedSize(horizontal: false, vertical: true)
+//                        .background(isSafeAreaHighlighted ? Color.SettingMenuFocus : Color.SettingMenuBG)
+//                        .cornerRadius(10, corners: .topLeft)
+//                        .cornerRadius(10, corners: .topRight)
+//                        .cornerRadius(10, corners: .bottomLeft)
+//                        .cornerRadius(10, corners: .bottomRight)
+//                    
+//                    Spacer().frame(height:5)
+//        
+//                    Text("Restricts display size to avoid device's front camera".localize())
+//                        .font(.system(size: IsIpad() ? 16 : 14, weight: .medium))
+//                        .foregroundStyle(Color.SettingText)
+//                        .fixedSize(horizontal: false, vertical: true)
+//                        .lineSpacing(0)
+//                        .lineLimit(.max)
+//                        .multilineTextAlignment(.leading)
+//                        .padding(.bottom,4)
+//                        .padding(.leading, spaceBetweenView)
+//                    
+//                    Spacer().frame(height: 10)
+//                }
+//            })
+//            
+//            framePacingPicker
+//            
+//            Spacer().frame(height: 20)
+//            
+//            videoEncoderPicker
+//            
+//        })
+//        .frame(
+//            maxWidth: .infinity,
+//            maxHeight: .infinity,
+//            alignment: .topLeading
+//        )
+//    }
+    
     
     private func printLog(_ msg:String){
         BiancaLogger.shared.logInfo("SettingsLauncherView - " + msg)

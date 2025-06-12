@@ -48,6 +48,7 @@ typedef enum : NSUInteger {
     BOOL _shouldReturnToMainVC;
     BOOL isCancelStreamingRetry;
     NSString *errorCodeRegister;
+    long long startStreamingTime;
 }
 
 @class AppStoreReviewHandler;
@@ -68,6 +69,17 @@ typedef enum : NSUInteger {
     }
 
     errorCodeRegister = @"";
+    
+    //recode start streaming event
+    TemporarySettings *_settings = [self valueForKey:@"_settings"];
+    NSDictionary *dimension = @{ @"neuron_app_version ": [RzUtils getAppVersion],
+                                 @"display_mode": _settings.displayMode==0 ? @"Duplicate PC Display" : @"iPhone Optimized",
+                                 @"negotiated_res": [NSString stringWithFormat:@"%@x%@", _settings.width, _settings.height] ,
+                                 @"refresh_rate": [NSString stringWithFormat:@"%@", _settings.framerate] };
+    NSString *gameName = ShareDataDB.shared.currentLaunchGame.name ?: @"Desktop";
+    NeuronEvent *event = [NeuronEvent createEventWithEventAction:@"neuron_stream_started" eventLabel:gameName dimension:dimension];
+    [[ShareDataDB shared] writeNeuronEvent:event];
+    startStreamingTime = (long long)([[NSDate date] timeIntervalSince1970] * 1000);
 //    [[NSNotificationCenter defaultCenter] addObserver:self
 //                                             selector:@selector(applicationWillResignActive:)
 //                                                 name:UIApplicationWillResignActiveNotification
@@ -84,6 +96,17 @@ typedef enum : NSUInteger {
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
+    
+    long long durationMs = (long long)([[NSDate date] timeIntervalSince1970] * 1000)-startStreamingTime;
+    TemporarySettings *_settings = [self valueForKey:@"_settings"];
+    NSDictionary *dimension = @{ @"neuron_app_version ": [RzUtils getAppVersion],
+                                 @"display_mode": _settings.displayMode==0 ? @"Duplicate PC Display" : @"iPhone Optimized",
+                                 @"negotiated_res": [NSString stringWithFormat:@"%@x%@", _settings.height, _settings.width] ,
+                                 @"refresh_rate": [NSString stringWithFormat:@"%@", _settings.framerate],
+                                 @"total_duration_ms": [NSString stringWithFormat:@"%lld", durationMs]};
+    NSString *gameName = ShareDataDB.shared.currentLaunchGame.name ?: @"Desktop";
+    NeuronEvent *event = [NeuronEvent createEventWithEventAction:@"neuron_stream_ended" eventLabel:gameName dimension:dimension];
+    [[ShareDataDB shared] writeNeuronEvent:event];
     
     [[ShareDataDB shared] resetCurrentLaunchGameData];
 }
@@ -193,7 +216,7 @@ typedef enum : NSUInteger {
             NSString *title = Localized(@"Streaming session in progress");
             [self showReplaceAlert:message title:title compltion:Completion];
         } else {
-            NSString *message = Localized(@"Connection errors detected.Do you want to cancel this connection or replace the previous session?");
+            NSString *message = Localized(@"Connection errors detected. Do you want to cancel this connection or replace the previous session?");
             message = [message stringByReplacingOccurrencesOfString:@"&app" withString:currentApp];
             message = [message stringByReplacingOccurrencesOfString:@"&device" withString:currentDevice];
             NSString *title = Localized(@"Reconnecting to PC Streaming");
@@ -221,7 +244,7 @@ typedef enum : NSUInteger {
                 [[SettingsRouter shared].navigationController pushViewController:webVC animated:YES];
             }]];
             
-            [alert addAction:[UIAlertAction actionWithTitle:Localized(@"Dismiss") style:UIAlertActionStyleDefault handler:^(UIAlertAction* action){
+            [alert addAction:[UIAlertAction actionWithTitle:Localized(@"OK") style:UIAlertActionStyleDefault handler:^(UIAlertAction* action){
                 [self returnToMainFrame];
             }]];
         } else {

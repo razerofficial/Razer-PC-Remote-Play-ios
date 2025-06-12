@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="landscape" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -28,6 +28,7 @@
                 <outlet property="duplicateSelectedImageView" destination="CsL-e9-psr" id="kRj-aP-lbi"/>
                 <outlet property="duplicateTitleLabel" destination="8d6-oX-amL" id="E5h-AF-myC"/>
                 <outlet property="imageTextLabel" destination="Inv-5H-cOG" id="eKb-Oa-Cm2"/>
+                <outlet property="nexusScreenshotImageView" destination="XEZ-rW-MuH" id="2nU-nO-9Tv"/>
                 <outlet property="permissionAlertButtonLabel" destination="loX-wf-FPy" id="3fw-FU-7LD"/>
                 <outlet property="permissionAlertContentLabel" destination="sIV-9c-41W" id="eU6-g8-RX0"/>
                 <outlet property="permissionAlertTitleLabel" destination="Rsb-ui-hcw" id="5Pk-1u-0dC"/>
@@ -51,6 +52,7 @@
                 <outlet property="tosButton" destination="XzP-d5-qax" id="AUT-Lx-5Z1"/>
                 <outlet property="tutorialDisplayModeView" destination="qWg-d5-IQb" id="2KQ-Ge-bBl"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="OTX-Os-woZ"/>
+                <outlet property="welcomeImageView" destination="1Dm-SU-lGe" id="Bip-Hx-edB"/>
                 <outlet property="welcomeSubtitleLabel" destination="nkJ-uE-pis" id="ePT-th-lMH"/>
                 <outlet property="welcomeTitleLabel" destination="dtp-2g-7NT" id="Nji-t9-PcF"/>
                 <outlet property="welcomeView" destination="ihR-TC-Oda" id="CoF-IE-xbx"/>
@@ -62,7 +64,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hCy-vM-U1S" customClass="RZView" customModule="neuron" customModuleProvider="target">
-                    <rect key="frame" x="0.0" y="0.0" width="896" height="414"/>
+                    <rect key="frame" x="0.0" y="48" width="896" height="366"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="color" keyPath="gradientFromColor">
@@ -90,19 +92,19 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="streaming" translatesAutoresizingMaskIntoConstraints="NO" id="1Dm-SU-lGe">
-                    <rect key="frame" x="68" y="98" width="295.5" height="197"/>
+                    <rect key="frame" x="68" y="105" width="295.5" height="197"/>
                     <constraints>
                         <constraint firstAttribute="width" secondItem="1Dm-SU-lGe" secondAttribute="height" multiplier="3:2" id="rgn-AF-Jmu"/>
                     </constraints>
                 </imageView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome to Remote Play" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dtp-2g-7NT">
-                    <rect key="frame" x="463.5" y="146" width="374.5" height="21.5"/>
+                    <rect key="frame" x="463.5" y="153" width="374.5" height="21.5"/>
                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nkJ-uE-pis">
-                    <rect key="frame" x="463.5" y="167.5" width="374.5" height="43"/>
+                    <rect key="frame" x="463.5" y="174.5" width="374.5" height="43"/>
                     <string key="text">To continue using Razer software and services
 you must first accept the Terms of Service and
 Privacy Policy agreement.</string>
@@ -111,7 +113,7 @@ Privacy Policy agreement.</string>
                     <nil key="highlightedColor"/>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XzP-d5-qax">
-                    <rect key="frame" x="463.5" y="220.5" width="109" height="29"/>
+                    <rect key="frame" x="463.5" y="227.5" width="109" height="29"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <color key="tintColor" red="0.2666666667" green="0.83921568629999999" blue="0.17254901959999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
@@ -123,7 +125,7 @@ Privacy Policy agreement.</string>
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="Cgu-J2-zq1">
-                    <rect key="frame" x="602" y="220.5" width="90" height="29"/>
+                    <rect key="frame" x="602" y="227.5" width="90" height="29"/>
                     <constraints>
                         <constraint firstAttribute="width" relation="lessThanOrEqual" constant="200" id="TRE-V7-Hij"/>
                     </constraints>
@@ -138,14 +140,14 @@ Privacy Policy agreement.</string>
                     </connections>
                 </button>
                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="neuron_icon" translatesAutoresizingMaskIntoConstraints="NO" id="vHs-gC-rfK">
-                    <rect key="frame" x="413.5" y="154" width="35" height="35"/>
+                    <rect key="frame" x="413.5" y="161" width="35" height="35"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="35" id="Ic6-1q-NOE"/>
                         <constraint firstAttribute="width" constant="35" id="S8H-wx-VYt"/>
                     </constraints>
                 </imageView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UV4-7u-t8s">
-                    <rect key="frame" x="586.5" y="230" width="1.5" height="10"/>
+                    <rect key="frame" x="586.5" y="237" width="1.5" height="10"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="1.5" id="9yn-Pz-G7G"/>
@@ -244,19 +246,19 @@ Privacy Policy agreement.</string>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="request_permission" translatesAutoresizingMaskIntoConstraints="NO" id="TB9-AW-QSp">
-                    <rect key="frame" x="68" y="112" width="313.5" height="169"/>
+                    <rect key="frame" x="68" y="119" width="313.5" height="169"/>
                     <constraints>
                         <constraint firstAttribute="width" secondItem="TB9-AW-QSp" secondAttribute="height" multiplier="289:156" id="Eq4-3n-kyu"/>
                     </constraints>
                 </imageView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Allow Remote Play to access this device’s network." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Inv-5H-cOG">
-                    <rect key="frame" x="68" y="286" width="313.5" height="33.5"/>
+                    <rect key="frame" x="68" y="293" width="313.5" height="33.5"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="m1g-Nf-K6z">
-                    <rect key="frame" x="446.5" y="96.5" width="449.5" height="200"/>
+                    <rect key="frame" x="446.5" y="103.5" width="449.5" height="200"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="To unlock additional functionality, Razer PC Remote Play requires the following permissions:" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MIR-id-Hbj">
                             <rect key="frame" x="0.0" y="0.0" width="401.5" height="72"/>
@@ -265,84 +267,24 @@ Privacy Policy agreement.</string>
                             <nil key="highlightedColor"/>
                         </label>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Cv6-4M-lfW">
-                            <rect key="frame" x="249.5" y="92" width="200" height="98"/>
+                            <rect key="frame" x="249.5" y="92" width="200" height="74"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="200" id="h5i-5J-EhJ"/>
                             </constraints>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vod-HV-z8d" customClass="RZView" customModule="neuron" customModuleProvider="target">
-                            <rect key="frame" x="0.0" y="92" width="449.5" height="98"/>
+                            <rect key="frame" x="0.0" y="92" width="449.5" height="74"/>
                             <subviews>
                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="local_network_black" translatesAutoresizingMaskIntoConstraints="NO" id="Rzi-lQ-y9N">
-                                    <rect key="frame" x="10" y="27" width="44" height="44"/>
+                                    <rect key="frame" x="10" y="15" width="44" height="44"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="44" id="Ny6-El-OO9"/>
                                         <constraint firstAttribute="width" constant="44" id="wo4-p4-TGc"/>
                                     </constraints>
                                 </imageView>
-                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UV4-rf-K8D" customClass="RZView" customModule="neuron" customModuleProvider="target">
-                                    <rect key="frame" x="306.5" y="27" width="113" height="44"/>
-                                    <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ALLOW" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RlM-B1-CUc">
-                                            <rect key="frame" x="50" y="13.5" width="51" height="17"/>
-                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
-                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="G1A-N0-aro" customClass="RZView" customModule="neuron" customModuleProvider="target">
-                                            <rect key="frame" x="12" y="8" width="28" height="28"/>
-                                            <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="A" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vpu-iz-uPb">
-                                                    <rect key="frame" x="8.5" y="4.5" width="11" height="19"/>
-                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
-                                                    <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <constraints>
-                                                <constraint firstItem="vpu-iz-uPb" firstAttribute="centerX" secondItem="G1A-N0-aro" secondAttribute="centerX" id="Mfw-TQ-yWw"/>
-                                                <constraint firstItem="vpu-iz-uPb" firstAttribute="centerY" secondItem="G1A-N0-aro" secondAttribute="centerY" id="UHZ-5b-ubv"/>
-                                                <constraint firstAttribute="height" constant="28" id="UNm-Oh-dlR"/>
-                                                <constraint firstAttribute="width" constant="28" id="qI6-Qt-1vQ"/>
-                                            </constraints>
-                                            <userDefinedRuntimeAttributes>
-                                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                    <real key="value" value="14"/>
-                                                </userDefinedRuntimeAttribute>
-                                            </userDefinedRuntimeAttributes>
-                                        </view>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eWS-32-KZp">
-                                            <rect key="frame" x="0.0" y="0.0" width="113" height="44"/>
-                                            <state key="normal" title="Button"/>
-                                            <buttonConfiguration key="configuration" style="plain"/>
-                                            <connections>
-                                                <action selector="onLocalNetworkPermissionAllowClicked:" destination="-1" eventType="touchUpInside" id="I9O-YW-zmT"/>
-                                            </connections>
-                                        </button>
-                                    </subviews>
-                                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    <constraints>
-                                        <constraint firstItem="RlM-B1-CUc" firstAttribute="leading" secondItem="G1A-N0-aro" secondAttribute="trailing" constant="10" id="Brn-NK-uFj"/>
-                                        <constraint firstItem="G1A-N0-aro" firstAttribute="centerY" secondItem="UV4-rf-K8D" secondAttribute="centerY" id="DKI-ma-Cpe"/>
-                                        <constraint firstItem="eWS-32-KZp" firstAttribute="centerX" secondItem="UV4-rf-K8D" secondAttribute="centerX" id="FDb-tO-KtJ"/>
-                                        <constraint firstAttribute="trailing" secondItem="RlM-B1-CUc" secondAttribute="trailing" constant="12" id="GKJ-bW-ThQ"/>
-                                        <constraint firstAttribute="height" constant="44" id="JNz-eB-KaT"/>
-                                        <constraint firstItem="eWS-32-KZp" firstAttribute="centerY" secondItem="UV4-rf-K8D" secondAttribute="centerY" id="VHj-Fe-tNM"/>
-                                        <constraint firstItem="eWS-32-KZp" firstAttribute="leading" secondItem="UV4-rf-K8D" secondAttribute="leading" id="Z2l-Dh-Cww"/>
-                                        <constraint firstItem="G1A-N0-aro" firstAttribute="leading" secondItem="UV4-rf-K8D" secondAttribute="leading" constant="12" id="aGJ-zy-G4X"/>
-                                        <constraint firstItem="eWS-32-KZp" firstAttribute="top" secondItem="UV4-rf-K8D" secondAttribute="top" id="gBo-IV-84R"/>
-                                        <constraint firstItem="RlM-B1-CUc" firstAttribute="centerY" secondItem="UV4-rf-K8D" secondAttribute="centerY" id="ltW-Ek-AH8"/>
-                                    </constraints>
-                                    <userDefinedRuntimeAttributes>
-                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                            <integer key="value" value="22"/>
-                                        </userDefinedRuntimeAttribute>
-                                    </userDefinedRuntimeAttributes>
-                                </view>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lnW-u8-sVN">
-                                    <rect key="frame" x="64" y="22" width="210.5" height="54"/>
+                                    <rect key="frame" x="64" y="10" width="210.5" height="54"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Local Network" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IyZ-WU-AZh">
                                             <rect key="frame" x="0.0" y="0.0" width="210.5" height="18"/>
@@ -368,29 +310,25 @@ Privacy Policy agreement.</string>
                                         <constraint firstItem="WH2-VC-zwV" firstAttribute="top" secondItem="IyZ-WU-AZh" secondAttribute="bottom" id="ssL-1m-zyd"/>
                                     </constraints>
                                 </view>
-                                <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="tick_black" translatesAutoresizingMaskIntoConstraints="NO" id="8v2-I6-JVR">
-                                    <rect key="frame" x="316.5" y="35" width="28" height="28"/>
+                                <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="tick_green" translatesAutoresizingMaskIntoConstraints="NO" id="8v2-I6-JVR">
+                                    <rect key="frame" x="324.5" y="25" width="24" height="24"/>
                                     <constraints>
-                                        <constraint firstAttribute="width" constant="28" id="8Er-hg-PvF"/>
-                                        <constraint firstAttribute="height" constant="28" id="Ny9-E3-Xak"/>
+                                        <constraint firstAttribute="width" constant="24" id="8Er-hg-PvF"/>
+                                        <constraint firstAttribute="height" constant="24" id="Ny9-E3-Xak"/>
                                     </constraints>
                                 </imageView>
                             </subviews>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
+                                <constraint firstItem="8v2-I6-JVR" firstAttribute="leading" secondItem="lnW-u8-sVN" secondAttribute="trailing" constant="50" id="6W0-Tq-DpS"/>
+                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="8v2-I6-JVR" secondAttribute="trailing" constant="50" id="7P6-NM-lxO"/>
                                 <constraint firstItem="Rzi-lQ-y9N" firstAttribute="centerY" secondItem="vod-HV-z8d" secondAttribute="centerY" id="7i0-kk-hjS"/>
                                 <constraint firstItem="lnW-u8-sVN" firstAttribute="leading" secondItem="Rzi-lQ-y9N" secondAttribute="trailing" constant="10" id="9v6-7U-uLD"/>
-                                <constraint firstAttribute="bottom" secondItem="UV4-rf-K8D" secondAttribute="bottom" priority="999" constant="27" id="Eos-Tr-5RB"/>
-                                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="lnW-u8-sVN" secondAttribute="bottom" constant="10" id="Ol1-9q-Ehw"/>
+                                <constraint firstAttribute="bottom" secondItem="lnW-u8-sVN" secondAttribute="bottom" constant="10" id="Ol1-9q-Ehw"/>
                                 <constraint firstItem="Rzi-lQ-y9N" firstAttribute="leading" secondItem="vod-HV-z8d" secondAttribute="leading" constant="10" id="Pdb-UI-DbI"/>
-                                <constraint firstAttribute="trailing" secondItem="UV4-rf-K8D" secondAttribute="trailing" constant="30" id="Rzg-Rv-b0D"/>
-                                <constraint firstItem="UV4-rf-K8D" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="lnW-u8-sVN" secondAttribute="trailing" constant="10" id="blv-CK-aLX"/>
-                                <constraint firstItem="8v2-I6-JVR" firstAttribute="centerY" secondItem="UV4-rf-K8D" secondAttribute="centerY" id="fsG-pe-kuj"/>
-                                <constraint firstItem="UV4-rf-K8D" firstAttribute="centerY" secondItem="vod-HV-z8d" secondAttribute="centerY" id="lHn-mf-SXi"/>
-                                <constraint firstItem="UV4-rf-K8D" firstAttribute="top" secondItem="vod-HV-z8d" secondAttribute="top" priority="999" constant="27" id="nj7-CI-uYl"/>
+                                <constraint firstItem="8v2-I6-JVR" firstAttribute="centerY" secondItem="vod-HV-z8d" secondAttribute="centerY" id="VOr-Bn-PY4"/>
                                 <constraint firstItem="lnW-u8-sVN" firstAttribute="centerY" secondItem="vod-HV-z8d" secondAttribute="centerY" id="qd2-5t-erv"/>
-                                <constraint firstItem="lnW-u8-sVN" firstAttribute="top" relation="greaterThanOrEqual" secondItem="vod-HV-z8d" secondAttribute="top" constant="10" id="tJZ-QA-uh5"/>
-                                <constraint firstItem="8v2-I6-JVR" firstAttribute="leading" secondItem="UV4-rf-K8D" secondAttribute="leading" constant="10" id="x23-yQ-9M5"/>
+                                <constraint firstItem="lnW-u8-sVN" firstAttribute="top" secondItem="vod-HV-z8d" secondAttribute="top" constant="10" id="tJZ-QA-uh5"/>
                             </constraints>
                             <userDefinedRuntimeAttributes>
                                 <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
@@ -403,7 +341,6 @@ Privacy Policy agreement.</string>
                     <constraints>
                         <constraint firstItem="vod-HV-z8d" firstAttribute="leading" secondItem="MIR-id-Hbj" secondAttribute="leading" id="0ey-9r-0f5"/>
                         <constraint firstAttribute="trailing" secondItem="Cv6-4M-lfW" secondAttribute="trailing" id="F1c-wD-4DG"/>
-                        <constraint firstAttribute="bottom" secondItem="vod-HV-z8d" secondAttribute="bottom" constant="10" id="QZu-Lz-F0D"/>
                         <constraint firstItem="vod-HV-z8d" firstAttribute="top" secondItem="MIR-id-Hbj" secondAttribute="bottom" constant="20" id="TlQ-9r-gSJ"/>
                         <constraint firstItem="MIR-id-Hbj" firstAttribute="top" secondItem="m1g-Nf-K6z" secondAttribute="top" id="dYG-ay-Jid"/>
                         <constraint firstAttribute="trailing" secondItem="vod-HV-z8d" secondAttribute="trailing" id="lKT-gL-Cew"/>
@@ -412,74 +349,145 @@ Privacy Policy agreement.</string>
                         <constraint firstItem="Cv6-4M-lfW" firstAttribute="top" secondItem="vod-HV-z8d" secondAttribute="top" id="vad-mw-02U"/>
                     </constraints>
                 </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gq9-qk-QOj" customClass="RZView" customModule="neuron" customModuleProvider="target">
-                    <rect key="frame" x="771" y="350" width="95" height="44"/>
+                <stackView opaque="NO" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="WMb-7n-FAi">
+                    <rect key="frame" x="638" y="350" width="228" height="44"/>
                     <subviews>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SKIP" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ahQ-bh-uZy">
-                            <rect key="frame" x="50" y="13.5" width="33" height="17"/>
-                            <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
-                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                            <nil key="highlightedColor"/>
-                        </label>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LrM-5z-Qm0" customClass="RZView" customModule="neuron" customModuleProvider="target">
-                            <rect key="frame" x="12" y="8" width="28" height="28"/>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gq9-qk-QOj" customClass="RZView" customModule="neuron" customModuleProvider="target">
+                            <rect key="frame" x="0.0" y="0.0" width="95" height="44"/>
                             <subviews>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Y" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1he-ZN-yDG">
-                                    <rect key="frame" x="8.5" y="4.5" width="11.5" height="19.5"/>
-                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
-                                    <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SKIP" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ahQ-bh-uZy">
+                                    <rect key="frame" x="50" y="13.5" width="33" height="17"/>
+                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
+                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LrM-5z-Qm0" customClass="RZView" customModule="neuron" customModuleProvider="target">
+                                    <rect key="frame" x="12" y="8" width="28" height="28"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Y" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1he-ZN-yDG">
+                                            <rect key="frame" x="8.5" y="4.5" width="11.5" height="19.5"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
+                                            <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <constraints>
+                                        <constraint firstItem="1he-ZN-yDG" firstAttribute="centerY" secondItem="LrM-5z-Qm0" secondAttribute="centerY" id="2PV-wN-dWj"/>
+                                        <constraint firstAttribute="height" constant="28" id="3gQ-2f-wKQ"/>
+                                        <constraint firstAttribute="width" constant="28" id="DVH-40-L4S"/>
+                                        <constraint firstItem="1he-ZN-yDG" firstAttribute="centerX" secondItem="LrM-5z-Qm0" secondAttribute="centerX" id="mam-mh-LiJ"/>
+                                    </constraints>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                            <real key="value" value="14"/>
+                                        </userDefinedRuntimeAttribute>
+                                    </userDefinedRuntimeAttributes>
+                                </view>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hKP-gJ-6fv">
+                                    <rect key="frame" x="0.0" y="0.0" width="95" height="44"/>
+                                    <state key="normal" title="Button"/>
+                                    <buttonConfiguration key="configuration" style="plain"/>
+                                    <connections>
+                                        <action selector="onPermissionBottomButtonClicked:" destination="-1" eventType="touchUpInside" id="wcc-1O-8FQ"/>
+                                    </connections>
+                                </button>
                             </subviews>
-                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <color key="backgroundColor" white="1" alpha="0.5" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
-                                <constraint firstItem="1he-ZN-yDG" firstAttribute="centerY" secondItem="LrM-5z-Qm0" secondAttribute="centerY" id="2PV-wN-dWj"/>
-                                <constraint firstAttribute="height" constant="28" id="3gQ-2f-wKQ"/>
-                                <constraint firstAttribute="width" constant="28" id="DVH-40-L4S"/>
-                                <constraint firstItem="1he-ZN-yDG" firstAttribute="centerX" secondItem="LrM-5z-Qm0" secondAttribute="centerX" id="mam-mh-LiJ"/>
+                                <constraint firstItem="ahQ-bh-uZy" firstAttribute="leading" secondItem="LrM-5z-Qm0" secondAttribute="trailing" constant="10" id="2ZM-cK-xQo"/>
+                                <constraint firstAttribute="trailing" secondItem="ahQ-bh-uZy" secondAttribute="trailing" constant="12" id="6eD-Rw-ItA"/>
+                                <constraint firstItem="hKP-gJ-6fv" firstAttribute="top" secondItem="Gq9-qk-QOj" secondAttribute="top" id="Btq-2x-iRv"/>
+                                <constraint firstItem="ahQ-bh-uZy" firstAttribute="centerY" secondItem="Gq9-qk-QOj" secondAttribute="centerY" id="XL6-p3-N5D"/>
+                                <constraint firstItem="hKP-gJ-6fv" firstAttribute="centerX" secondItem="Gq9-qk-QOj" secondAttribute="centerX" id="XuH-v1-Lh3"/>
+                                <constraint firstAttribute="height" constant="44" id="hKf-bo-d6Y"/>
+                                <constraint firstItem="hKP-gJ-6fv" firstAttribute="centerY" secondItem="Gq9-qk-QOj" secondAttribute="centerY" id="k2G-0F-oiA"/>
+                                <constraint firstItem="LrM-5z-Qm0" firstAttribute="centerY" secondItem="Gq9-qk-QOj" secondAttribute="centerY" id="usN-zm-WvM"/>
+                                <constraint firstItem="LrM-5z-Qm0" firstAttribute="leading" secondItem="Gq9-qk-QOj" secondAttribute="leading" constant="12" id="xBh-v4-PkB"/>
+                                <constraint firstItem="hKP-gJ-6fv" firstAttribute="leading" secondItem="Gq9-qk-QOj" secondAttribute="leading" id="xD3-6b-6Vh"/>
                             </constraints>
                             <userDefinedRuntimeAttributes>
                                 <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                    <real key="value" value="14"/>
+                                    <integer key="value" value="22"/>
                                 </userDefinedRuntimeAttribute>
                             </userDefinedRuntimeAttributes>
                         </view>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hKP-gJ-6fv">
-                            <rect key="frame" x="0.0" y="0.0" width="95" height="44"/>
-                            <state key="normal" title="Button"/>
-                            <buttonConfiguration key="configuration" style="plain"/>
-                            <connections>
-                                <action selector="onPermissionBottomButtonClicked:" destination="-1" eventType="touchUpInside" id="wcc-1O-8FQ"/>
-                            </connections>
-                        </button>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UV4-rf-K8D" customClass="RZView" customModule="neuron" customModuleProvider="target">
+                            <rect key="frame" x="115" y="0.0" width="113" height="44"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ALLOW" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RlM-B1-CUc">
+                                    <rect key="frame" x="50" y="13.5" width="51" height="17"/>
+                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
+                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="G1A-N0-aro" customClass="RZView" customModule="neuron" customModuleProvider="target">
+                                    <rect key="frame" x="12" y="8" width="28" height="28"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="A" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vpu-iz-uPb">
+                                            <rect key="frame" x="8.5" y="4.5" width="11.5" height="19.5"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
+                                            <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <constraints>
+                                        <constraint firstItem="vpu-iz-uPb" firstAttribute="centerX" secondItem="G1A-N0-aro" secondAttribute="centerX" id="Mfw-TQ-yWw"/>
+                                        <constraint firstItem="vpu-iz-uPb" firstAttribute="centerY" secondItem="G1A-N0-aro" secondAttribute="centerY" id="UHZ-5b-ubv"/>
+                                        <constraint firstAttribute="height" constant="28" id="UNm-Oh-dlR"/>
+                                        <constraint firstAttribute="width" constant="28" id="qI6-Qt-1vQ"/>
+                                    </constraints>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                            <real key="value" value="14"/>
+                                        </userDefinedRuntimeAttribute>
+                                    </userDefinedRuntimeAttributes>
+                                </view>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eWS-32-KZp">
+                                    <rect key="frame" x="0.0" y="0.0" width="113" height="44"/>
+                                    <state key="normal" title="Button"/>
+                                    <buttonConfiguration key="configuration" style="plain"/>
+                                    <connections>
+                                        <action selector="onLocalNetworkPermissionAllowClicked:" destination="-1" eventType="touchUpInside" id="I9O-YW-zmT"/>
+                                    </connections>
+                                </button>
+                            </subviews>
+                            <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.5" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                            <constraints>
+                                <constraint firstItem="RlM-B1-CUc" firstAttribute="leading" secondItem="G1A-N0-aro" secondAttribute="trailing" constant="10" id="Brn-NK-uFj"/>
+                                <constraint firstItem="G1A-N0-aro" firstAttribute="centerY" secondItem="UV4-rf-K8D" secondAttribute="centerY" id="DKI-ma-Cpe"/>
+                                <constraint firstItem="eWS-32-KZp" firstAttribute="centerX" secondItem="UV4-rf-K8D" secondAttribute="centerX" id="FDb-tO-KtJ"/>
+                                <constraint firstAttribute="trailing" secondItem="RlM-B1-CUc" secondAttribute="trailing" constant="12" id="GKJ-bW-ThQ"/>
+                                <constraint firstAttribute="height" constant="44" id="JNz-eB-KaT"/>
+                                <constraint firstItem="eWS-32-KZp" firstAttribute="centerY" secondItem="UV4-rf-K8D" secondAttribute="centerY" id="VHj-Fe-tNM"/>
+                                <constraint firstItem="eWS-32-KZp" firstAttribute="leading" secondItem="UV4-rf-K8D" secondAttribute="leading" id="Z2l-Dh-Cww"/>
+                                <constraint firstItem="G1A-N0-aro" firstAttribute="leading" secondItem="UV4-rf-K8D" secondAttribute="leading" constant="12" id="aGJ-zy-G4X"/>
+                                <constraint firstItem="eWS-32-KZp" firstAttribute="top" secondItem="UV4-rf-K8D" secondAttribute="top" id="gBo-IV-84R"/>
+                                <constraint firstItem="RlM-B1-CUc" firstAttribute="centerY" secondItem="UV4-rf-K8D" secondAttribute="centerY" id="ltW-Ek-AH8"/>
+                            </constraints>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                    <integer key="value" value="22"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
+                        </view>
                     </subviews>
-                    <color key="backgroundColor" white="1" alpha="0.5" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
-                        <constraint firstItem="ahQ-bh-uZy" firstAttribute="leading" secondItem="LrM-5z-Qm0" secondAttribute="trailing" constant="10" id="2ZM-cK-xQo"/>
-                        <constraint firstAttribute="trailing" secondItem="ahQ-bh-uZy" secondAttribute="trailing" constant="12" id="6eD-Rw-ItA"/>
-                        <constraint firstItem="hKP-gJ-6fv" firstAttribute="top" secondItem="Gq9-qk-QOj" secondAttribute="top" id="Btq-2x-iRv"/>
-                        <constraint firstItem="ahQ-bh-uZy" firstAttribute="centerY" secondItem="Gq9-qk-QOj" secondAttribute="centerY" id="XL6-p3-N5D"/>
-                        <constraint firstItem="hKP-gJ-6fv" firstAttribute="centerX" secondItem="Gq9-qk-QOj" secondAttribute="centerX" id="XuH-v1-Lh3"/>
-                        <constraint firstAttribute="height" constant="44" id="hKf-bo-d6Y"/>
-                        <constraint firstItem="hKP-gJ-6fv" firstAttribute="centerY" secondItem="Gq9-qk-QOj" secondAttribute="centerY" id="k2G-0F-oiA"/>
-                        <constraint firstItem="LrM-5z-Qm0" firstAttribute="centerY" secondItem="Gq9-qk-QOj" secondAttribute="centerY" id="usN-zm-WvM"/>
-                        <constraint firstItem="LrM-5z-Qm0" firstAttribute="leading" secondItem="Gq9-qk-QOj" secondAttribute="leading" constant="12" id="xBh-v4-PkB"/>
-                        <constraint firstItem="hKP-gJ-6fv" firstAttribute="leading" secondItem="Gq9-qk-QOj" secondAttribute="leading" id="xD3-6b-6Vh"/>
+                        <constraint firstAttribute="height" constant="44" id="rNi-6E-gDP"/>
                     </constraints>
-                    <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                            <integer key="value" value="22"/>
-                        </userDefinedRuntimeAttribute>
-                    </userDefinedRuntimeAttributes>
-                </view>
+                </stackView>
             </subviews>
             <viewLayoutGuide key="safeArea" id="v0R-4Z-8Jb"/>
             <color key="backgroundColor" red="0.33333333333333331" green="0.33333333333333331" blue="0.33333333333333331" alpha="0.51377152423469385" colorSpace="custom" customColorSpace="displayP3"/>
             <constraints>
+                <constraint firstAttribute="trailing" secondItem="WMb-7n-FAi" secondAttribute="trailing" constant="30" id="DBg-Xy-YoE"/>
                 <constraint firstItem="Inv-5H-cOG" firstAttribute="trailing" secondItem="TB9-AW-QSp" secondAttribute="trailing" id="E1r-va-PxQ"/>
+                <constraint firstItem="WMb-7n-FAi" firstAttribute="top" relation="greaterThanOrEqual" secondItem="m1g-Nf-K6z" secondAttribute="bottom" constant="10" id="EhM-D9-C7w"/>
+                <constraint firstItem="m1g-Nf-K6z" firstAttribute="top" secondItem="v0R-4Z-8Jb" secondAttribute="top" constant="55.5" id="HJ4-kJ-LKb"/>
                 <constraint firstItem="TB9-AW-QSp" firstAttribute="leading" secondItem="v0R-4Z-8Jb" secondAttribute="leading" constant="20" id="LrK-ab-to1"/>
                 <constraint firstItem="TB9-AW-QSp" firstAttribute="centerY" secondItem="v0R-4Z-8Jb" secondAttribute="centerY" id="Tu0-15-P0P"/>
-                <constraint firstAttribute="trailing" secondItem="Gq9-qk-QOj" secondAttribute="trailing" constant="30" id="djQ-eY-CJl"/>
+                <constraint firstAttribute="bottom" secondItem="WMb-7n-FAi" secondAttribute="bottom" constant="20" id="YeN-SP-cYb"/>
                 <constraint firstItem="Inv-5H-cOG" firstAttribute="top" secondItem="TB9-AW-QSp" secondAttribute="bottom" constant="5" id="lM1-66-vgj"/>
                 <constraint firstAttribute="trailing" secondItem="m1g-Nf-K6z" secondAttribute="trailing" id="lS9-8t-lH8"/>
                 <constraint firstItem="m1g-Nf-K6z" firstAttribute="centerY" secondItem="TB9-AW-QSp" secondAttribute="centerY" id="liK-qE-JqJ"/>
@@ -487,7 +495,6 @@ Privacy Policy agreement.</string>
                 <constraint firstItem="TB9-AW-QSp" firstAttribute="width" secondItem="mkJ-eM-Erj" secondAttribute="width" multiplier="0.35" priority="999" id="qEj-DX-THZ"/>
                 <constraint firstItem="m1g-Nf-K6z" firstAttribute="leading" secondItem="TB9-AW-QSp" secondAttribute="trailing" constant="65" id="qZY-Rl-gYa"/>
                 <constraint firstItem="MIR-id-Hbj" firstAttribute="trailing" secondItem="v0R-4Z-8Jb" secondAttribute="trailing" id="sln-UE-oDb"/>
-                <constraint firstAttribute="bottom" secondItem="Gq9-qk-QOj" secondAttribute="bottom" constant="20" id="sxN-Kr-N1C"/>
             </constraints>
             <point key="canvasLocation" x="-25.446428571428569" y="1405.7971014492755"/>
         </view>
@@ -496,19 +503,19 @@ Privacy Policy agreement.</string>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="nexus_screenshot" translatesAutoresizingMaskIntoConstraints="NO" id="XEZ-rW-MuH">
-                    <rect key="frame" x="88" y="126" width="295.5" height="141"/>
+                    <rect key="frame" x="88" y="133" width="295.5" height="141"/>
                     <constraints>
                         <constraint firstAttribute="width" secondItem="XEZ-rW-MuH" secondAttribute="height" multiplier="247:118" id="PIT-xz-V6Z"/>
                     </constraints>
                 </imageView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Download Razer Nexus" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hpj-v8-ooC">
-                    <rect key="frame" x="493.5" y="146" width="334.5" height="21"/>
+                    <rect key="frame" x="493.5" y="153" width="334.5" height="21"/>
                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gOj-UH-gHs">
-                    <rect key="frame" x="493.5" y="167" width="334.5" height="57.5"/>
+                    <rect key="frame" x="493.5" y="174" width="334.5" height="57.5"/>
                     <string key="text">Razer PC Remote Play is designed to enhance PC gaming on your
 mobile device through seamless integration with
 Razer Nexus.</string>
@@ -517,14 +524,14 @@ Razer Nexus.</string>
                     <nil key="highlightedColor"/>
                 </label>
                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="nexus_icon" translatesAutoresizingMaskIntoConstraints="NO" id="8bS-l6-9Mq">
-                    <rect key="frame" x="443.5" y="159" width="35" height="35"/>
+                    <rect key="frame" x="443.5" y="166" width="35" height="35"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="35" id="1IE-Fi-H6v"/>
                         <constraint firstAttribute="height" constant="35" id="dco-2P-IV4"/>
                     </constraints>
                 </imageView>
                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="appstore" translatesAutoresizingMaskIntoConstraints="NO" id="q9m-Sf-2mA">
-                    <rect key="frame" x="493.5" y="244.5" width="118" height="40"/>
+                    <rect key="frame" x="493.5" y="251.5" width="118" height="40"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="40" id="A9E-rK-fpC"/>
                         <constraint firstAttribute="width" constant="118" id="Kbb-1T-CNl"/>
@@ -679,7 +686,7 @@ Razer Nexus.</string>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Jgv-2A-0Jl" customClass="RZView" customModule="neuron" customModuleProvider="target">
-                    <rect key="frame" x="278" y="92.5" width="340" height="208.5"/>
+                    <rect key="frame" x="278" y="99.5" width="340" height="208.5"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enable Local Network Access" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rsb-ui-hcw">
                             <rect key="frame" x="40" y="25" width="260" height="19.5"/>
@@ -748,13 +755,13 @@ Razer Nexus.</string>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="streaming" translatesAutoresizingMaskIntoConstraints="NO" id="Q5j-Yt-iwx">
-                    <rect key="frame" x="68" y="98" width="295.5" height="197"/>
+                    <rect key="frame" x="68" y="105" width="295.5" height="197"/>
                     <constraints>
                         <constraint firstAttribute="width" secondItem="Q5j-Yt-iwx" secondAttribute="height" multiplier="3:2" id="7mz-32-qp1"/>
                     </constraints>
                 </imageView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="R4o-M1-4vg">
-                    <rect key="frame" x="403.5" y="55.5" width="444.5" height="202"/>
+                    <rect key="frame" x="403.5" y="62.5" width="444.5" height="202"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PC display streaming mode" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RHt-8g-K9e">
                             <rect key="frame" x="0.0" y="0.0" width="444.5" height="24"/>
@@ -952,7 +959,7 @@ Razer Nexus.</string>
                     </constraints>
                 </view>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kcd-aM-OaP">
-                    <rect key="frame" x="403.5" y="267.5" width="444.5" height="67"/>
+                    <rect key="frame" x="403.5" y="274.5" width="444.5" height="67"/>
                     <string key="text">Easily mirror your PC screen to your phone for convenient access to apps and content anywhere. Enjoy smooth synchronization and vibrant visuals—perfect for gaming, presentations, or multitasking on the go!</string>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1045,7 +1052,7 @@ Razer Nexus.</string>
         <image name="nexus_screenshot" width="988" height="472"/>
         <image name="request_permission" width="578" height="312"/>
         <image name="streaming" width="298" height="169.5"/>
-        <image name="tick_black" width="56" height="56"/>
+        <image name="tick_green" width="24" height="24"/>
         <image name="tutorial_pc_duplicate" width="74" height="74"/>
         <image name="tutorial_pc_model_selected" width="22" height="22"/>
         <image name="tutorial_pc_model_unselected" width="22" height="22"/>

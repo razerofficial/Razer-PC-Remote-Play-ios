@@ -221,7 +221,7 @@
         }
         
         if (![self addHostToDiscovery:host]) {
-            callback(host, Localized(@"Host information updated"));
+            callback(host, @"Host information updated");
         } else {
             callback(host, nil);
         }

@@ -157,6 +157,7 @@
 		3689E0672C69AC3900629595 /* ControllerInputTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3689E0612C69AC3900629595 /* ControllerInputTracker.swift */; };
 		3689E0692C6AF94A00629595 /* RZBaseVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3689E0682C6AF94A00629595 /* RZBaseVC.swift */; };
 		3689E06F2C6B0C1500629595 /* RZHandleResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3689E06E2C6B0C1500629595 /* RZHandleResponder.swift */; };
+		662A2A892DAF9BD500C1968B /* AutoScrollingUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 662A2A882DAF9BD500C1968B /* AutoScrollingUtils.swift */; };
 		66EAA23B2CC8A90A00E0C414 /* RZStreamFrameSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66EAA23A2CC8A90A00E0C414 /* RZStreamFrameSettingsViewController.swift */; };
 		66EAA23F2CC8D82E00E0C414 /* NeuronFrameSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66EAA23E2CC8D82E00E0C414 /* NeuronFrameSettingsView.swift */; };
 		66EAA2412CC8DD2B00E0C414 /* NeuronFrameSettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66EAA2402CC8DD2B00E0C414 /* NeuronFrameSettingsViewModel.swift */; };
@@ -174,6 +175,7 @@
 		88EC99A82C770CDC00398352 /* AboutVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88EC99A72C770CDC00398352 /* AboutVC.swift */; };
 		88F408302C7D7A2F00D90373 /* WebVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88F4082F2C7D7A2F00D90373 /* WebVC.swift */; };
 		88FBE80D2C4A176B005B22B3 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 88FBE80C2C4A176B005B22B3 /* Launch Screen.storyboard */; };
+		B50A8BDF2D94F1DF009B78C6 /* NeuronEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50A8BDE2D94F1DF009B78C6 /* NeuronEvent.swift */; };
 		B511E2D72C3248F0000E00C3 /* TutorialViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B511E2D52C3248F0000E00C3 /* TutorialViewController.xib */; };
 		B51D87D52C5B3D2E0006CF68 /* RZWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B51D87D32C5B3D2E0006CF68 /* RZWebViewController.m */; };
 		B51D87D62C5B3D2E0006CF68 /* RZWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B51D87D42C5B3D2E0006CF68 /* RZWebViewController.xib */; };
@@ -724,6 +726,7 @@
 		3DF4BA7A6D28537340C7F467 /* Pods-neuron.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-neuron.debug.xcconfig"; path = "Target Support Files/Pods-neuron/Pods-neuron.debug.xcconfig"; sourceTree = "<group>"; };
 		4E1D4CE03341AC0376999810 /* Pods-neuron-neuronUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-neuron-neuronUITests.debug.xcconfig"; path = "Target Support Files/Pods-neuron-neuronUITests/Pods-neuron-neuronUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		52FDA172D85F035BC8B23392 /* Pods-neuronTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-neuronTests.debug.xcconfig"; path = "Target Support Files/Pods-neuronTests/Pods-neuronTests.debug.xcconfig"; sourceTree = "<group>"; };
+		662A2A882DAF9BD500C1968B /* AutoScrollingUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoScrollingUtils.swift; sourceTree = "<group>"; };
 		66EAA23A2CC8A90A00E0C414 /* RZStreamFrameSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RZStreamFrameSettingsViewController.swift; sourceTree = "<group>"; };
 		66EAA23E2CC8D82E00E0C414 /* NeuronFrameSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeuronFrameSettingsView.swift; sourceTree = "<group>"; };
 		66EAA2402CC8DD2B00E0C414 /* NeuronFrameSettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeuronFrameSettingsViewModel.swift; sourceTree = "<group>"; };
@@ -769,6 +772,7 @@
 		88F4082F2C7D7A2F00D90373 /* WebVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebVC.swift; sourceTree = "<group>"; };
 		88FBE80C2C4A176B005B22B3 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		8D3ECCA76009F8F2A4DAC278 /* Pods-neuronTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-neuronTests.release.xcconfig"; path = "Target Support Files/Pods-neuronTests/Pods-neuronTests.release.xcconfig"; sourceTree = "<group>"; };
+		B50A8BDE2D94F1DF009B78C6 /* NeuronEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeuronEvent.swift; sourceTree = "<group>"; };
 		B511E2D52C3248F0000E00C3 /* TutorialViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TutorialViewController.xib; sourceTree = "<group>"; };
 		B51D87D22C5B3D2E0006CF68 /* RZWebViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RZWebViewController.h; sourceTree = "<group>"; };
 		B51D87D32C5B3D2E0006CF68 /* RZWebViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RZWebViewController.m; sourceTree = "<group>"; };
@@ -967,6 +971,7 @@
 		10423FC72C0EC2CE000679F8 /* RzUtils */ = {
 			isa = PBXGroup;
 			children = (
+				662A2A882DAF9BD500C1968B /* AutoScrollingUtils.swift */,
 				10423FC22C0EC2C7000679F8 /* RzUtils.h */,
 				10423FC32C0EC2C7000679F8 /* RzUtils.m */,
 			);
@@ -1746,6 +1751,7 @@
 				108EE0E92B901B0600094A01 /* RzTemporaryApp.h */,
 				108EE0EA2B901B0600094A01 /* RzTemporaryApp.m */,
 				66EAA2452CC9DED700E0C414 /* StreamingEnums.swift */,
+				B50A8BDE2D94F1DF009B78C6 /* NeuronEvent.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -2060,8 +2066,6 @@
 			dependencies = (
 			);
 			name = neuron;
-			packageProductDependencies = (
-			);
 			productName = neuron;
 			productReference = 10736C632B838A160003EFD5 /* neuron.app */;
 			productType = "com.apple.product-type.application";
@@ -2147,8 +2151,6 @@
 				sv,
 			);
 			mainGroup = 10736C5A2B838A160003EFD5;
-			packageReferences = (
-			);
 			productRefGroup = 10736C642B838A160003EFD5 /* Products */;
 			projectDirPath = "";
 			projectReferences = (
@@ -2294,9 +2296,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-neuron-neuronUITests/Pods-neuron-neuronUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-neuron-neuronUITests/Pods-neuron-neuronUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -2356,9 +2362,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-neuron/Pods-neuron-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-neuron/Pods-neuron-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -2379,6 +2389,7 @@
 				B5CCFC682D06954100528DBB /* HttpResponse+Neuron.m in Sources */,
 				3652DB032C5745B300A475CB /* Window+Extension.swift in Sources */,
 				B5CCFC792D07F06500528DBB /* RZServerInfoResponse.m in Sources */,
+				B50A8BDF2D94F1DF009B78C6 /* NeuronEvent.swift in Sources */,
 				10736EC82B838BD00003EFD5 /* AppAssetRetriever.m in Sources */,
 				10736EE12B838BD00003EFD5 /* Logger.m in Sources */,
 				10736EB92B838BD00003EFD5 /* StreamManager.m in Sources */,
@@ -2437,6 +2448,7 @@
 				10736EA52B838BD00003EFD5 /* TemporaryApp.m in Sources */,
 				36514A8D2C5A1DB5008793A5 /* SettingsRouter.swift in Sources */,
 				3689E0662C69AC3900629595 /* ControllerInputDelegate.swift in Sources */,
+				662A2A892DAF9BD500C1968B /* AutoScrollingUtils.swift in Sources */,
 				3652DB132C5780DD00A475CB /* SettingsMenuItem.swift in Sources */,
 				66EAA2612CCA371400E0C414 /* RoundedCorner.swift in Sources */,
 				36514A9E2C5B24CA008793A5 /* SettingsAdddHostVC.swift in Sources */,
@@ -2723,7 +2735,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = neuron/neuron.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 184;
+				CURRENT_PROJECT_VERSION = 201;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = R2H967U7J8;
@@ -2791,7 +2803,7 @@
 					"$(PROJECT_DIR)/moonlight-ios/libs/OpenSSL/lib/",
 					"$(PROJECT_DIR)/moonlight-ios/libs/OpenSSL/lib",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 2.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.razer.neuron;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -2810,7 +2822,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = neuron/neuron.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 184;
+				CURRENT_PROJECT_VERSION = 201;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = R2H967U7J8;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
@@ -2854,7 +2866,7 @@
 					"$(PROJECT_DIR)/moonlight-ios/libs/FFmpeg/lib/iOS",
 					"$(PROJECT_DIR)/moonlight-ios/libs/OpenSSL/lib",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 2.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.razer.neuron;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

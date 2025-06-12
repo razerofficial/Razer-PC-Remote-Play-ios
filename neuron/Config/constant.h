@@ -27,6 +27,8 @@ static NSString *frameSettingsTXTPath = @"frameSetings.txt";
 static NSString *devOptionsPath = @"devOptions.db";
 static NSString *manuallyUnpairedHostPath = @"manuallyUnpairedHost.db";
 static NSString *shareLogPath = @"shareLog.txt";
+static NSString *neuronInfoPath = @"neuronInfo.db";
+static NSString *neuronEventPath = @"neuronEvent.db";
 
 //notifications
 static NSString *kRetryStreamingNotification = @"retryStreamingNotification";
