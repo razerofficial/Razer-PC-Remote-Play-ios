@@ -38,7 +38,7 @@ class RZAlertView: UIView {
     
     let titleLabel: UILabel = {
         let label = UILabel()
-          label.font = UIFont.boldSystemFont(ofSize: 16)
+        label.font = UIFont.dynamic(size: 16, weight: .bold)
           label.textColor = .white
           label.textAlignment = .center
           label.numberOfLines = 0
@@ -47,7 +47,7 @@ class RZAlertView: UIView {
     
     let messageLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 15)
+        label.font = UIFont.dynamic(size: 15)
         label.textColor = .white
         label.textAlignment = .center
         label.numberOfLines = 0

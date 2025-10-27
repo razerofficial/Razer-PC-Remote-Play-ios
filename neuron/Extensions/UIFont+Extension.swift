@@ -45,4 +45,15 @@ extension UIFont {
         
         
     }
+    
+    static func dynamic(size: CGFloat) -> UIFont {
+        let baseFont = UIFont.systemFont(ofSize: size, weight: .regular)
+        return UIFontMetrics(forTextStyle: .body).scaledFont(for: baseFont)
+    }
+    
+    static func dynamic(size: CGFloat, weight: UIFont.Weight) -> UIFont {
+        let baseFont = UIFont.systemFont(ofSize: size, weight: weight)
+        return UIFontMetrics(forTextStyle: .body).scaledFont(for: baseFont)
+    }
+    
 }

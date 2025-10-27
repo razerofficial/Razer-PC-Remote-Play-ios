@@ -25,7 +25,7 @@
 "Your PC will create a virtual display matching your [iPhone/iPad]’s resolution and refresh rate of %1$s at %2$sHz and stream it to your [iPhone/iPad].\n\nAny screen connected to your PC will be temporarily disabled while streaming." = "Din PC opretter en virtuel skærm, der matcher din [iPhone/iPad]s opløsning og opdateringshastighed på %1$s ved %2$sHz, og streamer den til din enhed.\n\nEnhver skærm, der er tilsluttet din PC, bliver midlertidigt deaktiveret, mens du streamer.";
 "Video Bitrate" = "Video-Bithastighed";
 "Touch Screen Control" = "Betjening Med Berøringsskærm";
-"Your PC’s connected display will be streamed to your [iPhone/iPad] " = "Din PC's tilsluttede skærm vil blive streamet til din [iPhone/iPad]";
+"Your PC’s connected display will be streamed to your [iPhone/iPad]." = "Din PC's tilsluttede skærm vil blive streamet til din [iPhone/iPad].";
 "Enhances visuals with better contrast, brightness, and color range." = "Forbedrer billederne med bedre kontrast, lysstyrke og farveområde.";
 "Virtual Trackpad" = "Virtuel Trackpad";
 "Direct Touch" = "Direkte Berøring";
@@ -50,6 +50,8 @@
 "Input PC IP address" = "IP-adresse for input-PC";
 "Pairing Request" = "Anmodning om parring";
 "Enter the code on \"%@\" to complete pairing with your device.\n\nPin Code" = "Indtast koden på \"%@\" for at fuldføre parringen med din enhed.\n\nPin-kode";
+"Enter the code on \"%@\" to complete pairing with your device." = "Indtast koden på \"%@\" for at fuldføre parringen med din enhed.";
+"Pin Code" = "Pin-kode";
 "Remote Play" = "Remote Play";
 "Unpair" = "Ophæv parring";
 "Pairing Failed" = "Parring mislykkedes";
@@ -147,6 +149,7 @@
 "Local Network" = "Lokalt Netværk";
 "Enable seamless streaming between your PC and Nexus." = "Gør det muligt at streame problemfrit mellem din PC og Nexus.";
 "ALLOW" = "TILLAD";
+"Allow" = "Tillad";
 "Done" = "Udført";
 "Home" = "Start";
 "Download" = "Download";
@@ -215,3 +218,11 @@
 "Streaming session in progress" = "Streaming-session er i gang";
 // 20250602 BIA-1856 miss string
 "Replace" = "Udskift";
+//20250912 AI translation
+"Stream PC games from your computer to your [iPhone/iPad]." = "Stream PC-spil fra din computer til din [iPhone/iPad].";
+"Video Settings Display Mode" = "Videovisningstilstand for indstillinger";
+"Enhances visuals with better contrast, brightness, and color range. Requires your PC’s connected display to have HDR enabled." = "Forbedrer billedet med bedre kontrast, lysstyrke og farveområde. Kræver at din PC's tilsluttede skærm har HDR aktiveret.";
+"Mute PC Speakers While Streaming" = "Slå PC-højttalere fra under streaming";
+"Advances Settings" = "Avancerede indstillinger";
+"Edit Profile" = "Rediger profil";
+"Computer" = "Computer";= "Tildel";

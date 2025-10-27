@@ -65,12 +65,12 @@ class SettingsMenuCell: UITableViewCell {
         case .rectangle:
             view.layer.cornerRadius = 0
         case .roundedRectangle:
-            view.layer.cornerRadius = 10.0
+            view.layer.cornerRadius = 26.0
         case .topHalfRoundedRectangle:
-            view.layer.cornerRadius = 10.0
+            view.layer.cornerRadius = 26.0
             view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         case .bottomHalfRoundedRectangle:
-            view.layer.cornerRadius = 10.0
+            view.layer.cornerRadius = 26.0
             view.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
         case .none:
             view.layer.cornerRadius = 0
@@ -93,8 +93,9 @@ class SettingsMenuCell: UITableViewCell {
             contentView.addSubview(separator)
             separator.snp.makeConstraints { make in
                 make.bottom.right.equalTo(contentView)
-                make.left.equalTo(20)
+                make.left.equalTo(SettingsUtil.shared.getSubViewSpaceBetweenView())
                 make.height.equalTo(0.5)
+                make.right.equalTo(-SettingsUtil.shared.getSubViewSpaceBetweenView())
             }
         }
     }
@@ -116,6 +117,7 @@ class SettingsMenuCell: UITableViewCell {
         label.numberOfLines = 0
         label.textColor = .white
         label.textAlignment = .left
+        label.font = UIFont.dynamic(size: 17)
         return label
     }()
     

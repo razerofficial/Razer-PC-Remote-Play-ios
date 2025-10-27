@@ -30,5 +30,6 @@ typedef struct {
 -(void) main;
 -(BOOL) getVideoStats:(video_stats_t*)stats;
 -(NSString*) getActiveCodecName;
++(VideoDecoderRenderer*) getCurrentRenderer; // Class method to access static renderer
 
 @end

@@ -61,10 +61,11 @@ extern int ff_isom_write_av1c(AVIOContext *pb, const uint8_t *buf, int size,
         if (_view.bounds.size.height == 0) {
             height = UIScreen.mainScreen.bounds.size.height;
         }
-        videoSize = CGSizeMake(width, height / _streamAspectRatio);
+        videoSize = CGSizeMake(width, height);// / _streamAspectRatio); //remove aspect ratio for fill the view
     }
     displayLayer.position = CGPointMake(CGRectGetMidX(_view.bounds), CGRectGetMidY(_view.bounds));
-    displayLayer.bounds = CGRectMake(0, 0, UIScreen.mainScreen.bounds.size.width, UIScreen.mainScreen.bounds.size.height);
+    displayLayer.bounds = CGRectMake(0, 0, videoSize.width, videoSize.height);
+    printf("[RzStream][StreamView] videoSize: %f x %f\n", videoSize.width, videoSize.height);
     displayLayer.videoGravity = AVLayerVideoGravityResizeAspect;
 
     // Hide the layer until we get an IDR frame. This ensures we
@@ -107,6 +108,36 @@ extern int ff_isom_write_av1c(AVIOContext *pb, const uint8_t *buf, int size,
     self->frameRate = frameRate;
 }
 
+// update Display Layer size only to avoid blank screen issue after rotation
+- (void)updateDisplayLayer
+{
+    if (displayLayer == nil) {
+        NSLog(@"[RzStream][VideoDecoderRenderer] displayLayer is nil, calling reinitializeDisplayLayer");
+        [self reinitializeDisplayLayer];
+        return;
+    }
+    
+    // only update the size and position
+    CGSize videoSize;
+    if (_view.bounds.size.width > _view.bounds.size.height * _streamAspectRatio) {
+        videoSize = CGSizeMake(_view.bounds.size.height * _streamAspectRatio, _view.bounds.size.height);
+    } else {
+        CGFloat width = _view.bounds.size.width;
+        CGFloat height = _view.bounds.size.height;
+        if (_view.bounds.size.width == 0) {
+            width = UIScreen.mainScreen.bounds.size.width;
+        }
+        if (_view.bounds.size.height == 0) {
+            height = UIScreen.mainScreen.bounds.size.height;
+        }
+        videoSize = CGSizeMake(width, height);
+    }
+    
+    displayLayer.position = CGPointMake(CGRectGetMidX(_view.bounds), CGRectGetMidY(_view.bounds));
+    displayLayer.bounds = CGRectMake(0, 0, videoSize.width, videoSize.height);
+    NSLog(@"[RzStream][VideoDecoderRenderer] updating displayLayer size to: %f x %f", videoSize.width, videoSize.height);
+}
+
 - (void)start
 {
     _displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(displayLinkCallback:)];
@@ -126,7 +157,11 @@ int DrSubmitDecodeUnit(PDECODE_UNIT decodeUnit);
 {
     VIDEO_FRAME_HANDLE handle;
     PDECODE_UNIT du;
-    
+
+    if (!_displayLink || _displayLink.targetTimestamp - _displayLink.timestamp <= 0) {
+        Log(LOG_E, @"displayLinkCallback: invalid displayLink or timestamp, skipping frame");
+        return;
+    }
     while (LiPollNextVideoFrame(&handle, &du)) {
         LiCompleteVideoFrame(handle, DrSubmitDecodeUnit(du));
         
@@ -151,6 +186,7 @@ int DrSubmitDecodeUnit(PDECODE_UNIT decodeUnit);
 - (void)stop
 {
     [_displayLink invalidate];
+    _displayLink = nil;
 }
 
 #define NALU_START_PREFIX_SIZE 3

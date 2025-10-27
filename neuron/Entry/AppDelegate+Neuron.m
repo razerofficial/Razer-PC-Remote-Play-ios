@@ -71,6 +71,9 @@
     });
     
     [FIRApp configure];
+    
+    [UIApplication sharedApplication].windows.firstObject.windowScene.sizeRestrictions.minimumSize = CGSizeMake(500, 500);
+    
     return ret;
 }
 

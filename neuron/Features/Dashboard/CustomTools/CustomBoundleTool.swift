@@ -78,6 +78,14 @@ func IsIOS174()->Bool {
     }
 }
 
+func IsIOS26()->Bool {
+    if #available(iOS 26.0, *) {
+        return true
+    } else {
+        return false
+    }
+}
+
 ////如果想要判断设备是ipad，要用如下方法
 //func IsIpad() -> Bool
 //{

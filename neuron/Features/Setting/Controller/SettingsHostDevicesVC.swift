@@ -31,6 +31,7 @@ enum HostDevicesSection : Int  {
     case PairedSection
     case NetSection
     case AddSection
+    case NavSection
 }
 
 class SettingsHostDevicesVC : RZBaseVC { // DiscoveryCallback, PairCallback
@@ -64,14 +65,15 @@ class SettingsHostDevicesVC : RZBaseVC { // DiscoveryCallback, PairCallback
     
     var lastView:UIView?
     let titleLabSpaceLeft = 40.0
-    let deviceCellSpaceLeft = 20.0
+    let deviceCellSpaceLeft = 16.0
+    let deviceCellSpaceRight = 10
     var selectedHost:TemporaryHost?
     var deviceSection:HostDevicesSection = .Unknow
     var selectedIndex:Int = 0
     
     var viewShoudResponsHandel:Bool = true
     
-    var addManualHostView:UIView?
+    var addManualHostView: AddManualHostView?
     
     let loaddingViewTimeout = 5
 
@@ -198,7 +200,6 @@ class SettingsHostDevicesVC : RZBaseVC { // DiscoveryCallback, PairCallback
     
     @objc func closeManualHostView(){
         if addManualHostView != nil {
-            addManualHostView?.removeFromSuperview()
             addManualHostView = nil
             handel.startTracking()
             handel.delegate = self
@@ -224,7 +225,7 @@ class SettingsHostDevicesVC : RZBaseVC { // DiscoveryCallback, PairCallback
         scroll.addSubview(contentView)
         contentView.snp.makeConstraints { make in
             make.top.left.right.equalTo(0)
-            make.width.equalTo(view)
+//            make.width.equalTo(view)
         }
         
         reloadContentView()
@@ -258,10 +259,11 @@ class SettingsHostDevicesVC : RZBaseVC { // DiscoveryCallback, PairCallback
             }
         }
         
-        let labAllDevice = SettingsRouter.titleLab("All Computers".localize().uppercased())
+        let labAllDevice = SettingsRouter.titleLab("All Computers".localize())
+        labAllDevice.font = UIFont.dynamic(size: 13)
         contentView.addSubview(labAllDevice)
         let deviceType = UIDevice.current.userInterfaceIdiom == .pad ? "iPad" : "iPhone"
-        let labAllDeviceDec = SettingsRouter.desLab(String(format: "To pair a PC, it must be on the same network as your %@. Ensure your PC has Razer Cortex v11.0.+ installed and signed in with your Razer ID.".localize(), deviceType),IsIpad() ? 16.0 : 14.0)
+        let labAllDeviceDec = SettingsRouter.desLab(String(format: "To pair a PC, it must be on the same network as your %@. Ensure your PC has Razer Cortex v11.0.+ installed and signed in with your Razer ID.".localize(), deviceType), 13)
         contentView.addSubview(labAllDeviceDec)
         
         labAllDevice.snp.makeConstraints { make in
@@ -296,7 +298,7 @@ class SettingsHostDevicesVC : RZBaseVC { // DiscoveryCallback, PairCallback
     func addPairedDevicesUI() {
         
         if pairedHosts.count > 0 {
-            let labPairedDevices = SettingsRouter.desLab("Paired PC".localize().uppercased(), IsIpad() ? 16.0 : 14.0)
+            let labPairedDevices = SettingsRouter.subTitleLab("Paired PC".localize(), 13.0)
             contentView.addSubview(labPairedDevices)
             
             labPairedDevices.snp.makeConstraints { make in
@@ -307,14 +309,14 @@ class SettingsHostDevicesVC : RZBaseVC { // DiscoveryCallback, PairCallback
             
             let devicesCellBg = UIView.init()
             devicesCellBg.backgroundColor = Color.hex(0x222222).uiColor()
-            devicesCellBg.layer.cornerRadius = 10.0
+            devicesCellBg.layer.cornerRadius = 26
             devicesCellBg.layer.masksToBounds = true
             devicesCellBg.isUserInteractionEnabled = true
             
             contentView.addSubview(devicesCellBg)
             devicesCellBg.snp.makeConstraints { make in
                 make.left.equalTo(deviceCellSpaceLeft)
-                make.right.equalTo(-deviceCellSpaceLeft)
+                make.right.equalTo(-deviceCellSpaceRight)
                 make.top.equalTo(labPairedDevices.snp.bottom).offset(10)
             }
             
@@ -330,7 +332,7 @@ class SettingsHostDevicesVC : RZBaseVC { // DiscoveryCallback, PairCallback
                     cell.backgroundColor = heihgtedColor
                     cell.tag = index
                     cell.addTarget(self, action: #selector(clickLocalHost), for: .touchUpInside)
-                    var tempCellHeight = 40.0
+                    var tempCellHeight = SettingsUtil.shared.getMenuBGHeight()
                     
                     devicesCellBg.addSubview(cell)
                     cell.snp.makeConstraints { make in
@@ -342,11 +344,12 @@ class SettingsHostDevicesVC : RZBaseVC { // DiscoveryCallback, PairCallback
                     
                     if pairedHosts.count > 1 && index != pairedHosts.count - 1 {
                         let line = UIView.init()
-                        line.backgroundColor = Color.hex(0x999999).uiColor()
+                        line.backgroundColor = Color.white.uiColor()
                         cell.addSubview(line)
                         line.snp.makeConstraints { make in
-                            make.bottom.right.equalTo(0)
+                            make.bottom.equalTo(0)
                             make.left.equalTo(20)
+                            make.right.equalTo(-20)
                             make.height.equalTo(1.0 / ScreenScale)
                         }
                     }
@@ -356,7 +359,7 @@ class SettingsHostDevicesVC : RZBaseVC { // DiscoveryCallback, PairCallback
             
             devicesCellBg.snp.remakeConstraints { make in
                 make.left.equalTo(deviceCellSpaceLeft)
-                make.right.equalTo(-deviceCellSpaceLeft)
+                make.right.equalTo(-deviceCellSpaceRight)
                 make.top.equalTo(labPairedDevices.snp.bottom).offset(10)
                 make.height.equalTo(lastCellTop)
             }
@@ -366,7 +369,7 @@ class SettingsHostDevicesVC : RZBaseVC { // DiscoveryCallback, PairCallback
     
     func addAvailableDevicesUI() {
         
-        let labAvailableDevices = SettingsRouter.desLab("Unpaired PC".localize().uppercased(), IsIpad() ? 16.0 : 14.0)
+        let labAvailableDevices = SettingsRouter.subTitleLab("Unpaired PC".localize(), 13)
 
         contentView.addSubview(labAvailableDevices)
         contentView.addSubview(loading)
@@ -392,18 +395,18 @@ class SettingsHostDevicesVC : RZBaseVC { // DiscoveryCallback, PairCallback
         
         let devicesCellBg = UIView.init()
         devicesCellBg.backgroundColor = Color.hex(0x222222).uiColor()
-        devicesCellBg.layer.cornerRadius = 10.0
+        devicesCellBg.layer.cornerRadius = 26
         devicesCellBg.layer.masksToBounds = true
         devicesCellBg.isUserInteractionEnabled = true
         
         contentView.addSubview(devicesCellBg)
         devicesCellBg.snp.makeConstraints { make in
             make.left.equalTo(deviceCellSpaceLeft)
-            make.right.equalTo(-deviceCellSpaceLeft)
+            make.right.equalTo(-deviceCellSpaceRight)
             make.top.equalTo(labAvailableDevices.snp.bottom).offset(10)
         }
         var lastCellTop = 0.0
-        let tempCellHeight = 40.0
+        let tempCellHeight = SettingsUtil.shared.getMenuBGHeight()
         
         if netHosts.count > 0 {
             
@@ -431,8 +434,9 @@ class SettingsHostDevicesVC : RZBaseVC { // DiscoveryCallback, PairCallback
                         line.backgroundColor = Color.hex(0x999999).uiColor()
                         cell.addSubview(line)
                         line.snp.makeConstraints { make in
-                            make.bottom.right.equalTo(0)
+                            make.bottom.equalTo(0)
                             make.left.equalTo(20)
+                            make.right.equalTo(-20)
                             make.height.equalTo(1.0 / ScreenScale)
                         }
                     //}
@@ -473,14 +477,14 @@ class SettingsHostDevicesVC : RZBaseVC { // DiscoveryCallback, PairCallback
         
         devicesCellBg.snp.remakeConstraints { make in
             make.left.equalTo(deviceCellSpaceLeft)
-            make.right.equalTo(-deviceCellSpaceLeft)
+            make.right.equalTo(-deviceCellSpaceRight)
             make.top.equalTo(labAvailableDevices.snp.bottom).offset(10)
             make.height.equalTo(lastCellTop)
         }
         
         lastView = devicesCellBg
         
-        let addHostLab = SettingsRouter.desLab("Enter the IP address of your computer.".localize(), IsIpad() ? 16.0 : 14.0)
+        let addHostLab = SettingsRouter.desLab("Enter the IP address of your computer.".localize(), 13)
         contentView.addSubview(addHostLab)
         
         addHostLab.snp.makeConstraints { make in
@@ -584,21 +588,13 @@ class SettingsHostDevicesVC : RZBaseVC { // DiscoveryCallback, PairCallback
         deviceSection = .AddSection
         reloadContentView()
         
-    
-        //Swift-UI
-        let contentView = AddManualHostView()
-        let hostingController = UIHostingController(rootView: contentView)
-        addManualHostView = hostingController.view
-        hostingController.view.backgroundColor = .clear
-        //UIApplication.shared.keyWindow?.addSubview(hostingController.view)
-        SettingsRouter.shared.navigationController?.view.addSubview(hostingController.view)
-        hostingController.view.snp.makeConstraints { make in
-            make.left.top.bottom.right.equalTo(0)
-        }
         
-//        let vc = SettingsAdddHostVC()
-//        vc.lastHandel = handel
-//        SettingsRouter.shared.navigationController?.pushViewController(vc, animated: true)
+        let addManualHostView = AddManualHostView()
+        self.addManualHostView = addManualHostView
+        let hostingController = AddManualHostHostingController(rootView: addManualHostView)
+        hostingController.modalPresentationStyle = .overFullScreen
+        hostingController.view.backgroundColor = .clear
+        SettingsRouter.shared.navigationController?.present(hostingController, animated: true)
     }
     
     func showLoadingView() {
@@ -641,7 +637,7 @@ class SettingsHostDevicesVC : RZBaseVC { // DiscoveryCallback, PairCallback
     }()
     
     lazy var scroll : UIScrollView = {
-        let scroll = UIScrollView.init(frame: view.bounds)
+        let scroll = UIScrollView.init()
         scroll.showsHorizontalScrollIndicator = false
         scroll.delaysContentTouches = true
         return scroll
@@ -674,7 +670,7 @@ class SettingsHostDevicesVC : RZBaseVC { // DiscoveryCallback, PairCallback
         let infoButton = UIButton.init(type: .infoLight)
         infoButton.isUserInteractionEnabled = false
         let title = SettingsRouter.titleLab(host.name)
-        let state = SettingsRouter.desLab("Available".localize(), 14)
+        let state = SettingsRouter.desLab("Available".localize(), 17)
         if host.state != State.online {
             state.text = "Unavailable".localize()
         }
@@ -717,7 +713,7 @@ class SettingsHostDevicesVC : RZBaseVC { // DiscoveryCallback, PairCallback
         let infoButton = UIButton.init(type: .infoLight)
         infoButton.isUserInteractionEnabled = false
         let title = SettingsRouter.titleLab(host.name)
-        let state = SettingsRouter.desLab("Unpaired".localize(), 14)
+        let state = SettingsRouter.desLab("Unpaired".localize(), 17)
 
         button.addSubview(imageView)
         button.addSubview(title)
@@ -761,12 +757,13 @@ class SettingsHostDevicesVC : RZBaseVC { // DiscoveryCallback, PairCallback
         title.snp.makeConstraints { make in
             make.left.equalTo(20)
             make.right.equalTo(-20)
-            make.top.equalTo(10)
+            make.centerY.equalToSuperview()
         }
         
         rightImg.snp.makeConstraints { make in
             make.right.equalTo(-10)
             make.width.height.equalTo(40)
+            make.centerY.equalToSuperview()
         }
         return button
     }
@@ -872,17 +869,18 @@ extension SettingsHostDevicesVC {
     func scrollToSelectedMenu(){
         
         let conentHeihgt = scroll.contentSize.height
+        let windowsHeight = SettingsRouter.shared.currentAppWindowSize().height
         var topY = 0
         
         if deviceSection == .PairedSection {
-            topY = 45 * selectedIndex
+            topY = Int(SettingsUtil.shared.getMenuBGHeight()) * selectedIndex
         }else if deviceSection == .NetSection {
-            topY = 40 * selectedIndex + 45 * (pairedHosts.count + 1)
+            topY = Int(SettingsUtil.shared.getMenuBGHeight()) * selectedIndex + Int(SettingsUtil.shared.getMenuBGHeight()) * (pairedHosts.count + 1)
         }else if deviceSection == .AddSection {
-            topY = Int(conentHeihgt - UIScreen.screenHeight)
+            topY = Int(conentHeihgt - windowsHeight)
         }
         
-        topY = min(topY, Int(conentHeihgt - UIScreen.screenHeight) > 0  ? Int(conentHeihgt - UIScreen.screenHeight) : 0)
+        topY = min(topY, Int(conentHeihgt - windowsHeight) > 0  ? Int(conentHeihgt - windowsHeight) : 0)
         topY = topY < 0 ? 0 : topY
         scroll.contentOffset = CGPoint(x: 0, y: topY)
     }

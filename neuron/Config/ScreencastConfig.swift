@@ -20,8 +20,12 @@ import UIKit
 
 //适配灵动岛和刘海屏的边距
 let SaveAreaLeft = UIWindow.key?.safeAreaInsets.left ?? 0.0
-let DeviceLeftSpace = SaveAreaLeft > 0 ? SaveAreaLeft : 5.0 + 20.0
+let DeviceLeftSpace = (SaveAreaLeft > 0 ? SaveAreaLeft : 5.0) + 20.0
 let ScreenScale = UIScreen.screenScale
+//屏幕原始高宽比
+let WindowWidth = (UIScreen.screenWidth > UIScreen.screenHeight ? UIScreen.screenWidth : UIScreen.screenHeight)
+let WindowHeight = (UIScreen.screenWidth > UIScreen.screenHeight ? UIScreen.screenHeight : UIScreen.screenWidth)
+let WindowRatio =  (WindowWidth / WindowHeight)
 
 final class ScreencastConfig: NSObject {
     private static var _ScreencastExtBundleIDkey: String?

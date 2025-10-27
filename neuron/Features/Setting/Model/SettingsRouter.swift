@@ -24,6 +24,45 @@ import SwiftUI
 import Combine
 
 class SettingsRouter: NSObject {
+    // Custom alert view to handle dynamic reposition
+    class PairAlertView: UIView {
+        private var displayLink: CADisplayLink?
+        private weak var parentWindow: UIWindow?
+        
+        override func didMoveToWindow() {
+            super.didMoveToWindow()
+            parentWindow = window
+            if window != nil {
+                startMonitoring()
+            } else {
+                stopMonitoring()
+            }
+        }
+        
+        private func startMonitoring() {
+            displayLink = CADisplayLink(target: self, selector: #selector(checkForWindowBoundsChange))
+            displayLink?.add(to: .main, forMode: .common)
+        }
+        
+        private func stopMonitoring() {
+            displayLink?.invalidate()
+            displayLink = nil
+        }
+        
+        @objc private func checkForWindowBoundsChange() {
+            if let window = parentWindow {
+                // window size changed, update frame layout (position)
+                if self.frame != window.bounds {
+                    self.frame = window.bounds
+                    self.setNeedsLayout()
+                }
+            }
+        }
+        
+        deinit {
+            stopMonitoring()
+        }
+    }
     
     @objc static let shared = SettingsRouter()
     //传送navigationController给Setting子页面
@@ -64,6 +103,15 @@ class SettingsRouter: NSObject {
     @objc var shareLogData:Data = ShareDataDB.shared().readData(fromPath: shareLogPath)
     @objc var shareLogEnableSave:Bool = isEnableSaveLogDisplayMode
     @objc var shareLogExcportIng:Bool = false
+    
+    @objc let wWidth = WindowWidth
+    @objc let wHeight = WindowHeight
+    @objc let wRatio = WindowRatio
+    
+//    var portraitBaseScale = 1.0
+    var ScaleX = 1.0
+    var ScaleY = 1.0
+    
     
     override init() {
         super.init()
@@ -113,6 +161,15 @@ class SettingsRouter: NSObject {
         return label
     }
     
+    class func subTitleLab(_ title:String ,_ size:CGFloat) -> UILabel {
+        let label = UILabel.init()
+        label.text = title
+        label.font = UIFont.systemFont(ofSize: size)
+        label.textColor = Color.white.uiColor()
+        label.numberOfLines = 0
+        return label
+    }
+    
     
     //MARK: - show alert for pin
     func showHostPairAlert(pin:String , hostName:String , action: ((UIAlertAction) -> Void)? = nil) {
@@ -120,9 +177,12 @@ class SettingsRouter: NSObject {
         HostListManger.shared.dismissLoadingViewCallBack?()
         pairAlertView?.removeFromSuperview()
         
-        pairAlertView = UIView.init()
+        pairAlertView = PairAlertView()
         pairAlertView?.backgroundColor = Color.hex(0x000000, alpha: 0.3).uiColor()
-        pairAlertView?.frame = CGRectMake(0, 0, UIScreen.screenWidth, UIScreen.screenHeight)
+        // set initial frame
+        if let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
+            pairAlertView?.frame = window.bounds
+        }
         
         let custonView = UIView()
         pairAlertView?.addSubview(custonView)
@@ -135,20 +195,20 @@ class SettingsRouter: NSObject {
         titleLab.text = "Pairing Request".localize()
         titleLab.textColor = .white
         titleLab.textAlignment = .center
-        titleLab.font = UIFont.boldSystemFont(ofSize: 16)
+        titleLab.font = UIFont.dynamic(size: 16, weight: .bold)
         
         let messageLab = UILabel.init()
         messageLab.text = String(format: "Enter the code on \"%@\" to complete pairing with your device.\n\nPin Code".localize(), hostName)
         messageLab.numberOfLines = 0
         messageLab.textColor = .white
         messageLab.textAlignment = .center
-        messageLab.font = UIFont.systemFont(ofSize: 15)
+        messageLab.font = UIFont.dynamic(size: 15)
         
         let codeLab = UILabel.init()
         codeLab.text = pin
         codeLab.textColor = Color.hex(0x44D62C).uiColor()
         codeLab.textAlignment = .center
-        codeLab.font = UIFont.boldSystemFont(ofSize: 40)
+        codeLab.font = UIFont.dynamic(size: 40, weight: .bold)
         
         let line = UIView()
         line.backgroundColor = Color.hex(0x999999).uiColor()
@@ -156,7 +216,7 @@ class SettingsRouter: NSObject {
         let button = UIButton(type: .custom)
         button.setTitle("OK".localize().uppercased(), for: .normal)
         button.titleLabel?.textAlignment = .center
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+        button.titleLabel?.font = UIFont.dynamic(size: 16)
         button.setTitleColor(Color.hex(0x007AFF).uiColor(), for: .normal)
         button.addTarget(self, action: #selector(closePairAlertView), for: .touchUpInside)
         let color = ControllerInputTracker.shared.isConnected ? Color.hex(0xffffff, alpha: 0.3).uiColor() : UIColor.clear
@@ -205,6 +265,94 @@ class SettingsRouter: NSObject {
             make.height.equalTo(40.0)
             make.bottom.equalToSuperview()
         }
+        
+        if #available(iOS 26.0, *) {
+            
+            let codeHeight = 52.0
+            
+            let bgView = UIVisualEffectView()
+            let glassEffect = UIGlassEffect.init(style: .regular)
+            glassEffect.isInteractive = true
+            bgView.effect = glassEffect
+            //bgView?.backgroundColor = .init(hex: 0x000000, alpha: 0.5)
+            bgView.layer.cornerRadius = 34.0
+            custonView.insertSubview(bgView, at: 0)
+            bgView.snp.makeConstraints { make in
+                make.edges.equalToSuperview()
+            }
+            custonView.backgroundColor = .clear
+            custonView.layer.cornerRadius = 0.0
+            custonView.clipsToBounds = false
+            
+            titleLab.textAlignment = .left
+            titleLab.font = UIFont.systemFont(ofSize: 17)
+            
+            messageLab.textAlignment = .left
+            messageLab.text = String(format: "Enter the code on \"%@\" to complete pairing with your device.".localize(), hostName)
+            messageLab.font = UIFont.systemFont(ofSize: 17)
+            
+            
+            let pinTipLab = UILabel.init()
+            pinTipLab.text = String(format:"Pin Code".localize(), hostName)
+            pinTipLab.numberOfLines = 0
+            pinTipLab.textColor = .white
+            pinTipLab.textAlignment = .center
+            pinTipLab.font = UIFont.systemFont(ofSize: 17)
+            custonView.addSubview(pinTipLab)
+
+            
+            line.removeFromSuperview()
+            //codeLab.backgroundColor = UIColor.init(hex: 0x44D62C)
+            //codeLab.textColor = .black
+            codeLab.font = .systemFont(ofSize: 24)
+            //codeLab.layer.cornerRadius = codeHeight / 2.0
+            //codeLab.layer.masksToBounds = true
+            
+            button.backgroundColor = Color.hex(0x787880 , alpha: 0.32).uiColor()
+            button.setTitleColor(Color.hex( 0x44D62C).uiColor(), for: .normal)
+            button.titleLabel?.font = .systemFont(ofSize: 17)
+            button.layer.cornerRadius = codeHeight / 2.0
+            
+            custonView.snp.remakeConstraints { make in
+                make.center.equalToSuperview()
+                make.width.lessThanOrEqualTo(300.0)
+            }
+            
+            titleLab.snp.remakeConstraints { make in
+                make.top.equalTo(20)
+                make.left.equalTo(20)
+                make.right.equalTo(-20)
+            }
+            
+            messageLab.snp.remakeConstraints { make in
+                make.top.equalTo(titleLab.snp_bottomMargin).offset(20)
+                make.left.equalTo(20)
+                make.right.equalTo(-20)
+                make.centerX.equalToSuperview()
+            }
+            
+            pinTipLab.snp.remakeConstraints { make in
+                make.top.equalTo(messageLab.snp_bottomMargin).offset(20)
+                make.left.equalTo(20)
+                make.right.equalTo(-20)
+                make.centerX.equalToSuperview()
+            }
+            
+            codeLab.snp.remakeConstraints { make in
+                make.top.equalTo(pinTipLab.snp_bottomMargin).offset(10)
+                make.left.equalTo(14)
+                make.right.equalTo(-14)
+                //make.height.equalTo(codeHeight)
+            }
+            
+            button.snp.remakeConstraints { make in
+                make.top.equalTo(codeLab.snp.bottom).offset(16)
+                make.left.equalTo(14)
+                make.right.equalTo(-14)
+                make.height.equalTo(codeHeight)
+                make.bottom.equalTo(-14)
+            }
+        }
                 
         DispatchQueue.main.async {
             if let alert = self.pairAlertView {
@@ -221,4 +369,72 @@ class SettingsRouter: NSObject {
         }
     }
     
+    @objc func isDeviceIpad() -> Bool {
+        return IsIpad()
+    }
+    
+    @objc func getWindowRatioWidth(_ size:CGSize) -> CGFloat {
+        // get window ratio width
+        let height = size.width / (WindowRatio)
+        if height > size.height {
+            return size.height * WindowRatio
+        }else{
+            return size.width
+        }
+    }
+    
+    func currentAppWindowSize() -> CGSize {
+        // Traverse all the connected scenes
+        for scene in UIApplication.shared.connectedScenes {
+            // Find the UIWindowScene that is currently active at the front desk.
+            if scene.activationState == .foregroundActive,
+               let windowScene = scene as? UIWindowScene {
+                return windowScene.coordinateSpace.bounds.size
+            }
+        }
+        return CGSize.init(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+    }
+    
+    func updateWindowSize() {
+        if IsIpad() {
+            // 获取当前窗口尺寸
+            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+                DispatchQueue.main.async {
+                    let windowSize = windowScene.windows.first?.frame.size ?? .zero
+                    let currentWidth = windowSize.width
+                    let currentHeight = windowSize.height
+                    let screenSize = UIScreen.main.bounds.size
+
+                    // since orientation is not reliable when app first launch, we use window size to determine portrait/landscape
+                    let isWindowPortrait = screenSize.height > screenSize.width
+
+                    if isWindowPortrait {
+                        // self.scale = currentWidth / max(screenSize.height, screenSize.width) //since we use dynamic layout, so doesn't need to scale anymore
+                        let portraitBaseScaleY = currentHeight / max(screenSize.height, screenSize.width)
+                        let portraitBaseScaleX = currentWidth / min(screenSize.height, screenSize.width)
+                        DashboardViewModel.shared.portraitBaseScale = min(portraitBaseScaleY, portraitBaseScaleX)  // SettingsPage: Scale based on physical portrait screen width and height length and which is minium
+                        DashboardViewModel.shared.portraitHeight = max(UIScreen.screenHeight, UIScreen.screenWidth)
+//                        self.portraitBaseScale = min(portraitBaseScaleY, portraitBaseScaleX)
+                        self.ScaleX = portraitBaseScaleX
+                        self.ScaleY = portraitBaseScaleY
+                        
+                        print("portraitBaseScale set to \(DashboardViewModel.shared.portraitBaseScale)")
+                    } else {
+                        // self.scale = currentWidth / max(screenSize.height, screenSize.width)//since we use dynamic layout, so doesn't need to scale anymore
+                        let portraitBaseScaleY = currentHeight / min(screenSize.height, screenSize.width)
+                        let portraitBaseScaleX = currentWidth / max(screenSize.height, screenSize.width)
+                        DashboardViewModel.shared.portraitBaseScale = min(portraitBaseScaleY, portraitBaseScaleX)  // SettingsPage: Scale based on physical portrait screen width and height length and which is minium
+                        DashboardViewModel.shared.portraitHeight = min(UIScreen.screenHeight, UIScreen.screenWidth)
+//                        self.portraitBaseScale = min(portraitBaseScaleY, portraitBaseScaleX)
+                        self.ScaleX = portraitBaseScaleX
+                        self.ScaleY = portraitBaseScaleY
+                        
+                        print("portraitBaseScale set to \(DashboardViewModel.shared.portraitBaseScale)")
+                    }
+
+                    print("updateWindowSize isWindowPortrait: \(isWindowPortrait ? "Portrait" : "Landscape"), currentWidth: \(currentWidth), screenSize.width: \(screenSize.width), currentHeight: \(currentHeight), screenSize.height: \(screenSize.height)")
+                }
+            }
+        }
+    }
 }

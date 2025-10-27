@@ -24,6 +24,9 @@ import Combine
 import UIKit
 import AVFoundation
 
+let AddManualHostViewWidth = IsIOS26() ? 478.0 : 582.0
+let AddManualHostViewHeight = IsIOS26() ? 275.0 : 281.0
+
 struct AddManualHostView: View {
     //@ObservedObject var settingsViewModel:SettingsViewModel
     
@@ -35,254 +38,515 @@ struct AddManualHostView: View {
     @SwiftUI.State var loading:Bool = false
     @SwiftUI.State var success:Bool = true
     @SwiftUI.State var addEnable:Bool = false
+    @SwiftUI.FocusState private var isAddressFieldFocused: Bool
+    @SwiftUI.FocusState private var isPortFieldFocused: Bool
     
-    var body : some View {
+    @SwiftUI.State var viewWidth = AddManualHostViewWidth
+    @SwiftUI.State var viewHeight = AddManualHostViewHeight
+    
+    
+    @SwiftUI.State private var scale: CGFloat = 1.0 //DashboardViewModel.shared.portraitBaseScale
+    
+    var body: some View {
         
         ZStack() {
             
-            Color.black.opacity(0.5)
-                .onTapGesture {
-                    DDLogInfo("click button to End search text editing")
-                    if viewModel.isAddressEditing == true || viewModel.isPortEditing == true {
-                        EmptyView().resignFirstResponder()
-                    }
-                }
-            
-            ZStack(){
+            GeometryReader { geo in
                 
-                Color.hex(0x222222)
-                
-                VStack(alignment:.leading) {
+                ZStack() {
                     
-                    
-                    VStack(alignment:.leading) {
-                        
-                        HStack(){
-                            
-                            Button.init {
-                                viewModel.viewDismissalModePublisher.send(true)
-                            } label: {
-                                Text("Cancel".localize())
-                                    .foregroundColor(.blue)
-                                    .font(Font.system(size:16))
-                                    .padding(EdgeInsets.init(top: 0, leading: 20, bottom: 0, trailing: 20))
+                    Color.black.opacity(0.5)
+                        .onTapGesture {
+                            DDLogInfo("click button to End search text editing")
+                            if viewModel.isAddressEditing == true || viewModel.isPortEditing == true {
+                                EmptyView().resignFirstResponder()
                             }
-                            .frame(height: 44)
-                            .opacity( loading ? 0.5 : 1.0)
+                        }
+                    
+                    ZStack(){
+                        
+                        if #available(iOS 26.0, *) {
+                            Color.clear
+                                .frame(width: viewWidth, height: viewHeight)
+                                .backgroundExtensionEffect()
+                                .glassEffect(in: .rect(cornerRadius: 34.0))
+                        }else{
+                            Color.hex(0x222222)
+                                .frame(width: viewWidth, height: viewHeight)
+                        }
+                        
+                        VStack(alignment:.leading) {
                             
+                            if #available(iOS 26.0, *) {
+                                
+                                Spacer().frame(height: 22.0)
+                                
+                                Text("Add PC manually".localize())
+                                    .foregroundColor(.white)
+                                    .font(.system(size: 16))
+                                    .padding(EdgeInsets.init(top: 0 , leading: 22, bottom: 0, trailing: 22))
+                                
+                                Spacer().frame(height: 34.0)
+                                
+                                newTextFiles
+                                
+                                Spacer().frame(height: 8.0)
+                                newWaringView.opacity(success ? 0.0 : 1.0)
+                                Spacer().frame(height: 8.0)
+                                
+                                bottomPath
+                                
+                                Spacer().frame(height: 14.0)
+                                
+                            }else {
+                                
+                                VStack(alignment:.leading) {
+                                    topPath
+                                    Spacer().frame(height:20)
+                                    textFiles
+                                }
+                                
+                                waringView.opacity(success ? 0.0 : 1.0)
+                                Spacer()
+                            }
+                            
+                        }
+                        
+                    }
+                    .frame(width: viewWidth, height: viewHeight)
+                    .onAppear() {
+                        if IsIpad() {
+                            viewWidth = min(AddManualHostViewWidth,geo.size.width)
+                            //let ratio = geo.size.width / SettingsRouter.shared.wWidth
+                            //scale = ratio
+                        }
+                    }
+                    .valueChanged(value: geo.size.width, onChange: { width in
+                        if IsIpad() {
+                            viewWidth = min(AddManualHostViewWidth,width)
+                            //let ratio = width / SettingsRouter.shared.wWidth
+                            //scale = ratio
+                        }
+                    })
+                    .clipped()
+                    .cornerRadius(10)
+                    .blur(radius: loading ? 3.0 : 0.0)
+                    .scaleEffect(scale)
+                    
+                    if loading {
+                        
+                        Color.Black.opacity(0.5)
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                DDLogInfo("Tap:Wating add host manually result ...")
+                            }
+                        
+                        VStack(){
                             Spacer()
-                            
-                            Text("Add PC manually".localize())
+                            Text("Connecting…".localize())
                                 .foregroundColor(.white)
-                                .font(Font.system(size:16))
-                            
+                                .font(.system(size:18))
+                            Spacer().frame(height: 10)
+                            Text("Please ensure Razer Cortex is running.".localize())
+                                .foregroundColor(.hex(0x999999))
+                                .font(.system(size:14))
+                            Spacer().frame(height: 10)
+                            ActivityIndicator(isAnimating: $loading, style: UIActivityIndicatorView.Style.medium)
+                                .frame(width:60,height: 60)
                             Spacer()
-                            
-                            Button.init {
-                                viewModel.clickA?()
-                            } label: {
-                                Text("Add".localize())
-                                    .foregroundColor( addEnable ? .blue : .hex(0x999999))
-                                    .font(Font.system(size:16))
-                                    .padding(EdgeInsets.init(top: 0, leading: 20, bottom: 0, trailing: 20))
-                            }
-                            .frame(height: 44)
-                            .opacity( addEnable ? 1.0 : 0.5 )
-                            
-                            
-                        }
-                        
-                        Spacer().frame(height:20)
-                        
-                        HStack(){
-                            
-                            Spacer().frame(width:15)
-                            
-                            VStack(spacing:0.1){
-                                
-                                HStack(alignment: .center){
-                                    
-                                    Spacer().frame(width:15)
-                                    
-                                    Text("IP address".localize())
-                                        .foregroundColor(.white)
-                                        .font(Font.system(size:16))
-                                    
-                                    Spacer().frame(width:15)
-                                    
-                                    RZTextField(placeholder: Text("Enter the IP address of your computer.".localize())
-                                        .foregroundColor(.hex(0x999999))
-                                        .font(Font.system(size: 16)), text: $address) { editing in
-                                            viewModel.isAddressEditing = editing
-                                        } commit: {
-                                            
-                                        }
-                                        .frame(height: 40)
-                                        .padding(EdgeInsets.init(top: 0, leading: 10, bottom: 0, trailing: 10))
-                                    
-                                }
-                                
-                                HStack(){
-                                    Spacer().frame(width:15)
-                                    Color.gray.frame(height: 1.0 / UIScreen.screenScale)
-                                }
-                                
-                                HStack(alignment: .center){
-                                    
-                                    Spacer().frame(width:15)
-                                    
-                                    ZStack(alignment:.leading){
-                                        Text("IP address".localize())
-                                            .foregroundColor(.hex(0x999999))
-                                            .font(Font.system(size:16))
-                                            .opacity(0.0)
-                                        
-                                        Text("Port".localize())
-                                            .foregroundColor(.white)
-                                            .font(Font.system(size:16))
-                                    }
-                                    
-                                    Spacer().frame(width:15)
-                                    
-                                    RZTextField(placeholder: Text("e.g.51337".localize())
-                                        .foregroundColor(.hex(0x999999))
-                                        .font(Font.system(size: 16)), text: $port) { editing in
-                                            viewModel.isPortEditing = editing
-                                        } commit: {
-                                            
-                                        }
-                                        .frame(height: 40)
-                                        .padding(EdgeInsets.init(top: 0, leading: 10, bottom: 0, trailing: 10))
-                                    
-                                }
-                                
-                            }.background {
-                                Color.hex(0x303032)
-                            }
-                            .cornerRadius(10.0)
-                            
-                            Spacer().frame(width:15)
-                            
                         }
                         
                     }
+                }
+                //.background(Color.Black)
+                .onAppear {
+                    DDLogInfo("AddManualHostView:onAppear")
+                    viewModel.startTracking()
+                    viewModel.delegate = viewModel
                     
-                    if success == false {
-                        HStack(){
-                            Spacer().frame(width:15)
-                            Spacer().frame(width:15)
-                            Text("Could not connect to host".localize())
-                                .foregroundColor(.hex(0xff0000))
-                                .font(Font.system(size:14))
-                            Image("settings_devices_warning")
+                    isAddressFieldFocused = true
+                    viewModel.isFocusCancel = false
+                    
+                    viewModel.clickA = {
+                        
+                        let str = address + ":" + port
+                        
+                        if checkAddEnable() == false {
+                            return
                         }
+                        
+                        if viewModel.isAddressEditing == true || viewModel.isPortEditing == true {
+                            EmptyView().resignFirstResponder()
+                        }
+                        
+                        onManualIpEnter(address: str)
                     }
-                    
-                    Spacer()
+                    viewModel.addNotification()
+                }
+                //        .onReceive(DashboardViewModel.shared.$portraitBaseScale) { newScale in
+                //            self.scale = newScale
+                //        }
+                .onAppearFix{
+                    DDLogInfo("AddManualHostView:onAppear")
+                    viewModel.startTracking()
+                    viewModel.delegate = viewModel
+                }
+                .onDisappear() {
+                    viewModel.removeNotification()
+                }
+                .onReceive(viewModel.viewDismissalModePublisher) { shouldDismiss in
+                    if shouldDismiss {
+                        self.presentationMode.wrappedValue.dismiss()
+                        //settingsViewModel.isShowManualHostView = false
+                        NotificationCenter.default.post(name: NTCloseManualHostView, object: nil)
+                    }
+                }
+                .valueChanged(value: address) { address in
+                    addEnable = checkAddEnable()
+                }
+                .valueChanged(value: port) { port in
+                    addEnable = checkAddEnable()
+                }
+                .valueChanged(value: loading) { isLoading in
+                    viewModel.loading = loading
+                }
+                .valueChanged(value: viewModel.isFocusAddress) { isFocusAddress in
+                    isAddressFieldFocused = isFocusAddress
+                }
+                .valueChanged(value: viewModel.isFocusPort) { isFocusPort in
+                    isPortFieldFocused = isFocusPort
                 }
                 
-                
             }
-            .frame(width: 582, height: 281)
-            .clipped()
-            .cornerRadius(10)
-            .blur(radius: loading ? 3.0 : 0.0)
             
-            if loading {
+        }
+    }
+    //MARK: - views
+    var topPath : some View {
+        
+        return HStack(){
+            
+            Button.init {
+                //viewModel.clickA?()
+                self.viewModel.viewDismissalModePublisher.send(true)
+            } label: {
+                Text("Cancel".localize())
+                    .foregroundColor(.blue)
+                    .font(.system(size: 16))
+                    .padding(EdgeInsets.init(top: 0, leading: 20, bottom: 0, trailing: 20))
+            }
+            .frame(height: 44)
+            .opacity( loading ? 0.5 : 1.0)
+            
+            Spacer()
+            
+            Text("Add PC manually".localize())
+                .foregroundColor(.white)
+                .font(.system(size: 16))
+            
+            Spacer()
+            
+            Button.init {
+                viewModel.clickA?()
+            } label: {
+                Text("Add".localize())
+                    .foregroundColor( addEnable ? .blue :.hex(0x999999))
+                    .font(.system(size: 16))
+                    .padding(EdgeInsets.init(top: 0, leading: 20, bottom: 0, trailing: 20))
+            }
+            .frame(height: 44)
+            .opacity(addEnable ? 1.0 : 0.5)
+            
+        }
+        
+    }
+    
+    var textFiles : some View {
+        return HStack(){
+            
+            Spacer().frame(width:15)
+            
+            VStack(spacing:0.1){
                 
-                Color.Black.opacity(0.5)
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        DDLogInfo("Tap:Wating add host manually result ...")
-                    }
-                
-                VStack(){
-                    Spacer()
-                    Text("Connecting…".localize())
+                HStack(){
+                    
+                    Spacer().frame(width:15)
+                    
+                    Text("IP address".localize())
                         .foregroundColor(.white)
-                        .font(Font.system(size:18))
-                    Spacer().frame(height: 10)
-                    Text("Please ensure Razer Cortex is running.".localize())
+                        .font(.system(size: 16))
+                    
+                    Spacer().frame(width:15)
+                    
+                    RZTextField(placeholder: Text("Enter the IP address of your computer.".localize())
                         .foregroundColor(.hex(0x999999))
-                        .font(Font.system(size:14))
-                    Spacer().frame(height: 10)
-                    ActivityIndicator(isAnimating: $loading, style: UIActivityIndicatorView.Style.medium)
-                        .frame(width:60,height: 60)
-                    Spacer()
+                        .font(.system(size: 16)), text: $address) { editing in
+                            viewModel.isAddressEditing = editing
+                        } commit: {
+                            if addEnable {
+                                viewModel.clickA?()
+                            }
+                        }
+                        .frame(height: 40)
+                    //.frame(maxWidth: IsIpad() ? .infinity : 350)
+                        .padding(EdgeInsets.init(top: 0, leading: 10, bottom: 0, trailing: 10))
+                    //.background(Color.White)
+                        .focused($isAddressFieldFocused)
+                        .introspectTextField { textField in
+                            // force disable keyboard's Shortcut Bar
+                            textField.inputAssistantItem.leadingBarButtonGroups = []
+                            textField.inputAssistantItem.trailingBarButtonGroups = []
+                            textField.inputAccessoryView = UIView()
+                        }
+                    
+                    
                 }
                 
+                HStack(){
+                    Spacer().frame(width:15)
+                    Color.gray.frame(height: 1.0 / UIScreen.screenScale)
+                }
+                
+                
+                HStack(){
+                    
+                    Spacer().frame(width:15)
+                    
+                    ZStack(alignment:.leading){
+                        Text("IP address".localize())
+                            .foregroundColor(.hex(0x999999))
+                            .font(.system(size: 16))
+                            .opacity(0.0)
+                        
+                        Text("Port".localize())
+                            .foregroundColor(.white)
+                            .font(.system(size: 16))
+                    }
+                    
+                    Spacer().frame(width:15)
+                    
+                    RZTextField(placeholder: Text("e.g.51337".localize())
+                        .foregroundColor(.hex(0x999999))
+                        .font(.system(size: 16)), text: $port) { editing in
+                            viewModel.isPortEditing = editing
+                        } commit: {
+                            if addEnable {
+                                viewModel.clickA?()
+                            }
+                        }
+                        .frame(height: 40)
+                    //.frame(maxWidth: IsIpad() ? .infinity : 350)
+                        .padding(EdgeInsets.init(top: 0, leading: 10, bottom: 0, trailing: 10))
+                    //.background(Color.White)
+                        .focused($isPortFieldFocused)
+                        .introspectTextField { textField in
+                            // force disable keyboard's Shortcut Bar
+                            textField.inputAssistantItem.leadingBarButtonGroups = []
+                            textField.inputAssistantItem.trailingBarButtonGroups = []
+                            textField.inputAccessoryView = UIView()
+                        }
+                    
+                    
+                }
+                
+            }.background {
+                Color.hex(0x303032)
             }
+            .cornerRadius(10.0)
             
-        }
-        .onAppear {
-            DDLogInfo("AddManualHostView:onAppear")
-            viewModel.startTracking()
-            viewModel.delegate = viewModel
+            Spacer().frame(width:15)
             
-            viewModel.clickA = {
-                
-                let str = address + ":" + port
-                if checkAddEnable() == false {
-                    return
-                }
-                
-                if viewModel.isAddressEditing == true || viewModel.isPortEditing == true {
-                    EmptyView().resignFirstResponder()
-                }
-                
-                onManualIpEnter(address: str)
-            }
-            viewModel.addNotification()
-        }
-        .edgesIgnoringSafeArea(.all)
-        .onDisappear() {
-            viewModel.removeNotification()
-        }
-        .onReceive(viewModel.viewDismissalModePublisher) { shouldDismiss in
-            if shouldDismiss {
-                self.presentationMode.wrappedValue.dismiss()
-                //settingsViewModel.isShowManualHostView = false
-                NotificationCenter.default.post(name: NTCloseManualHostView, object: nil)
-            }
-        }
-        .valueChanged(value: address) { address in
-            addEnable = checkAddEnable()
-        }
-        .valueChanged(value: port) { port in
-            addEnable = checkAddEnable()
-        }
-        .valueChanged(value: loading) { isLoading in
-            viewModel.loading = loading
-        }
-        .introspectViewController { vc in
-            vc.view.backgroundColor = .clear
         }
     }
     
+    var waringView : some View {
+        return HStack(){
+            Spacer().frame(width:15)
+            Spacer().frame(width:15)
+            Text("Could not connect to host".localize())
+                .foregroundColor(.hex(0xff0000))
+                .font(.system(size: 14))
+            Image("settings_host_warning")
+        }
+        //.frame(height:40.0)
+    }
+    
+    var newWaringView : some View {
+        return HStack(){
+            Spacer().frame(width:15)
+            Text("Could not connect to host".localize())
+                .foregroundColor(.hex(0xff0000))
+                .font(.system(size: 14))
+            Image("new_settings_host_warning")
+        }
+        //.frame(height:40.0)
+    }
+    
+    var newTextFiles : some View {
+        return HStack(){
+            
+            Spacer().frame(width:15)
+            
+            VStack(spacing:0.1){
+                
+                HStack(){
+                    
+                    Spacer().frame(width:15)
+                    
+                    RZTextField(placeholder: Text("Enter the IP address of your computer.".localize())
+                        .foregroundColor(.hex(0xEBEBF5,alpha: 0.3))
+                        .font(.system(size: 16)), text: $address) { editing in
+                            viewModel.isAddressEditing = editing
+                        } commit: {
+                            if addEnable {
+                                viewModel.clickA?()
+                            }
+                        }
+                        .frame(height: 52)
+                        .focused($isAddressFieldFocused)
+                        .introspectTextField { textField in
+                            // force disable keyboard's Shortcut Bar
+                            textField.inputAssistantItem.leadingBarButtonGroups = []
+                            textField.inputAssistantItem.trailingBarButtonGroups = []
+                            textField.inputAccessoryView = UIView()
+                        }
+                    
+                    
+                    Spacer().frame(width:15)
+                    
+                }
+                
+                HStack(){
+                    Spacer().frame(width:15)
+                    Color.hex(0x1a1a1a).frame(height: 1.0 / UIScreen.screenScale)
+                    Spacer().frame(width:15)
+                }
+                
+                
+                HStack(){
+                    
+                    Spacer().frame(width:15)
+                    
+                    RZTextField(placeholder: Text("Port".localize())
+                        .foregroundColor(.hex(0xEBEBF5,alpha: 0.3))
+                        .font(.system(size: 16)), text: $port) { editing in
+                            viewModel.isPortEditing = editing
+                        } commit: {
+                            if addEnable {
+                                viewModel.clickA?()
+                            }
+                        }
+                        .frame(height: 52)
+                        .focused($isPortFieldFocused)
+                        .introspectTextField { textField in
+                            // force disable keyboard's Shortcut Bar
+                            textField.inputAssistantItem.leadingBarButtonGroups = []
+                            textField.inputAssistantItem.trailingBarButtonGroups = []
+                            textField.inputAccessoryView = UIView()
+                        }
+                    
+                    
+                    Spacer().frame(width:15)
+                    
+                }
+                
+            }.background {
+                Color.hex(0x767680,alpha: 0.24)
+            }
+            .cornerRadius(34.0)
+            
+            Spacer().frame(width:15)
+            
+        }
+    }
+    
+    var bottomPath : some View {
+        
+        let bottonHeight = 48.0
+        let leftSpace = 14.0
+        let midSpace = 16.0
+        let bottonWidth = ( viewWidth - leftSpace * 2 - midSpace ) / 2.0
+        
+        return HStack(){
+            Spacer().frame(width:leftSpace)
+            
+            Button.init {
+                //viewModel.clickA?()
+                self.viewModel.viewDismissalModePublisher.send(true)
+            } label: {
+                Text("Cancel".localize())
+                    .foregroundColor(.white)
+                    .font(.system(size: 16))
+                    .padding(EdgeInsets.init(top: 0, leading: 20, bottom: 0, trailing: 20))
+            }
+            .frame(width: bottonWidth ,height: bottonHeight )
+            .background(content: {
+                if viewModel.isFocusCancel {
+                    Color.hex(0xffffff,alpha: 0.32)
+                        .cornerRadius( bottonHeight / 2)
+                }else{
+                    Color.hex(0x787880,alpha: 0.32)
+                        .cornerRadius( bottonHeight / 2)
+                }
+            })
+            .opacity( loading ? 0.5 : 1.0)
+            
+            Spacer().frame(width:midSpace)
+            
+            Button.init {
+                viewModel.clickA?()
+            } label: {
+                Text("Add".localize())
+                    .foregroundColor( addEnable ? .white :.hex(0x999999))
+                    .font(.system(size: 16))
+                    .padding(EdgeInsets.init(top: 0, leading: 20, bottom: 0, trailing: 20))
+            }
+            .frame(width: bottonWidth ,height: bottonHeight )
+            .background(content: {
+                if viewModel.isFocusAdd && addEnable {
+                    Color.hex(0xffffff,alpha: 0.32)
+                        .cornerRadius( bottonHeight / 2)
+                }else{
+                    Color.hex(0x787880,alpha: 0.32)
+                        .cornerRadius( bottonHeight / 2)
+                }
+            })
+            .opacity(addEnable ? 1.0 : 0.5)
+            
+            Spacer().frame(width:leftSpace)
+        }
+        
+    }
+    
+    //MARK: - func
     func checkAddEnable()->Bool {
         
         if address.isEmpty || port.isEmpty {
             addEnable = false
+            viewModel.addEnable = addEnable
             return false
         }
         
         let strArray = address.components(separatedBy: ":")
         if strArray.count > 1 {
             addEnable = false
+            viewModel.addEnable = addEnable
             return false
         }
         
         let strArray2 = address.components(separatedBy: "：")
         if strArray2.count > 1 {
             addEnable = false
+            viewModel.addEnable = addEnable
             return false
         }
         
         let str = address + ":" + port
-        return viewModel.checkIPWithPort(str)
+        addEnable = viewModel.checkIPWithPort(str)
+        viewModel.addEnable = addEnable
+        return addEnable
         
     }
-    
     
     func onManualIpEnter(address: String) {
         
@@ -337,6 +601,7 @@ struct AddManualHostView: View {
                     }
                     if found == false {
                         self.success = false
+                        self.isAddressFieldFocused = true
                     }
                 }
             }
@@ -352,6 +617,11 @@ class AddManualHostViewModel : RZHandleResponder , RZHandleResponderDelegate {
     var viewDismissalModePublisher = PassthroughSubject<Bool, Never>()
     @Published var isAddressEditing: Bool = false
     @Published var isPortEditing: Bool = false
+    @Published var isFocusAddress: Bool = true
+    @Published var isFocusPort: Bool = false
+    @Published var isFocusCancel: Bool = false
+    @Published var isFocusAdd: Bool = false
+    @Published var addEnable:Bool = false
     var clickA:(()->Void)? = nil
     
     func addNotification(){
@@ -409,11 +679,44 @@ class AddManualHostViewModel : RZHandleResponder , RZHandleResponderDelegate {
         if loading {
             return
         }
+        
         switch action {
         case .A:
-            clickA?()
+            if IsIOS26() {
+                if isFocusCancel {
+                    self.shouldDismissView = true
+                } else if isFocusAdd {
+                    clickA?()
+                }
+            } else{
+                clickA?()
+            }
+            
         case .B:
             self.shouldDismissView = true
+        case .left:
+            if isFocusAdd {
+                isFocusCancel = true
+                isFocusAdd = false
+            }
+        case .right:
+            if isFocusAdd == false && isFocusCancel == false {
+                isFocusCancel = true
+                isFocusAdd = false
+            }else if isFocusCancel && addEnable {
+                isFocusCancel = false
+                isFocusAdd = true
+            }
+        case .up:
+            if isFocusPort {
+                isFocusAddress = true
+                isFocusPort = false
+            }
+        case .down:
+            if isFocusAddress {
+                isFocusAddress = false
+                isFocusPort = true
+            }
         default: break
         }
         
@@ -424,5 +727,23 @@ class AddManualHostViewModel : RZHandleResponder , RZHandleResponderDelegate {
 extension View {
     func resignFirstResponder() {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+}
+
+// MARK: - ESC Key Handling UIHostingController for AddManualHostView
+public class AddManualHostHostingController<Content: View>: UIHostingController<Content> {
+    
+    public override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        for press in presses {
+            guard let key = press.key else { continue }
+            if key.keyCode == .keyboardEscape {
+                Logger.debug("AddManualHostView: ESC key dismiss")
+                dismiss(animated: true) { [weak self] in
+                    NotificationCenter.default.post(name: NTCloseManualHostView, object: nil)
+                }
+                return
+            }
+        }
+        super.pressesBegan(presses, with: event)
     }
 }

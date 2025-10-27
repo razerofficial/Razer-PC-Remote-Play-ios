@@ -18,6 +18,8 @@
 #ifndef constant_h
 #define constant_h
 
+#import <Foundation/Foundation.h>
+
 static NSString *groupID = @"group.com.razer.kishiv2";
 static NSString *frameSettingsPath = @"frameSettings.db";
 static NSString *currentLaunchGamePath = @"currentLaunchGame.db";
@@ -27,6 +29,7 @@ static NSString *frameSettingsTXTPath = @"frameSetings.txt";
 static NSString *devOptionsPath = @"devOptions.db";
 static NSString *manuallyUnpairedHostPath = @"manuallyUnpairedHost.db";
 static NSString *shareLogPath = @"shareLog.txt";
+static NSString *audioStreamingPath = @"audio_streaming.opus";
 static NSString *neuronInfoPath = @"neuronInfo.db";
 static NSString *neuronEventPath = @"neuronEvent.db";
 

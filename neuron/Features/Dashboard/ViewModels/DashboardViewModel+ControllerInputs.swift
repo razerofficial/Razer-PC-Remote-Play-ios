@@ -145,6 +145,8 @@ extension DashboardViewModel {
                     deviceSection = .AddSection
                     selectedIndex = 0
                 }
+            }else if deviceSection == .AddSection {
+                return
             }
             
             scrollToSelectedMenu()
@@ -187,9 +189,22 @@ extension DashboardViewModel {
                 deviceSection = .PairedSection
             }
             
-            if deviceSection == .PairedSection {
-                if selectedIndex + HostRowLimit < pairedHosts.count {
-                    selectedIndex = selectedIndex + HostRowLimit
+            if deviceSection == .NavSection {
+                
+                if pairedHosts.count > 0 {
+                    selectedIndex = 0
+                    deviceSection = .PairedSection
+                }else if netHosts.count > 0 {
+                    deviceSection = .NetSection
+                    selectedIndex = 0
+                }else{
+                    deviceSection = .AddSection
+                    selectedIndex = 0
+                }
+                
+            }else if deviceSection == .PairedSection {
+                if selectedIndex + dynamicRowLimit < pairedHosts.count {
+                    selectedIndex = selectedIndex + dynamicRowLimit
                 }else if selectedIndex < pairedHosts.count - 1 {
                     selectedIndex = pairedHosts.count - 1
                 }else if netHosts.count > 0 {
@@ -201,14 +216,16 @@ extension DashboardViewModel {
                 }
             }else if deviceSection == .NetSection {
                 
-                if selectedIndex + HostRowLimit < netHosts.count {
-                    selectedIndex = selectedIndex + HostRowLimit
+                if selectedIndex + dynamicRowLimit < netHosts.count {
+                    selectedIndex = selectedIndex + dynamicRowLimit
                 }else if selectedIndex < netHosts.count - 1 {
                     selectedIndex = netHosts.count - 1
                 }else{
                     deviceSection = .AddSection
                     selectedIndex = 0
                 }
+            }else if deviceSection == .AddSection {
+                return
             }
             
             scrollToSelectedMenu()
@@ -222,19 +239,23 @@ extension DashboardViewModel {
             }
             
             if deviceSection == .PairedSection {
-                if selectedIndex - HostRowLimit >= 0 {
-                    selectedIndex = selectedIndex - HostRowLimit
-                }else {
+                if selectedIndex - dynamicRowLimit >= 0 {
+                    selectedIndex = selectedIndex - dynamicRowLimit
+                } else {
                     selectedIndex = 0
+                    deviceSection = .NavSection
                 }
             }else if deviceSection == .NetSection {
-                if selectedIndex - HostRowLimit >= 0 {
-                    selectedIndex = selectedIndex - HostRowLimit
+                if selectedIndex - dynamicRowLimit >= 0 {
+                    selectedIndex = selectedIndex - dynamicRowLimit
                 }else if selectedIndex > 0 {
                     selectedIndex = 0
                 }else if pairedHosts.count > 0{
                     deviceSection = .PairedSection
                     selectedIndex = pairedHosts.count - 1
+                }else{
+                    selectedIndex = 0
+                    deviceSection = .NavSection
                 }
             }else if deviceSection == .AddSection {
                 if netHosts.count > 0 {
@@ -243,6 +264,9 @@ extension DashboardViewModel {
                 }else if pairedHosts.count > 0{
                     deviceSection = .PairedSection
                     selectedIndex = pairedHosts.count - 1
+                }else{
+                    selectedIndex = 0
+                    deviceSection = .NavSection
                 }
             }
             scrollToSelectedMenu()
@@ -252,23 +276,23 @@ extension DashboardViewModel {
     
     func scrollToSelectedMenu(){
         DispatchQueue.main.async { [self] in
-            let conentHeihgt = scroll?.contentSize.height ?? UIScreen.screenHeight
+            let conentHeihgt = scroll?.contentSize.height ?? currentWindowHeight
             var topY = 0
             
             if deviceSection == .PairedSection {
-                topY = Int(HostCellMoveStep) * (selectedIndex / HostRowLimit)
+                topY = Int(HostCellMoveStep) * (selectedIndex / dynamicRowLimit)
             }else if deviceSection == .NetSection {
                 
                 var topSapce = 0
                 if pairedHosts.count > 0 {
-                    topSapce = Int(HostCellMoveStep) * ((pairedHosts.count / HostRowLimit) + 1) + 40
+                    topSapce = Int(HostCellMoveStep) * ((pairedHosts.count / dynamicRowLimit) + 1) + 40
                 }
-                topY = Int(HostCellMoveStep) * (selectedIndex / HostRowLimit) + topSapce
+                topY = Int(HostCellMoveStep) * (selectedIndex / dynamicRowLimit) + topSapce
                 
             }else if deviceSection == .AddSection {
-                topY = Int(conentHeihgt - UIScreen.screenHeight)
+                topY = Int(conentHeihgt - currentWindowHeight)
             }
-            topY = min(topY, Int(conentHeihgt - UIScreen.screenHeight) > 0  ? Int(conentHeihgt - UIScreen.screenHeight) : 0)
+            topY = min(topY, (Int(conentHeihgt - currentWindowHeight) > 0)  ? Int(conentHeihgt - currentWindowHeight) : 0)
             topY = topY < 0 ? 0 : topY
             scroll?.contentOffset = CGPoint(x: 0, y: topY)
         }
@@ -314,6 +338,8 @@ extension DashboardViewModel {
         
         switch deviceSection {
             
+        case .NavSection:
+            goToSettingVC()
         case .PairedSection:
             if let host = pairedHosts[safe: selectedIndex] {
                 if host.state == .online {

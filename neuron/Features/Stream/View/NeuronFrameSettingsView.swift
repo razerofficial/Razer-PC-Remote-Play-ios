@@ -24,8 +24,8 @@ struct NeuronFrameSettingsView: View {
 
     @ObservedObject var viewModel: NeuronFrameSettingsViewModel
     
-    private let spaceBetweenView = CGFloat(16)
-    private let topPaddingValue = IsIpad() ? CGFloat(75) : CGFloat(35)
+    private let spaceBetweenView = SettingsUtil.shared.getSubViewSpaceBetweenView()
+    private let topPaddingValue = IsIpad() ? CGFloat(35) : CGFloat(35)
     private let PCDisplayStreamingModeItemDefaultWidth: CGFloat = IsIpad() ? 155 : 145
     @SwiftUI.State var remotePlay: Bool = false
     
@@ -113,9 +113,9 @@ struct NeuronFrameSettingsView: View {
     private func scrollToIfNeeded(proxy: ScrollViewProxy, targetID: String) {
         guard let rect = viewPositions[targetID], let visibleRect = getVisibleRect() else { return }
         
-        if isRectMostlyVisible(rect, within: visibleRect) {
+//        if isRectMostlyVisible(rect, within: visibleRect) {
             proxy.scrollTo(targetID, anchor: .center)
-        }
+//        }
     }
 
     private func getVisibleRect() -> CGRect? {
@@ -134,9 +134,9 @@ struct NeuronFrameSettingsView: View {
         let highlighted = viewModel.highlightedUIComponent
         return VStack(alignment: .leading, spacing: 0, content: {
             
-            Text("Display mode".localize().uppercased())
-                .font(.system(size: IsIpad() ? 16 : 14, weight: .medium))
-                .foregroundStyle(Color.SettingText)
+            Text("Video Settings Display Mode".localize())
+                .font(.system(size: 13))
+                .foregroundStyle(Color.white)
                 .padding(.bottom,4)
                 .padding(.leading, spaceBetweenView)
             Spacer()
@@ -145,31 +145,29 @@ struct NeuronFrameSettingsView: View {
                 ForEach(PCDisplayStreamingMode.all, id: \.self) {mode in
                     VStack {
                         Image(highlighted == mode.highlightedUIComponent() ? mode.highlightedImageName() : mode.displayImageName())
-                            .frame(width: 62, height: 40)
-                            .padding(.top, 10)
+                            .frame(width: 62, height: 52)
+                            .padding(.top, 30)
                         Text(mode.displayName().localize())
                             .foregroundColor(Color.white)
-                            .font(.system(size: 16))
+                            .font(.system(size: 13))
                             .padding(.leading, spaceBetweenView)
                             .padding(.trailing, spaceBetweenView)
                             .padding(.top, 10)
                             .lineLimit(2)
                             .multilineTextAlignment(.center)
-                            .frame(height: 50)
+                        Spacer()
                         Image(viewModel.frameSettings.displayMode == mode.rawValue ? "active_profile" : "favorite_nm")
                             .resizable()
                             .frame(width: 22, height: 22)
                             .padding(.bottom, 10)
                     }
-                        .frame(maxWidth: PCDisplayStreamingMode.all.count>2 ? .infinity : PCDisplayStreamingModeItemDefaultWidth)
+                        .frame(maxWidth: PCDisplayStreamingMode.all.count>2 ? .infinity : 135)
+                        .frame(minHeight: 170)
                         .frame(alignment: .leading)
                         .fixedSize(horizontal: false, vertical: true)
                         .background(highlighted == mode.highlightedUIComponent() ? Color.SettingMenuFocus : Color.SettingMenuBG)
                         .autoScrollingWith(id: mode.highlightedUIComponent().description, scrollViewCoordinateSpaceName: scrollViewCoordinateSpaceName, positions: $viewPositions)
-                        .cornerRadius(10, corners: .topLeft)
-                        .cornerRadius(10, corners: .topRight)
-                        .cornerRadius(10, corners: .bottomLeft)
-                        .cornerRadius(10, corners: .bottomRight)
+                        .cornerRadius(26)
                         .onTapGesture {
                             //select mode
                             viewModel.lastVC?.updateLastVCHandel()
@@ -181,7 +179,7 @@ struct NeuronFrameSettingsView: View {
                 }
             }
             Text(viewModel.displayMode.descriptionString().localize())
-                .font(.system(size: 14, weight: .medium))
+                .font(.system(size: 13, weight: .regular))
                 .foregroundStyle(Color.SettingText)
                 .fixedSize(horizontal: false, vertical: true)
                 .lineSpacing(0)
@@ -206,7 +204,7 @@ struct NeuronFrameSettingsView: View {
                     .padding(.top, 6)
                     .padding(.bottom, 6)
             })
-            .padding(.trailing, 10)
+            .padding(.trailing, SettingsUtil.shared.getSubViewSpaceBetweenView())
             .onDataChange(of: viewModel.LimitScreenResolutionTtoSafeArea) { newValue in
                 if newValue == true {
                     viewModel.resolution = .resolutionSafeArea
@@ -240,7 +238,7 @@ struct NeuronFrameSettingsView: View {
                     .padding(.top, 6)
                     .padding(.bottom, 6)
             })
-            .padding(.trailing, 10)
+            .padding(.trailing, SettingsUtil.shared.getSubViewSpaceBetweenView())
             .simultaneousGesture(
                 TapGesture()
                     .onEnded{
@@ -270,16 +268,16 @@ struct NeuronFrameSettingsView: View {
         return VStack(alignment: .leading, spacing: 0, content: {
             
             HStack(content: {
-                Text("Video Bitrate".localize().uppercased())
-                    .font(.system(size: IsIpad() ? 16 : 14, weight: .medium))
-                    .foregroundStyle(Color.SettingText)
+                Text("Video Bitrate".localize())
+                    .font(.system(size: 13, weight: .regular))
+                    .foregroundStyle(Color.white)
                     .padding(.bottom,4)
                     .padding(.leading, spaceBetweenView)
                 
                 Spacer()
                 
                 Text("\(String(format: "%.1f", viewModel.bitrate)) Mbps")
-                    .font(.system(size: IsIpad() ? 16 : 14, weight: .medium))
+                    .font(.system(size: 13, weight: .regular))
                     .foregroundStyle(Color.SettingText)
                     .padding(.bottom,4)
                     .padding(.trailing, spaceBetweenView)
@@ -301,14 +299,11 @@ struct NeuronFrameSettingsView: View {
                     .foregroundColor(.White)
                 Spacer().frame(width: spaceBetweenView)
             }
-            .frame(maxWidth: .infinity, minHeight: 40, maxHeight: .infinity)
+            .frame(maxWidth: .infinity, minHeight: SettingsUtil.shared.getMenuBGHeight(), maxHeight: .infinity)
             .frame(alignment: .leading)
             .fixedSize(horizontal: false, vertical: true)
             .background(isHighlighted ? Color.SettingMenuFocus : Color.SettingMenuBG)
-            .cornerRadius(10, corners: .topLeft)
-            .cornerRadius(10, corners: .topRight)
-            .cornerRadius(10, corners: .bottomLeft)
-            .cornerRadius(10, corners: .bottomRight)
+            .cornerRadius(26)
             .simultaneousGesture(
                 TapGesture()
                     .onEnded{
@@ -335,7 +330,7 @@ struct NeuronFrameSettingsView: View {
                         .padding(.top, 6)
                         .padding(.bottom, 6)
                 })
-                .padding(.trailing, 10)
+                .padding(.trailing, SettingsUtil.shared.getSubViewSpaceBetweenView())
                 .simultaneousGesture(
                     TapGesture()
                         .onEnded{
@@ -345,19 +340,16 @@ struct NeuronFrameSettingsView: View {
                 .onDataChange(of: viewModel.frameSettings.enableHdr) { newValue in
                     viewModel.saveSettings()
                 }
-            }.frame(maxWidth: .infinity, minHeight: 40, maxHeight: .infinity)
+            }.frame(maxWidth: .infinity, minHeight: SettingsUtil.shared.getMenuBGHeight(), maxHeight: .infinity)
                 .frame(alignment: .leading)
                 .fixedSize(horizontal: false, vertical: true)
                 .background(isHighlighted ? Color.SettingMenuFocus : Color.SettingMenuBG)
-                .cornerRadius(10, corners: .topLeft)
-                .cornerRadius(10, corners: .topRight)
-                .cornerRadius(10, corners: .bottomLeft)
-                .cornerRadius(10, corners: .bottomRight)
+                .cornerRadius(26)
             
             Spacer().frame(height:5)
             
-            Text("Enhances visuals with better contrast, brightness, and color range.".localize() + "\n" + "Requires your PC’s connected display to have HDR enabled.".localize())
-                .font(.system(size: IsIpad() ? 16 : 14, weight: .medium))
+            Text("Enhances visuals with better contrast, brightness, and color range. Requires your PC’s connected display to have HDR enabled.".localize())
+                .font(.system(size: 13, weight: .regular))
                 .foregroundStyle(Color.SettingText)
                 .fixedSize(horizontal: false, vertical: true)
                 .lineSpacing(0)
@@ -407,13 +399,10 @@ struct NeuronFrameSettingsView: View {
                     viewModel.saveSettings()
                 }
             }
-            .frame(maxWidth: .infinity, minHeight: 40, maxHeight: .infinity)
+            .frame(maxWidth: .infinity, minHeight: SettingsUtil.shared.getMenuBGHeight(), maxHeight: .infinity)
             .fixedSize(horizontal: false, vertical: true)
             .background(isHighlighted ? Color.SettingMenuFocus : Color.SettingMenuBG)
-            .cornerRadius(10, corners: .topLeft)
-            .cornerRadius(10, corners: .topRight)
-            .cornerRadius(10, corners: .bottomLeft)
-            .cornerRadius(10, corners: .bottomRight)
+            .cornerRadius(26)
             
             Spacer()
                 .frame(height:20)
@@ -426,14 +415,14 @@ struct NeuronFrameSettingsView: View {
         return VStack(alignment: .leading, spacing: 0, content: {
             HStack {
                 Toggle(isOn: $viewModel.MuteHostPC, label: {
-                    Text("Mute host PC's Speakers While Streaming".localize())
+                    Text("Mute PC Speakers While Streaming".localize())
                         .foregroundColor(Color.white)
                         .font(.system(size: 16))
                         .padding(.leading, spaceBetweenView)
                         .padding(.top, 6)
                         .padding(.bottom, 6)
                 })
-                .padding(.trailing, 10)
+                .padding(.trailing, SettingsUtil.shared.getSubViewSpaceBetweenView())
                 .simultaneousGesture(
                     TapGesture()
                         .onEnded{
@@ -445,13 +434,10 @@ struct NeuronFrameSettingsView: View {
                     viewModel.saveSettings()
                 }
             }
-            .frame(maxWidth: .infinity, minHeight: 40, maxHeight: .infinity)
+            .frame(maxWidth: .infinity, minHeight: SettingsUtil.shared.getMenuBGHeight(), maxHeight: .infinity)
             .fixedSize(horizontal: false, vertical: true)
             .background(isHighlighted ? Color.SettingMenuFocus : Color.SettingMenuBG)
-            .cornerRadius(10, corners: .topLeft)
-            .cornerRadius(10, corners: .topRight)
-            .cornerRadius(10, corners: .bottomLeft)
-            .cornerRadius(10, corners: .bottomRight)
+            .cornerRadius(26)
             
             Spacer()
                 .frame(height:20)
@@ -489,18 +475,15 @@ struct NeuronFrameSettingsView: View {
                     viewModel.saveSettings()
                 }
             }
-            .frame(maxWidth: .infinity, minHeight: 40, maxHeight: .infinity)
+            .frame(maxWidth: .infinity, minHeight: SettingsUtil.shared.getMenuBGHeight(), maxHeight: .infinity)
             .fixedSize(horizontal: false, vertical: true)
             .background(isHighlighted ? Color.SettingMenuFocus : Color.SettingMenuBG)
-            .cornerRadius(10, corners: .topLeft)
-            .cornerRadius(10, corners: .topRight)
-            .cornerRadius(10, corners: .bottomLeft)
-            .cornerRadius(10, corners: .bottomRight)
+            .cornerRadius(26)
             
             Spacer().frame(height:5)
             
             Text("Attempt to automatically close games when finished streaming.".localize())
-                .font(.system(size: IsIpad() ? 16 : 14, weight: .medium))
+                .font(.system(size: 13, weight: .regular))
                 .foregroundStyle(Color.SettingText)
                 .fixedSize(horizontal: false, vertical: true)
                 .lineSpacing(0)
@@ -546,13 +529,10 @@ struct NeuronFrameSettingsView: View {
                     viewModel.saveSettings()
                 }
             }
-            .frame(maxWidth: .infinity, minHeight: 40, maxHeight: .infinity)
+            .frame(maxWidth: .infinity, minHeight: SettingsUtil.shared.getMenuBGHeight(), maxHeight: .infinity)
             .fixedSize(horizontal: false, vertical: true)
             .background(isHighlighted ? Color.SettingMenuFocus : Color.SettingMenuBG)
-            .cornerRadius(10, corners: .topLeft)
-            .cornerRadius(10, corners: .topRight)
-            .cornerRadius(10, corners: .bottomLeft)
-            .cornerRadius(10, corners: .bottomRight)
+            .cornerRadius(26)
             
             Spacer()
                 .frame(height:20)
@@ -592,13 +572,10 @@ struct NeuronFrameSettingsView: View {
                     viewModel.saveSettings()
                 }
             }
-            .frame(maxWidth: .infinity, minHeight: 40, maxHeight: .infinity)
+            .frame(maxWidth: .infinity, minHeight: SettingsUtil.shared.getMenuBGHeight(), maxHeight: .infinity)
             .fixedSize(horizontal: false, vertical: true)
             .background(isHighlighted ? Color.SettingMenuFocus : Color.SettingMenuBG)
-            .cornerRadius(10, corners: .topLeft)
-            .cornerRadius(10, corners: .topRight)
-            .cornerRadius(10, corners: .bottomLeft)
-            .cornerRadius(10, corners: .bottomRight)
+            .cornerRadius(26)
             
             Spacer()
                 .frame(height:20)
@@ -609,9 +586,9 @@ struct NeuronFrameSettingsView: View {
     var advancedSettingsTextView: some View {
      
         return VStack(alignment: .leading, spacing:0) {
-            Text("Advanced Settings".localize().uppercased())
-                .font(.system(size: 14, weight: .medium))
-                .foregroundStyle(Color.SettingText)
+            Text("Advances Settings".localize())
+                .font(.system(size: 13, weight: .regular))
+                .foregroundStyle(Color.white)
                 .padding(.bottom,4)
                 .padding(.leading, spaceBetweenView)
             Spacer()
@@ -626,27 +603,27 @@ struct NeuronFrameSettingsView: View {
         return VStack(alignment: .leading, spacing: 0) {
             if viewModel.isNeedShowLimitRefreshRateToggle() && viewModel.isNeedShowLimitScreenResolutionToSafeAreaToggle() {
                 limitRefreshRateToggle
-                    .frame(maxWidth: .infinity, minHeight: 40, maxHeight: .infinity)
+                    .frame(maxWidth: .infinity, minHeight: SettingsUtil.shared.getMenuBGHeight(), maxHeight: .infinity)
                     .frame(alignment: .leading)
                     .fixedSize(horizontal: false, vertical: true)
                     .background(isRefreshRateHighlighted ? Color.SettingMenuFocus : Color.SettingMenuBG)
-                    .cornerRadius(10, corners: .topLeft)
-                    .cornerRadius(10, corners: .topRight)
+                    .cornerRadius(26, corners: .topLeft)
+                    .cornerRadius(26, corners: .topRight)
                 
                 Color.SettingsLine.frame(maxWidth: .infinity).frame(height: 1 / UIScreen.main.scale)
                 
                 LimitScreenResolutionTtoSafeAreaToggle
-                    .frame(maxWidth: .infinity, minHeight: 40, maxHeight: .infinity)
+                    .frame(maxWidth: .infinity, minHeight: SettingsUtil.shared.getMenuBGHeight(), maxHeight: .infinity)
                     .frame(alignment: .leading)
                     .fixedSize(horizontal: false, vertical: true)
                     .background(isSafeAreaHighlighted ? Color.SettingMenuFocus : Color.SettingMenuBG)
-                    .cornerRadius(10, corners: .bottomLeft)
-                    .cornerRadius(10, corners: .bottomRight)
+                    .cornerRadius(26, corners: .bottomLeft)
+                    .cornerRadius(26, corners: .bottomRight)
                 
                 Spacer().frame(height:5)
                 
                 Text("Restricts display size to avoid device's front camera".localize())
-                    .font(.system(size: IsIpad() ? 16 : 14, weight: .medium))
+                    .font(.system(size: 13, weight: .regular))
                     .foregroundStyle(Color.SettingText)
                     .fixedSize(horizontal: false, vertical: true)
                     .lineSpacing(0)
@@ -658,31 +635,25 @@ struct NeuronFrameSettingsView: View {
                 Spacer().frame(height: 20)
             }else if viewModel.isNeedShowLimitRefreshRateToggle() {
                 limitRefreshRateToggle
-                    .frame(maxWidth: .infinity, minHeight: 40, maxHeight: .infinity)
+                    .frame(maxWidth: .infinity, minHeight: SettingsUtil.shared.getMenuBGHeight(), maxHeight: .infinity)
                     .frame(alignment: .leading)
                     .fixedSize(horizontal: false, vertical: true)
                     .background(isRefreshRateHighlighted ? Color.SettingMenuFocus : Color.SettingMenuBG)
-                    .cornerRadius(10, corners: .topLeft)
-                    .cornerRadius(10, corners: .topRight)
-                    .cornerRadius(10, corners: .bottomLeft)
-                    .cornerRadius(10, corners: .bottomRight)
+                    .cornerRadius(26)
                 
                 Spacer().frame(height: 20)
             }else if viewModel.isNeedShowLimitScreenResolutionToSafeAreaToggle() {
                 LimitScreenResolutionTtoSafeAreaToggle
-                    .frame(maxWidth: .infinity, minHeight: 40, maxHeight: .infinity)
+                    .frame(maxWidth: .infinity, minHeight: SettingsUtil.shared.getMenuBGHeight(), maxHeight: .infinity)
                     .frame(alignment: .leading)
                     .fixedSize(horizontal: false, vertical: true)
                     .background(isSafeAreaHighlighted ? Color.SettingMenuFocus : Color.SettingMenuBG)
-                    .cornerRadius(10, corners: .topLeft)
-                    .cornerRadius(10, corners: .topRight)
-                    .cornerRadius(10, corners: .bottomLeft)
-                    .cornerRadius(10, corners: .bottomRight)
+                    .cornerRadius(26)
                 
                 Spacer().frame(height:5)
                 
                 Text("Restricts display size to avoid device's front camera".localize())
-                    .font(.system(size: IsIpad() ? 16 : 14, weight: .medium))
+                    .font(.system(size: 13, weight: .regular))
                     .foregroundStyle(Color.SettingText)
                     .fixedSize(horizontal: false, vertical: true)
                     .lineSpacing(0)
@@ -695,112 +666,6 @@ struct NeuronFrameSettingsView: View {
             }
         }
     }
-    
-    
-//    var advancedSettingsView: some View {
-//        let isRefreshRateHighlighted = viewModel.highlightedUIComponent == .NeuronStreamingSettingsRefreshRateToggle
-//        let isSafeAreaHighlighted = viewModel.highlightedUIComponent == .NeuronStreamingSettingsLimitScreenResolutionToSafeAreaToggle
-//        return VStack(alignment: .leading, spacing: 0, content: {
-//            
-//            Text("Advanced Settings".localize().uppercased())
-//                .font(.system(size: 14, weight: .medium))
-//                .foregroundStyle(Color.SettingText)
-//                .padding(.bottom,4)
-//                .padding(.leading, spaceBetweenView)
-//            Spacer()
-//                .frame(width: 10)
-//            
-//            VStack(alignment: .leading, spacing: 0, content: {
-//                
-//                autoQuitPicker
-//                
-//                Spacer()
-//                    .frame(height: 20)
-//                
-//                if viewModel.isNeedShowLimitRefreshRateToggle() && viewModel.isNeedShowLimitScreenResolutionToSafeAreaToggle() {
-//                    limitRefreshRateToggle
-//                        .frame(maxWidth: .infinity, minHeight: 40, maxHeight: .infinity)
-//                        .frame(alignment: .leading)
-//                        .fixedSize(horizontal: false, vertical: true)
-//                        .background(isRefreshRateHighlighted ? Color.SettingMenuFocus : Color.SettingMenuBG)
-//                        .cornerRadius(10, corners: .topLeft)
-//                        .cornerRadius(10, corners: .topRight)
-//                    
-//                    Color.SettingsLine.frame(maxWidth: .infinity).frame(height: 1 / UIScreen.main.scale)
-//                    
-//                    LimitScreenResolutionTtoSafeAreaToggle
-//                        .frame(maxWidth: .infinity, minHeight: 40, maxHeight: .infinity)
-//                        .frame(alignment: .leading)
-//                        .fixedSize(horizontal: false, vertical: true)
-//                        .background(isSafeAreaHighlighted ? Color.SettingMenuFocus : Color.SettingMenuBG)
-//                        .cornerRadius(10, corners: .bottomLeft)
-//                        .cornerRadius(10, corners: .bottomRight)
-//                    
-//                    Spacer().frame(height:5)
-//        
-//                    Text("Restricts display size to avoid device's front camera".localize())
-//                        .font(.system(size: IsIpad() ? 16 : 14, weight: .medium))
-//                        .foregroundStyle(Color.SettingText)
-//                        .fixedSize(horizontal: false, vertical: true)
-//                        .lineSpacing(0)
-//                        .lineLimit(.max)
-//                        .multilineTextAlignment(.leading)
-//                        .padding(.bottom,4)
-//                        .padding(.leading, spaceBetweenView)
-//                    
-//                    Spacer().frame(height: 10)
-//                }else if viewModel.isNeedShowLimitRefreshRateToggle() {
-//                    limitRefreshRateToggle
-//                        .frame(maxWidth: .infinity, minHeight: 40, maxHeight: .infinity)
-//                        .frame(alignment: .leading)
-//                        .fixedSize(horizontal: false, vertical: true)
-//                        .background(isRefreshRateHighlighted ? Color.SettingMenuFocus : Color.SettingMenuBG)
-//                        .cornerRadius(10, corners: .topLeft)
-//                        .cornerRadius(10, corners: .topRight)
-//                        .cornerRadius(10, corners: .bottomLeft)
-//                        .cornerRadius(10, corners: .bottomRight)
-//                    
-//                    Spacer().frame(height: 10)
-//                }else if viewModel.isNeedShowLimitScreenResolutionToSafeAreaToggle() {
-//                    LimitScreenResolutionTtoSafeAreaToggle
-//                        .frame(maxWidth: .infinity, minHeight: 40, maxHeight: .infinity)
-//                        .frame(alignment: .leading)
-//                        .fixedSize(horizontal: false, vertical: true)
-//                        .background(isSafeAreaHighlighted ? Color.SettingMenuFocus : Color.SettingMenuBG)
-//                        .cornerRadius(10, corners: .topLeft)
-//                        .cornerRadius(10, corners: .topRight)
-//                        .cornerRadius(10, corners: .bottomLeft)
-//                        .cornerRadius(10, corners: .bottomRight)
-//                    
-//                    Spacer().frame(height:5)
-//        
-//                    Text("Restricts display size to avoid device's front camera".localize())
-//                        .font(.system(size: IsIpad() ? 16 : 14, weight: .medium))
-//                        .foregroundStyle(Color.SettingText)
-//                        .fixedSize(horizontal: false, vertical: true)
-//                        .lineSpacing(0)
-//                        .lineLimit(.max)
-//                        .multilineTextAlignment(.leading)
-//                        .padding(.bottom,4)
-//                        .padding(.leading, spaceBetweenView)
-//                    
-//                    Spacer().frame(height: 10)
-//                }
-//            })
-//            
-//            framePacingPicker
-//            
-//            Spacer().frame(height: 20)
-//            
-//            videoEncoderPicker
-//            
-//        })
-//        .frame(
-//            maxWidth: .infinity,
-//            maxHeight: .infinity,
-//            alignment: .topLeading
-//        )
-//    }
     
     
     private func printLog(_ msg:String){
@@ -825,9 +690,4 @@ func IsIpad() -> Bool
         return true
     }
     return false
-    
-    //这两个防范判断不准，不要用
-    //#define is_iPhone (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
-    //
-    //#define is_iPad (UI_USER_INTERFACE_IDIOM()== UIUserInterfaceIdiomPad)
 }

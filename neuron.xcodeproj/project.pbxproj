@@ -21,17 +21,12 @@
 		10172B032CA681B600B29E7B /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10172B022CA681B600B29E7B /* Toast.swift */; };
 		102424392B8390F900493082 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 102424382B8390F900493082 /* libxml2.tbd */; };
 		1024243A2B83910200493082 /* libmoonlight-common.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 10736F402B838DF70003EFD5 /* libmoonlight-common.a */; };
-		1024243B2B8391A300493082 /* libopus.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 10736DCA2B838BD00003EFD5 /* libopus.a */; };
-		1024243C2B8391D400493082 /* libavcodec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 10736DB12B838BD00003EFD5 /* libavcodec.a */; };
-		1024243D2B8391D400493082 /* libavformat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 10736DB22B838BD00003EFD5 /* libavformat.a */; };
-		1024243E2B8391D400493082 /* libavutil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 10736DB02B838BD00003EFD5 /* libavutil.a */; };
 		102424402B8391E300493082 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1024243F2B8391E300493082 /* CoreGraphics.framework */; };
 		102424422B8391F500493082 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 102424412B8391F500493082 /* CoreData.framework */; };
 		102424442B8391FB00493082 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 102424432B8391FB00493082 /* CoreMotion.framework */; };
 		102424462B83920600493082 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 102424452B83920600493082 /* UIKit.framework */; };
 		102424482B83920E00493082 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 102424472B83920E00493082 /* Foundation.framework */; };
 		1024244A2B83921400493082 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 102424492B83921400493082 /* CoreFoundation.framework */; };
-		1024244B2B83922700493082 /* libSDL2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 10736E312B838BD00003EFD5 /* libSDL2.a */; };
 		102DB8B32CE1A85D000594AB /* CustomNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 102DB8B22CE1A85D000594AB /* CustomNavigationBar.swift */; };
 		103D81C62C100C1D003D0FF0 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 103D81C52C100C1D003D0FF0 /* NetworkMonitor.swift */; };
 		10405FC42B91722A002030AE /* CryptoManager+Neuron.m in Sources */ = {isa = PBXBuildFile; fileRef = 10405FC32B91722A002030AE /* CryptoManager+Neuron.m */; };
@@ -95,12 +90,20 @@
 		10736EE22B838BD00003EFD5 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 10736D282B838BD00003EFD5 /* Utils.m */; };
 		10736F352B838BD10003EFD5 /* Launch Screen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 10736EA22B838BD00003EFD5 /* Launch Screen.xib */; };
 		10736F382B838BE10003EFD5 /* X1Kit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10736F372B838BE10003EFD5 /* X1Kit.swift */; };
+		1076419A2E5311F500DF367F /* Font+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107641992E5311F400DF367F /* Font+Extension.swift */; };
 		10772D9E2B8ED3DA00A839D1 /* ShareDataDB.m in Sources */ = {isa = PBXBuildFile; fileRef = 10772D9D2B8ED3DA00A839D1 /* ShareDataDB.m */; };
 		108EE0E82B901AA400094A01 /* RzTemporaryHost.m in Sources */ = {isa = PBXBuildFile; fileRef = 108EE0E72B901AA400094A01 /* RzTemporaryHost.m */; };
 		108EE0EB2B901B0600094A01 /* RzTemporaryApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 108EE0EA2B901B0600094A01 /* RzTemporaryApp.m */; };
 		10C1A2382B9088770081B01D /* AppDelegate+Neuron.m in Sources */ = {isa = PBXBuildFile; fileRef = 10C1A2372B9088770081B01D /* AppDelegate+Neuron.m */; };
 		10D990162B8DDA030023BBC6 /* RzApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 10D990152B8DDA030023BBC6 /* RzApp.m */; };
 		10D9901D2B8DDC820023BBC6 /* RzSwizzling.m in Sources */ = {isa = PBXBuildFile; fileRef = 10D9901C2B8DDC820023BBC6 /* RzSwizzling.m */; };
+		332A62852E7931FB001A4589 /* libavcodec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 332A62822E7931FB001A4589 /* libavcodec.a */; };
+		332A62862E7931FB001A4589 /* libavutil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 332A62832E7931FB001A4589 /* libavutil.a */; };
+		332A62872E7931FB001A4589 /* libavformat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 332A62842E7931FB001A4589 /* libavformat.a */; };
+		332A62892E79320B001A4589 /* libopus.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 332A62882E79320B001A4589 /* libopus.a */; };
+		337A9AEB2E793D220084C3F0 /* libSDL2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 332A62802E7931DD001A4589 /* libSDL2.a */; };
+		338555B62E7950CB005C79EC /* DynamicGridLayoutHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 338555B52E7950CB005C79EC /* DynamicGridLayoutHelper.swift */; };
+		3387D50D2E432F5600C6BF99 /* KeyboardHandlingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3387D50C2E432F5600C6BF99 /* KeyboardHandlingViewController.swift */; };
 		33F79F0D2C9ABDF100535FFC /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 33F79F092C9ABDF100535FFC /* libcrypto.a */; };
 		33F79F0E2C9ABDF100535FFC /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 33F79F0C2C9ABDF100535FFC /* libssl.a */; };
 		3606EDA62C58838000B34526 /* SettingsHostDevicesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3606EDA32C58838000B34526 /* SettingsHostDevicesVC.swift */; };
@@ -157,7 +160,9 @@
 		3689E0672C69AC3900629595 /* ControllerInputTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3689E0612C69AC3900629595 /* ControllerInputTracker.swift */; };
 		3689E0692C6AF94A00629595 /* RZBaseVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3689E0682C6AF94A00629595 /* RZBaseVC.swift */; };
 		3689E06F2C6B0C1500629595 /* RZHandleResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3689E06E2C6B0C1500629595 /* RZHandleResponder.swift */; };
+		36E2E5872D7846EA00689BC0 /* RZLaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 36E2E5862D7846EA00689BC0 /* RZLaunchScreen.xib */; };
 		662A2A892DAF9BD500C1968B /* AutoScrollingUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 662A2A882DAF9BD500C1968B /* AutoScrollingUtils.swift */; };
+		66985EFC2E7A5844002A3B36 /* SettingsUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66985EFB2E7A5844002A3B36 /* SettingsUtils.swift */; };
 		66EAA23B2CC8A90A00E0C414 /* RZStreamFrameSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66EAA23A2CC8A90A00E0C414 /* RZStreamFrameSettingsViewController.swift */; };
 		66EAA23F2CC8D82E00E0C414 /* NeuronFrameSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66EAA23E2CC8D82E00E0C414 /* NeuronFrameSettingsView.swift */; };
 		66EAA2412CC8DD2B00E0C414 /* NeuronFrameSettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66EAA2402CC8DD2B00E0C414 /* NeuronFrameSettingsViewModel.swift */; };
@@ -176,7 +181,6 @@
 		88F408302C7D7A2F00D90373 /* WebVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88F4082F2C7D7A2F00D90373 /* WebVC.swift */; };
 		88FBE80D2C4A176B005B22B3 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 88FBE80C2C4A176B005B22B3 /* Launch Screen.storyboard */; };
 		B50A8BDF2D94F1DF009B78C6 /* NeuronEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50A8BDE2D94F1DF009B78C6 /* NeuronEvent.swift */; };
-		B511E2D72C3248F0000E00C3 /* TutorialViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B511E2D52C3248F0000E00C3 /* TutorialViewController.xib */; };
 		B51D87D52C5B3D2E0006CF68 /* RZWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B51D87D32C5B3D2E0006CF68 /* RZWebViewController.m */; };
 		B51D87D62C5B3D2E0006CF68 /* RZWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B51D87D42C5B3D2E0006CF68 /* RZWebViewController.xib */; };
 		B51D87E12C5C78F90006CF68 /* DiscoveryManager+Neuron.m in Sources */ = {isa = PBXBuildFile; fileRef = B51D87E02C5C78F90006CF68 /* DiscoveryManager+Neuron.m */; };
@@ -186,13 +190,13 @@
 		B560F1A52BFF2FE600F7A6B7 /* RZAboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B560F1A32BFF2FE600F7A6B7 /* RZAboutViewController.m */; };
 		B560F1A62BFF2FE600F7A6B7 /* RZAboutViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B560F1A42BFF2FE600F7A6B7 /* RZAboutViewController.xib */; };
 		B5A2CA572C48B8BA001ED549 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B5A2CA562C48B8BA001ED549 /* GoogleService-Info.plist */; };
+		B5B87EE72E8914DD0039245F /* TutorialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B87EE42E8914D20039245F /* TutorialView.swift */; };
+		B5B87EED2E8A30000039245F /* TutorialViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B87EEC2E8A2FFE0039245F /* TutorialViewModel.swift */; };
 		B5CCFC682D06954100528DBB /* HttpResponse+Neuron.m in Sources */ = {isa = PBXBuildFile; fileRef = B5CCFC672D06954100528DBB /* HttpResponse+Neuron.m */; };
 		B5CCFC792D07F06500528DBB /* RZServerInfoResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = B5CCFC782D07F06500528DBB /* RZServerInfoResponse.m */; };
 		B5EAF2952CB675F70037FD31 /* RZAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5EAF2942CB675F70037FD31 /* RZAlertView.swift */; };
-		B5EB1D162CEC7DBF00EBE416 /* TutorialViewController_iPadMini.xib in Resources */ = {isa = PBXBuildFile; fileRef = B5EB1D132CEC7DBF00EBE416 /* TutorialViewController_iPadMini.xib */; };
 		B5F306A52CCA321D006D9BF9 /* TutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F306A42CCA321C006D9BF9 /* TutorialViewController.swift */; };
 		B5FBDC9A0ED263BA4953FD65 /* Pods_neuronTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C05DC2085FF21EA6E100A3FB /* Pods_neuronTests.framework */; };
-		B5FC2CD52C58900A0076F6E5 /* RZView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5FC2CD42C5890090076F6E5 /* RZView.swift */; };
 		D309BC53A946F613ACA874C9 /* Pods_neuron_neuronUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C69962B5AA550E7B2C30BBD /* Pods_neuron_neuronUITests.framework */; };
 		F2EA3475B5AC23CC577D08E6 /* Pods_neuron.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C4F4043BC1E0AC770D6B395 /* Pods_neuron.framework */; };
 /* End PBXBuildFile section */
@@ -652,6 +656,7 @@
 		10736EA22B838BD00003EFD5 /* Launch Screen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "Launch Screen.xib"; path = "moonlight-ios/Launch Screen.xib"; sourceTree = "<group>"; };
 		10736F372B838BE10003EFD5 /* X1Kit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = X1Kit.swift; sourceTree = "<group>"; };
 		10736F3A2B838DF70003EFD5 /* moonlight-common.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "moonlight-common.xcodeproj"; path = "moonlight-ios/moonlight-common/moonlight-common.xcodeproj"; sourceTree = "<group>"; };
+		107641992E5311F400DF367F /* Font+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Font+Extension.swift"; sourceTree = "<group>"; };
 		10772D9C2B8ED3DA00A839D1 /* ShareDataDB.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShareDataDB.h; sourceTree = "<group>"; };
 		10772D9D2B8ED3DA00A839D1 /* ShareDataDB.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShareDataDB.m; sourceTree = "<group>"; };
 		108EE0E62B901AA400094A01 /* RzTemporaryHost.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RzTemporaryHost.h; sourceTree = "<group>"; };
@@ -665,7 +670,14 @@
 		10D9901B2B8DDC820023BBC6 /* RzSwizzling.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RzSwizzling.h; sourceTree = "<group>"; };
 		10D9901C2B8DDC820023BBC6 /* RzSwizzling.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RzSwizzling.m; sourceTree = "<group>"; };
 		10D990202B8DE0480023BBC6 /* Global-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Global-Prefix.pch"; sourceTree = "<group>"; };
+		332A62802E7931DD001A4589 /* libSDL2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDL2.a; path = "moonlight-ios/libs/SDL2/lib/libSDL2.a"; sourceTree = "<group>"; };
+		332A62822E7931FB001A4589 /* libavcodec.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavcodec.a; path = "moonlight-ios/libs/FFmpeg/lib/libavcodec.a"; sourceTree = "<group>"; };
+		332A62832E7931FB001A4589 /* libavutil.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavutil.a; path = "moonlight-ios/libs/FFmpeg/lib/libavutil.a"; sourceTree = "<group>"; };
+		332A62842E7931FB001A4589 /* libavformat.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavformat.a; path = "moonlight-ios/libs/FFmpeg/lib/libavformat.a"; sourceTree = "<group>"; };
+		332A62882E79320B001A4589 /* libopus.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libopus.a; path = "moonlight-ios/libs/opus/lib/libopus.a"; sourceTree = "<group>"; };
 		337369922C9208120028DD01 /* OpenSSL.xcframework */ = {isa = PBXFileReference; expectedSignature = "AppleDeveloperProgram:67RAULRX93:Marcin Krzyzanowski"; lastKnownFileType = wrapper.xcframework; name = OpenSSL.xcframework; path = "Pods/OpenSSL-Universal/OpenSSL.xcframework"; sourceTree = "<group>"; };
+		338555B52E7950CB005C79EC /* DynamicGridLayoutHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicGridLayoutHelper.swift; sourceTree = "<group>"; };
+		3387D50C2E432F5600C6BF99 /* KeyboardHandlingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardHandlingViewController.swift; sourceTree = "<group>"; };
 		33F79F092C9ABDF100535FFC /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = "moonlight-ios/libs/OpenSSL/lib/libcrypto.a"; sourceTree = "<group>"; };
 		33F79F0C2C9ABDF100535FFC /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = "moonlight-ios/libs/OpenSSL/lib/libssl.a"; sourceTree = "<group>"; };
 		3606EDA32C58838000B34526 /* SettingsHostDevicesVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsHostDevicesVC.swift; sourceTree = "<group>"; };
@@ -723,10 +735,12 @@
 		3689E0612C69AC3900629595 /* ControllerInputTracker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ControllerInputTracker.swift; sourceTree = "<group>"; };
 		3689E0682C6AF94A00629595 /* RZBaseVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RZBaseVC.swift; sourceTree = "<group>"; };
 		3689E06E2C6B0C1500629595 /* RZHandleResponder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RZHandleResponder.swift; sourceTree = "<group>"; };
+		36E2E5862D7846EA00689BC0 /* RZLaunchScreen.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RZLaunchScreen.xib; sourceTree = "<group>"; };
 		3DF4BA7A6D28537340C7F467 /* Pods-neuron.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-neuron.debug.xcconfig"; path = "Target Support Files/Pods-neuron/Pods-neuron.debug.xcconfig"; sourceTree = "<group>"; };
 		4E1D4CE03341AC0376999810 /* Pods-neuron-neuronUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-neuron-neuronUITests.debug.xcconfig"; path = "Target Support Files/Pods-neuron-neuronUITests/Pods-neuron-neuronUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		52FDA172D85F035BC8B23392 /* Pods-neuronTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-neuronTests.debug.xcconfig"; path = "Target Support Files/Pods-neuronTests/Pods-neuronTests.debug.xcconfig"; sourceTree = "<group>"; };
 		662A2A882DAF9BD500C1968B /* AutoScrollingUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoScrollingUtils.swift; sourceTree = "<group>"; };
+		66985EFB2E7A5844002A3B36 /* SettingsUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsUtils.swift; sourceTree = "<group>"; };
 		66EAA23A2CC8A90A00E0C414 /* RZStreamFrameSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RZStreamFrameSettingsViewController.swift; sourceTree = "<group>"; };
 		66EAA23E2CC8D82E00E0C414 /* NeuronFrameSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeuronFrameSettingsView.swift; sourceTree = "<group>"; };
 		66EAA2402CC8DD2B00E0C414 /* NeuronFrameSettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeuronFrameSettingsViewModel.swift; sourceTree = "<group>"; };
@@ -773,7 +787,6 @@
 		88FBE80C2C4A176B005B22B3 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		8D3ECCA76009F8F2A4DAC278 /* Pods-neuronTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-neuronTests.release.xcconfig"; path = "Target Support Files/Pods-neuronTests/Pods-neuronTests.release.xcconfig"; sourceTree = "<group>"; };
 		B50A8BDE2D94F1DF009B78C6 /* NeuronEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeuronEvent.swift; sourceTree = "<group>"; };
-		B511E2D52C3248F0000E00C3 /* TutorialViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TutorialViewController.xib; sourceTree = "<group>"; };
 		B51D87D22C5B3D2E0006CF68 /* RZWebViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RZWebViewController.h; sourceTree = "<group>"; };
 		B51D87D32C5B3D2E0006CF68 /* RZWebViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RZWebViewController.m; sourceTree = "<group>"; };
 		B51D87D42C5B3D2E0006CF68 /* RZWebViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RZWebViewController.xib; sourceTree = "<group>"; };
@@ -787,14 +800,14 @@
 		B560F1A32BFF2FE600F7A6B7 /* RZAboutViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RZAboutViewController.m; sourceTree = "<group>"; };
 		B560F1A42BFF2FE600F7A6B7 /* RZAboutViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RZAboutViewController.xib; sourceTree = "<group>"; };
 		B5A2CA562C48B8BA001ED549 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		B5B87EE42E8914D20039245F /* TutorialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialView.swift; sourceTree = "<group>"; };
+		B5B87EEC2E8A2FFE0039245F /* TutorialViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialViewModel.swift; sourceTree = "<group>"; };
 		B5CCFC662D06954100528DBB /* HttpResponse+Neuron.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "HttpResponse+Neuron.h"; sourceTree = "<group>"; };
 		B5CCFC672D06954100528DBB /* HttpResponse+Neuron.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "HttpResponse+Neuron.m"; sourceTree = "<group>"; };
 		B5CCFC772D07F06500528DBB /* RZServerInfoResponse.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RZServerInfoResponse.h; sourceTree = "<group>"; };
 		B5CCFC782D07F06500528DBB /* RZServerInfoResponse.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RZServerInfoResponse.m; sourceTree = "<group>"; };
 		B5EAF2942CB675F70037FD31 /* RZAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RZAlertView.swift; sourceTree = "<group>"; };
-		B5EB1D132CEC7DBF00EBE416 /* TutorialViewController_iPadMini.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TutorialViewController_iPadMini.xib; sourceTree = "<group>"; };
 		B5F306A42CCA321C006D9BF9 /* TutorialViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialViewController.swift; sourceTree = "<group>"; };
-		B5FC2CD42C5890090076F6E5 /* RZView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RZView.swift; sourceTree = "<group>"; };
 		C05DC2085FF21EA6E100A3FB /* Pods_neuronTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_neuronTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -806,18 +819,18 @@
 				33F79F0D2C9ABDF100535FFC /* libcrypto.a in Frameworks */,
 				33F79F0E2C9ABDF100535FFC /* libssl.a in Frameworks */,
 				102424482B83920E00493082 /* Foundation.framework in Frameworks */,
-				1024244B2B83922700493082 /* libSDL2.a in Frameworks */,
 				1024244A2B83921400493082 /* CoreFoundation.framework in Frameworks */,
 				102424462B83920600493082 /* UIKit.framework in Frameworks */,
 				102424442B8391FB00493082 /* CoreMotion.framework in Frameworks */,
 				102424422B8391F500493082 /* CoreData.framework in Frameworks */,
 				102424402B8391E300493082 /* CoreGraphics.framework in Frameworks */,
-				1024243C2B8391D400493082 /* libavcodec.a in Frameworks */,
-				1024243D2B8391D400493082 /* libavformat.a in Frameworks */,
-				1024243E2B8391D400493082 /* libavutil.a in Frameworks */,
-				1024243B2B8391A300493082 /* libopus.a in Frameworks */,
+				332A62852E7931FB001A4589 /* libavcodec.a in Frameworks */,
+				332A62862E7931FB001A4589 /* libavutil.a in Frameworks */,
+				332A62872E7931FB001A4589 /* libavformat.a in Frameworks */,
+				332A62892E79320B001A4589 /* libopus.a in Frameworks */,
 				1024243A2B83910200493082 /* libmoonlight-common.a in Frameworks */,
 				102424392B8390F900493082 /* libxml2.tbd in Frameworks */,
+				337A9AEB2E793D220084C3F0 /* libSDL2.a in Frameworks */,
 				F2EA3475B5AC23CC577D08E6 /* Pods_neuron.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -932,6 +945,11 @@
 		102424362B8390EF00493082 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				332A62882E79320B001A4589 /* libopus.a */,
+				332A62822E7931FB001A4589 /* libavcodec.a */,
+				332A62842E7931FB001A4589 /* libavformat.a */,
+				332A62832E7931FB001A4589 /* libavutil.a */,
+				332A62802E7931DD001A4589 /* libSDL2.a */,
 				66EAA2472CCA1BE400E0C414 /* SwiftUI.framework */,
 				33F79F092C9ABDF100535FFC /* libcrypto.a */,
 				33F79F0C2C9ABDF100535FFC /* libssl.a */,
@@ -1021,7 +1039,6 @@
 				66EAA2682CCB309400E0C414 /* Neuron-Bridging-Header.h */,
 				10983F482B8F1763004CA821 /* neuron.entitlements */,
 				3689E0622C69AC3900629595 /* ControllerInput */,
-				B5FC2CD32C588FF40076F6E5 /* BaseView */,
 				3652DAED2C5745B300A475CB /* Extensions */,
 				10D9901F2B8DDFA10023BBC6 /* Config */,
 				66EAA2542CCA367300E0C414 /* Modifiers */,
@@ -1034,6 +1051,7 @@
 				10736C7A2B838A170003EFD5 /* Info.plist */,
 				10736C7B2B838A170003EFD5 /* main.m */,
 				88FBE80C2C4A176B005B22B3 /* Launch Screen.storyboard */,
+				36E2E5862D7846EA00689BC0 /* RZLaunchScreen.xib */,
 			);
 			path = neuron;
 			sourceTree = "<group>";
@@ -1759,6 +1777,7 @@
 		10D9900F2B8DD1F10023BBC6 /* Utility */ = {
 			isa = PBXGroup;
 			children = (
+				338555B52E7950CB005C79EC /* DynamicGridLayoutHelper.swift */,
 				88EA975D2D62D6D5003CD63F /* AppStoreReviewHandler.swift */,
 				10172B012CA6819F00B29E7B /* Toast */,
 				10423FEB2C0F58E1000679F8 /* Network */,
@@ -1894,6 +1913,7 @@
 				66EAA2492CCA35FB00E0C414 /* View+Extension.swift */,
 				66EAA25E2CCA36A700E0C414 /* ChangeObserver.swift */,
 				66EAA2602CCA371400E0C414 /* RoundedCorner.swift */,
+				107641992E5311F400DF367F /* Font+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1904,6 +1924,7 @@
 				3652DB122C5780DD00A475CB /* SettingsMenuItem.swift */,
 				36514A8C2C5A1DB5008793A5 /* SettingsRouter.swift */,
 				362B88372CD1CEC200F15F95 /* SettingsRouter+Streaming.swift */,
+				66985EFB2E7A5844002A3B36 /* SettingsUtils.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1938,6 +1959,7 @@
 			children = (
 				3689E05F2C69AC3900629595 /* ButtonEventsConstants.swift */,
 				3689E0602C69AC3900629595 /* ControllerInputDelegate.swift */,
+				3387D50C2E432F5600C6BF99 /* KeyboardHandlingViewController.swift */,
 				3689E0612C69AC3900629595 /* ControllerInputTracker.swift */,
 				3689E06E2C6B0C1500629595 /* RZHandleResponder.swift */,
 			);
@@ -1984,9 +2006,9 @@
 		B511E2D02C3248CF000E00C3 /* Tutorial */ = {
 			isa = PBXGroup;
 			children = (
+				B5B87EE42E8914D20039245F /* TutorialView.swift */,
+				B5B87EEC2E8A2FFE0039245F /* TutorialViewModel.swift */,
 				B5F306A42CCA321C006D9BF9 /* TutorialViewController.swift */,
-				B511E2D52C3248F0000E00C3 /* TutorialViewController.xib */,
-				B5EB1D132CEC7DBF00EBE416 /* TutorialViewController_iPadMini.xib */,
 			);
 			path = Tutorial;
 			sourceTree = "<group>";
@@ -2025,14 +2047,6 @@
 			path = About;
 			sourceTree = "<group>";
 		};
-		B5FC2CD32C588FF40076F6E5 /* BaseView */ = {
-			isa = PBXGroup;
-			children = (
-				B5FC2CD42C5890090076F6E5 /* RZView.swift */,
-			);
-			path = BaseView;
-			sourceTree = "<group>";
-		};
 		D903611D87E527932D6C1D9B /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -2054,6 +2068,7 @@
 			buildConfigurationList = 10736C952B838A170003EFD5 /* Build configuration list for PBXNativeTarget "neuron" */;
 			buildPhases = (
 				54ADFEF67EF427D989DB6C8B /* [CP] Check Pods Manifest.lock */,
+				332A627F2E793142001A4589 /* ShellScript */,
 				29AADE622B870480007584C5 /* ShellScript */,
 				10736C5F2B838A160003EFD5 /* Sources */,
 				10736C602B838A160003EFD5 /* Frameworks */,
@@ -2198,9 +2213,8 @@
 				88E519312C747518002B66F2 /* licenses.html in Resources */,
 				362B88362CD0CEF000F15F95 /* Color.xcassets in Resources */,
 				B560F12E2BFDBDA000F7A6B7 /* StreamFrame.storyboard in Resources */,
+				36E2E5872D7846EA00689BC0 /* RZLaunchScreen.xib in Resources */,
 				88FBE80D2C4A176B005B22B3 /* Launch Screen.storyboard in Resources */,
-				B511E2D72C3248F0000E00C3 /* TutorialViewController.xib in Resources */,
-				B5EB1D162CEC7DBF00EBE416 /* TutorialViewController_iPadMini.xib in Resources */,
 				887C89782CC78EB7006804D0 /* Localizable.strings in Resources */,
 				10736EAD2B838BD00003EFD5 /* InfoPlist.strings in Resources */,
 				362B881F2CD0CD7000F15F95 /* Fonts.bundle in Resources */,
@@ -2266,8 +2280,27 @@
 			shellPath = /bin/sh;
 			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\ncd \"${PROJECT_DIR}\"\n \n#git submodule update --init --recursive --remote\n \n# Check the exit status of the previous command\nif [ $? -ne 0 ]; then\n    echo \"Error: Submodule update failed. Exiting with status code -1.\"\n    exit -1\nfi\n \necho \"Submodule update successful.\"\n";
 		};
+		332A627F2E793142001A4589 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n#!/bin/bash\nset -euo pipefail\n\nROOT=\"$SRCROOT/moonlight-ios/libs\"\n\n# Map Xcode platform -> folder name\ncase \"$PLATFORM_NAME\" in\n  iphoneos)         PLAT=\"iOS\" ;;\n  iphonesimulator)  PLAT=\"iOS-Sim\" ;;\n  appletvos)        PLAT=\"tvOS\" ;;\n  appletvsimulator) PLAT=\"tvOS-Sim\" ;;\n  *) echo \"vvvv Skip: unsupported PLATFORM_NAME=$PLATFORM_NAME\"; exit 0 ;;\nesac\n\necho \"vvvv Selecting libs for $PLATFORM_NAME -> $PLAT , root = $ROOT\"\n\ndo_cp() {\n  local src=\"$1\" dst=\"$2\"\n  if [[ -f \"$src\" ]]; then\n    cp -f \"$src\" \"$dst\"\n    echo \"vvvv copied: $src -> $dst\"\n  else\n    echo \"vvvv WARN: missing $src\"\n  fi\n}\n\n# FFmpeg\ndo_cp \"$ROOT/FFmpeg/lib/$PLAT/libavutil.a\"   \"$ROOT/FFmpeg/lib/libavutil.a\"\ndo_cp \"$ROOT/FFmpeg/lib/$PLAT/libavcodec.a\"  \"$ROOT/FFmpeg/lib/libavcodec.a\"\ndo_cp \"$ROOT/FFmpeg/lib/$PLAT/libavformat.a\" \"$ROOT/FFmpeg/lib/libavformat.a\"\n\n# opus\ndo_cp \"$ROOT/opus/lib/$PLAT/libopus.a\"       \"$ROOT/opus/lib/libopus.a\"\n\n# SDL2\ndo_cp \"$ROOT/SDL2/lib/$PLAT/libSDL2.a\"       \"$ROOT/SDL2/lib/libSDL2.a\"\n\n# OpenSSL\ndo_cp \"$ROOT/OpenSSL/lib/$PLAT/libcrypto.a\"  \"$ROOT/OpenSSL/lib/libcrypto.a\"\ndo_cp \"$ROOT/OpenSSL/lib/$PLAT/libssl.a\"     \"$ROOT/OpenSSL/lib/libssl.a\"\n";
+		};
 		54ADFEF67EF427D989DB6C8B /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -2398,6 +2431,7 @@
 				10736EBE2B838BD00003EFD5 /* HttpResponse.m in Sources */,
 				100024F52C6AFACF009C814D /* SettingsMenuVC+AppEntry.swift in Sources */,
 				3652DAFD2C5745B300A475CB /* UINavigationController+Extension.swift in Sources */,
+				66985EFC2E7A5844002A3B36 /* SettingsUtils.swift in Sources */,
 				362B87EA2CD07AE300F15F95 /* DashboardVC.swift in Sources */,
 				362B87EB2CD07AE300F15F95 /* DashboardViewModel+ControllerInputs.swift in Sources */,
 				362B87EC2CD07AE300F15F95 /* HostListManger.swift in Sources */,
@@ -2421,8 +2455,8 @@
 				362B88012CD0C61100F15F95 /* BlurView.swift in Sources */,
 				10736EC22B838BD00003EFD5 /* AppAssetManager.m in Sources */,
 				10405FC42B91722A002030AE /* CryptoManager+Neuron.m in Sources */,
-				B5FC2CD52C58900A0076F6E5 /* RZView.swift in Sources */,
 				3652DAF22C5745B300A475CB /* Dictionary+Extension.swift in Sources */,
+				3387D50D2E432F5600C6BF99 /* KeyboardHandlingViewController.swift in Sources */,
 				105D24C52C6B02EE00A6B3BD /* RZStreamFrameViewController.m in Sources */,
 				10736EC72B838BD00003EFD5 /* HttpManager.m in Sources */,
 				10736EBC2B838BD00003EFD5 /* WakeOnLanManager.m in Sources */,
@@ -2443,6 +2477,7 @@
 				66EAA2412CC8DD2B00E0C414 /* NeuronFrameSettingsViewModel.swift in Sources */,
 				108EE0EB2B901B0600094A01 /* RzTemporaryApp.m in Sources */,
 				10736EB02B838BD00003EFD5 /* HapticContext.m in Sources */,
+				1076419A2E5311F500DF367F /* Font+Extension.swift in Sources */,
 				3652DB002C5745B300A475CB /* UIViewController+Extension.swift in Sources */,
 				10736EB72B838BD00003EFD5 /* KeyboardSupport.m in Sources */,
 				10736EA52B838BD00003EFD5 /* TemporaryApp.m in Sources */,
@@ -2479,6 +2514,7 @@
 				36514A9C2C5A1EC1008793A5 /* SettingsHostMenuVC.swift in Sources */,
 				10D990162B8DDA030023BBC6 /* RzApp.m in Sources */,
 				10736EC12B838BD00003EFD5 /* MDNSManager.m in Sources */,
+				338555B62E7950CB005C79EC /* DynamicGridLayoutHelper.swift in Sources */,
 				10172ACA2CA4118800B29E7B /* NetLatency.m in Sources */,
 				3652DAF02C5745B300A475CB /* Data+Extension.swift in Sources */,
 				10772D9E2B8ED3DA00A839D1 /* ShareDataDB.m in Sources */,
@@ -2492,6 +2528,7 @@
 				10736EB12B838BD00003EFD5 /* KeyboardInputField.m in Sources */,
 				362B87FB2CD0BE8500F15F95 /* BottomMenuView.swift in Sources */,
 				3652DB112C57798200A475CB /* Color+Extension.swift in Sources */,
+				B5B87EED2E8A30000039245F /* TutorialViewModel.swift in Sources */,
 				10736ED32B838BD00003EFD5 /* AppDelegate.m in Sources */,
 				3652DAFA2C5745B300A475CB /* UIApplication+Extension.swift in Sources */,
 				10736ED02B838BD00003EFD5 /* SWRevealViewController.m in Sources */,
@@ -2515,6 +2552,7 @@
 				10C1A2382B9088770081B01D /* AppDelegate+Neuron.m in Sources */,
 				10736EAE2B838BD00003EFD5 /* ComputerScrollView.m in Sources */,
 				10736EC52B838BD00003EFD5 /* AppListResponse.m in Sources */,
+				B5B87EE72E8914DD0039245F /* TutorialView.swift in Sources */,
 				10423FEA2C0F57D7000679F8 /* RzLocalNetworkPermissionService.swift in Sources */,
 				10736C7C2B838A170003EFD5 /* main.m in Sources */,
 				10172A522CA3F3D100B29E7B /* ExtraConfig.m in Sources */,
@@ -2735,7 +2773,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = neuron/neuron.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 201;
+				CURRENT_PROJECT_VERSION = 219;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = R2H967U7J8;
@@ -2777,17 +2815,19 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "Remote Play";
 				INFOPLIST_KEY_GCSupportsControllerUserInteraction = YES;
 				INFOPLIST_KEY_GCSupportsGameMode = YES;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.games";
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Bluetooth access allows Razer PC Remote Play to connect to Citrix X1 mice.";
 				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "Bluetooth access allows Razer PC Remote Play to connect to Citrix X1 mice.";
 				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Razer PC Remote Play uses the local network to connect to your gaming PC for streaming.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
 				INFOPLIST_KEY_UIMainStoryboardFile = "";
 				INFOPLIST_KEY_UIRequiredDeviceCapabilities = armv7;
-				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UIRequiresFullScreen = NO;
 				INFOPLIST_KEY_UIStatusBarHidden = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationLandscapeRight;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2795,15 +2835,18 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/moonlight-ios/libs/FFmpeg/lib/iOS",
+					"$(PROJECT_DIR)/moonlight-ios/libs/FFmpeg/lib",
 					"$(PROJECT_DIR)/moonlight-ios/libs/FFmpeg/lib/iOS-Sim",
-					"$(PROJECT_DIR)/moonlight-ios/libs/opus/lib/iOS",
-					"$(PROJECT_DIR)/moonlight-ios/libs/SDL2/lib/iOS",
+					"$(PROJECT_DIR)/moonlight-ios/libs/opus/lib",
+					"$(PROJECT_DIR)/moonlight-ios/libs/SDL2/lib",
 					"$(PROJECT_DIR)/moonlight-ios/libs/SDL2/lib/iOS-Sim",
 					"$(PROJECT_DIR)/moonlight-ios/libs/OpenSSL/lib/",
 					"$(PROJECT_DIR)/moonlight-ios/libs/OpenSSL/lib",
+					"$(PROJECT_DIR)/moonlight-ios/libs/SDL2/lib",
+					"$(PROJECT_DIR)/moonlight-ios/libs/FFmpeg/lib",
+					"$(PROJECT_DIR)/moonlight-ios/libs/opus/lib",
 				);
-				MARKETING_VERSION = 2.0.0;
+				MARKETING_VERSION = 2.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.razer.neuron;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -2822,7 +2865,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = neuron/neuron.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 201;
+				CURRENT_PROJECT_VERSION = 219;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = R2H967U7J8;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
@@ -2839,17 +2882,19 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "Remote Play";
 				INFOPLIST_KEY_GCSupportsControllerUserInteraction = YES;
 				INFOPLIST_KEY_GCSupportsGameMode = YES;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.games";
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Bluetooth access allows Razer PC Remote Play to connect to Citrix X1 mice.";
 				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "Bluetooth access allows Razer PC Remote Play to connect to Citrix X1 mice.";
 				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Razer PC Remote Play uses the local network to connect to your gaming PC for streaming.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
 				INFOPLIST_KEY_UIMainStoryboardFile = "";
 				INFOPLIST_KEY_UIRequiredDeviceCapabilities = armv7;
-				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UIRequiresFullScreen = NO;
 				INFOPLIST_KEY_UIStatusBarHidden = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationLandscapeRight;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2865,8 +2910,11 @@
 					"$(PROJECT_DIR)/moonlight-ios/libs/OpenSSL/lib/",
 					"$(PROJECT_DIR)/moonlight-ios/libs/FFmpeg/lib/iOS",
 					"$(PROJECT_DIR)/moonlight-ios/libs/OpenSSL/lib",
+					"$(PROJECT_DIR)/moonlight-ios/libs/SDL2/lib",
+					"$(PROJECT_DIR)/moonlight-ios/libs/FFmpeg/lib",
+					"$(PROJECT_DIR)/moonlight-ios/libs/opus/lib",
 				);
-				MARKETING_VERSION = 2.0.0;
+				MARKETING_VERSION = 2.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.razer.neuron;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

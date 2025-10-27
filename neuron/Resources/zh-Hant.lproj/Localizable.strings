@@ -25,7 +25,7 @@
 "Your PC will create a virtual display matching your [iPhone/iPad]’s resolution and refresh rate of %1$s at %2$sHz and stream it to your [iPhone/iPad].\n\nAny screen connected to your PC will be temporarily disabled while streaming." = "你的 PC 將會建立一個符合 [iPhone/iPad] 解析度和更新率（%1$s @ %2$sHz）的虛擬顯示器，並串流至你的 [iPhone/iPad]。\n\n串流時，所有連接至 PC 的螢幕都將暫時停用。";
 "Video Bitrate" = "視訊位元率";
 "Touch Screen Control" = "觸控螢幕控制";
-"Your PC’s connected display will be streamed to your [iPhone/iPad] " = "會將連接至 PC 的顯示內容串流到你的 [iPhone/iPad] 上";
+"Your PC’s connected display will be streamed to your [iPhone/iPad]." = "會將連接至 PC 的顯示內容串流到你的 [iPhone/iPad] 上。";
 "Enhances visuals with better contrast, brightness, and color range." = "強化視覺效果，使用更優異的對比度、亮度和色彩範圍。";
 "Virtual Trackpad" = "虛擬觸控板";
 "Direct Touch" = "直接觸控";
@@ -50,6 +50,8 @@
 "Input PC IP address" = "輸入 PC IP 位址";
 "Pairing Request" = "配對要求";
 "Enter the code on \"%@\" to complete pairing with your device.\n\nPin Code" = "在 \"%@\" 上輸入此代碼，以完成裝置配對。\n\nPIN 碼";
+"Enter the code on \"%@\" to complete pairing with your device." = "在 \"%@\" 上輸入此代碼，以完成裝置配對。";
+"Pin Code" = "PIN 碼";
 "Remote Play" = "遠端遊玩";
 "Unpair" = "取消配對";
 "Pairing Failed" = "配對失敗";
@@ -147,6 +149,7 @@
 "Local Network" = "本地網路";
 "Enable seamless streaming between your PC and Nexus." = "在 PC 和Nexus間啟用順暢串流。";
 "ALLOW" = "允許";
+"Allow" = "允許";
 "Done" = "完成";
 "Home" = "首頁";
 "Download" = "下載";
@@ -215,3 +218,11 @@
 "Streaming session in progress" = "串流工作階段正在進行中";
 // 20250602 BIA-1856 miss string
 "Replace" = "取代";
+//20250912 AI translation
+"Stream PC games from your computer to your [iPhone/iPad]." = "從電腦串流 PC 遊戲到您的[iPhone/iPad]。";
+"Video Settings Display Mode" = "影像設定顯示模式";
+"Enhances visuals with better contrast, brightness, and color range. Requires your PC’s connected display to have HDR enabled." = "提升對比、亮度與色彩範圍。需確保您的電腦顯示器已啟用 HDR。";
+"Mute PC Speakers While Streaming" = "串流時靜音電腦喇叭";
+"Advances Settings" = "進階設定";
+"Edit Profile" = "編輯個人資料";
+"Computer" = "電腦";

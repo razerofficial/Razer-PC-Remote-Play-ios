@@ -25,7 +25,7 @@
 "Your PC will create a virtual display matching your [iPhone/iPad]’s resolution and refresh rate of %1$s at %2$sHz and stream it to your [iPhone/iPad].\n\nAny screen connected to your PC will be temporarily disabled while streaming." = "Your PC will create a virtual display matching your [iPhone/iPad]’s resolution and refresh rate of %1$s at %2$sHz and stream it to your [iPhone/iPad].\n\nAny screen connected to your PC will be temporarily disabled while streaming.";
 "Video Bitrate" = "Video Bitrate";
 "Touch Screen Control" = "Touch Screen Control";
-"Your PC’s connected display will be streamed to your [iPhone/iPad] " = "Your PC’s connected display will be streamed to your [iPhone/iPad] ";
+"Your PC’s connected display will be streamed to your [iPhone/iPad]." = "Your PC’s connected display will be streamed to your [iPhone/iPad].";
 "Enhances visuals with better contrast, brightness, and color range." = "Enhances visuals with better contrast, brightness, and color range.";
 "Virtual Trackpad" = "Virtual Trackpad";
 "Direct Touch" = "Direct Touch";
@@ -50,6 +50,8 @@
 "Input PC IP address" = "Input PC IP address";
 "Pairing Request" = "Pairing Request";
 "Enter the code on \"%@\" to complete pairing with your device.\n\nPin Code" = "Enter the code on \"%@\" to complete pairing with your device.\n\nPin Code";
+"Enter the code on \"%@\" to complete pairing with your device." = "Enter the code on \"%@\" to complete pairing with your device.";
+"Pin Code" = "Pin Code";
 "Remote Play" = "Remote Play";
 "Unpair" = "Unpair";
 "Pairing Failed" = "Pairing Failed";
@@ -147,6 +149,7 @@
 "Local Network" = "Local Network";
 "Enable seamless streaming between your PC and Nexus." = "Enable seamless streaming between your PC and Nexus.";
 "ALLOW" = "ALLOW";
+"Allow" = "Allow";
 "Done" = "Done";
 "Home" = "Home";
 "Download" = "Download";
@@ -216,3 +219,11 @@
 "Streaming session in progress" = "Streaming session in progress";
 // 20250602 BIA-1856 miss string
 "Replace" = "Replace";
+//20250912 AI translation
+"Stream PC games from your computer to your [iPhone/iPad]." = "Stream PC games from your computer to your [iPhone/iPad].";
+"Video Settings Display Mode" = "Video Settings Display Mode";
+"Enhances visuals with better contrast, brightness, and color range. Requires your PC’s connected display to have HDR enabled." = "Enhances visuals with better contrast, brightness, and color range. Requires your PC’s connected display to have HDR enabled.";
+"Mute PC Speakers While Streaming" = "Mute PC Speakers While Streaming";
+"Advances Settings" = "Advances Settings";
+"Edit Profile" = "Edit Profile";
+"Computer" = "Computer";

@@ -333,7 +333,7 @@ enum PCDisplayStreamingMode: Int, Codable {
             return "Separate Screen"
         case .DeviceOptimized:
             let deviceString = UIDevice.current.userInterfaceIdiom == .pad ? "iPad" : "iPhone"
-            return "[iPhone/iPad] Optimized".localize().kStringByReplaceString(replaceStr: "[iPhone/iPad]", willReplaceStr: deviceString+"\n")
+            return "[iPhone/iPad] Optimized".localize().kStringByReplaceString(replaceStr: "[iPhone/iPad]", willReplaceStr: deviceString)
         }
     }
     
@@ -374,7 +374,7 @@ enum PCDisplayStreamingMode: Int, Codable {
     func descriptionString() -> String {
         switch self {
         case .DuplicatePCDisplayMode:
-            return "Your PC’s connected display will be streamed to your [iPhone/iPad] ".localize().kStringByReplaceString(replaceStr: "[iPhone/iPad]", willReplaceStr: getCurrentDeviceTypeString())
+            return "Your PC’s connected display will be streamed to your [iPhone/iPad].".localize().kStringByReplaceString(replaceStr: "[iPhone/iPad]", willReplaceStr: getCurrentDeviceTypeString())
         case .SeparateScreenMode:
             return ""
         case .DeviceOptimized:

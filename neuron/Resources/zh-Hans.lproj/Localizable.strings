@@ -25,7 +25,7 @@
 "Your PC will create a virtual display matching your [iPhone/iPad]’s resolution and refresh rate of %1$s at %2$sHz and stream it to your [iPhone/iPad].\n\nAny screen connected to your PC will be temporarily disabled while streaming." = "电脑将创建一个与 [iPhone/iPad] 的分辨率和刷新率（%1$s，%2$sHz）相匹配的虚拟屏幕，并将其串流到 [iPhone/iPad] 上。\n\n在串流时，与电脑连接的所有显示器都将被暂时禁用。";
 "Video Bitrate" = "视频码率";
 "Touch Screen Control" = "触摸屏控制";
-"Your PC’s connected display will be streamed to your [iPhone/iPad] " = "电脑所连接的显示器将串流到你的 [iPhone/iPad] 上";
+"Your PC’s connected display will be streamed to your [iPhone/iPad]." = "电脑所连接的显示器将串流到你的 [iPhone/iPad] 上。";
 "Enhances visuals with better contrast, brightness, and color range." = "通过更好的对比度、亮度和色彩范围来增强视觉效果。";
 "Virtual Trackpad" = "虚拟触控板";
 "Direct Touch" = "直接接触";
@@ -50,6 +50,8 @@
 "Input PC IP address" = "输入电脑 IP 地址";
 "Pairing Request" = "配对要求";
 "Enter the code on \"%@\" to complete pairing with your device.\n\nPin Code" = "输入 \"%@\" 上的代码，完成与设备的配对。\n\nPIN 码";
+"Enter the code on \"%@\" to complete pairing with your device." = "输入 \"%@\" 上的代码，完成与设备的配对。";
+"Pin Code" = "PIN 码";
 "Remote Play" = "远程畅玩";
 "Unpair" = "取消配对";
 "Pairing Failed" = "配对失败";
@@ -147,6 +149,7 @@
 "Local Network" = "本地网络";
 "Enable seamless streaming between your PC and Nexus." = "在电脑和Nexus之间实现无缝串流。";
 "ALLOW" = "允许";
+"Allow" = "允许";
 "Done" = "完成";
 "Home" = "主页";
 "Download" = "下载";
@@ -215,3 +218,11 @@
 "Streaming session in progress" = "正在串流中";
 // 20250602 BIA-1856 miss string
 "Replace" = "替换";
+//20250912 AI translation
+"Stream PC games from your computer to your [iPhone/iPad]." = "将电脑上的PC游戏串流到您的[iPhone/iPad]。";
+"Video Settings Display Mode" = "视频设置显示模式";
+"Enhances visuals with better contrast, brightness, and color range. Requires your PC’s connected display to have HDR enabled." = "提升画面对比度、亮度和色彩范围。需要您的电脑显示器已启用HDR。";
+"Mute PC Speakers While Streaming" = "串流时静音电脑扬声器";
+"Advances Settings" = "高级设置";
+"Edit Profile" = "编辑个人资料";
+"Computer" = "电脑";

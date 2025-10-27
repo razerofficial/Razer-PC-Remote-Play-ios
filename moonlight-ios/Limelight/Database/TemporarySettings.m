@@ -8,6 +8,9 @@
 
 #import "TemporarySettings.h"
 #import "OnScreenControls.h"
+#import "RzUtils.h"
+#import <Foundation/Foundation.h>
+#import "Settings+CoreDataClass.h"
 
 @implementation TemporarySettings
 
@@ -71,8 +74,14 @@
 #else
     self.bitrate = settings.bitrate;
     self.framerate = settings.framerate;
-    self.height = settings.height;
-    self.width = settings.width;
+    // swap width and height for portrait mode
+    if ([RzUtils isPortrait]) {
+        self.height = [NSNumber numberWithInteger:MAX([settings.height intValue], [settings.width intValue])];
+        self.width = [NSNumber numberWithInteger:MIN([settings.height intValue], [settings.width intValue])];
+    } else {
+        self.height = [NSNumber numberWithInteger:MIN([settings.height intValue], [settings.width intValue])];
+        self.width = [NSNumber numberWithInteger:MAX([settings.height intValue], [settings.width intValue])];
+    }
     self.audioConfig = settings.audioConfig;
     self.preferredCodec = settings.preferredCodec;
     self.useFramePacing = settings.useFramePacing;

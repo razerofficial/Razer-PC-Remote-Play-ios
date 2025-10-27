@@ -35,3 +35,25 @@ struct BlurView: UIViewRepresentable {
 //        BlurView(style: .light)
 //    }
 //}
+
+struct GlassEffectView : View {
+    
+    var sizeWidth:CGFloat = .infinity
+    var sizeHeight:CGFloat = .infinity
+    var radius:CGFloat = 1.0
+    var color:Color = Color.black.opacity(0.2)
+    
+    var body: some View {
+        Button.init(action: {
+            
+        }, label: {
+            color.frame(width:sizeWidth,height:sizeHeight, alignment: .center)
+                .compatibleGlassEffect(radius: radius)
+        })
+        //.compatibleGlassEffect(radius: radius)
+        .cornerRadius(radius)
+        .clipped()
+        .disabled(true)
+        .animation(.none)
+    }
+}

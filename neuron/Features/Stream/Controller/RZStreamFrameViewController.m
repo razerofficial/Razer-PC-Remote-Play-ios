@@ -16,6 +16,7 @@
  */
 
 #import "RZStreamFrameViewController.h"
+#include <Foundation/NSObjCRuntime.h>
 #import "StreamLoadingView.h"
 #import "RzUtils.h"
 #import "RzApp.h"
@@ -23,6 +24,8 @@
 #include <VideoToolbox/VideoToolbox.h>
 #import "ServerInfoResponse.h"
 #import "Moonlight-Swift.h"
+#import "RzUtils.h"
+#import "Connection.h"
 
 typedef enum : NSUInteger {
     Origin = 0,
@@ -33,15 +36,24 @@ typedef enum : NSUInteger {
 
 @interface RZStreamFrameViewController ()
 @property (weak, nonatomic) StreamLoadingView *loadingView;
+@property (strong, nonatomic) UIView *loadingViewBg;
 
 // For showing customized toast
-@property (strong, nonatomic) UIView *containerView;
+@property (strong, nonatomic) UIView *toastContainerView;
 @property (strong, nonatomic) UITextView *textView;
 @property (strong, nonatomic) UIImageView *iconView;
 
 @property (strong, nonatomic) UILabel *debugMessageLabel;
-
 @property (strong, nonatomic) UIVisualEffectView *blurView;
+
+// root container to hold ALL views and scale as a whole
+@property (strong, nonatomic) UIView *rootContainerView;
+@property (assign, nonatomic) CGSize lastScaleSize;
+// Track the orientation when the controller was first loaded (kept for reference)
+@property (assign, nonatomic) BOOL initialPortrait;
+
+- (void)storePCResolutionWidth:(CGFloat)width height:(CGFloat)height withLogMessage:(NSString *)message;
+
 @end
 
 @implementation RZStreamFrameViewController {
@@ -50,33 +62,115 @@ typedef enum : NSUInteger {
     NSString *errorCodeRegister;
     long long startStreamingTime;
 }
+  bool isNeedUpdateDisplayLayer = false;
+  bool lastOrientationIsPortrait = false;
+  long displayMode = 0;
 
-@class AppStoreReviewHandler;
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        _initialPortrait = NO;
+    }
+    return self;
+}
+
+- (CGSize)nativeScreenSize {
+    CGSize screenSize = UIScreen.mainScreen.bounds.size;
+    int width  = (int)screenSize.width;
+    int height = (int)screenSize.height;
+    NSLog(@"[RZStream][nativeScreenSize] _initialPortrait: %d, streamWidth: %d, streamHeight: %d\n", _initialPortrait, width, height);
+    return (CGSize){width, height};
+}
+
+// Calculate aspect ratio fit size for given content size within screen bounds
+- (CGSize)calculateAspectFitSize:(CGSize)contentSize screenSize:(CGSize)screenSize {
+    if (contentSize.width <= 0 || contentSize.height <= 0 || screenSize.width <= 0 || screenSize.height <= 0) {
+        return screenSize;
+    }
+
+    CGFloat contentAspectRatio = contentSize.width / contentSize.height;
+    CGFloat screenAspectRatio = screenSize.width / screenSize.height;
+    CGFloat fitWidth, fitHeight;
+
+    if (contentAspectRatio > screenAspectRatio) {
+        // Content is wider than screen, fit to width
+        fitWidth = screenSize.width;
+        fitHeight = screenSize.width / contentAspectRatio;
+    } else {
+        // Content is taller than screen, fit to height
+        fitHeight = screenSize.height;
+        fitWidth = screenSize.height * contentAspectRatio;
+    }
+
+    NSLog(@"[RZStream][calculateAspectFitSize] contentSize: %@, screenSize: %@, fitSize: %@",
+          NSStringFromCGSize(contentSize),
+          NSStringFromCGSize(screenSize),
+          NSStringFromCGSize(CGSizeMake(fitWidth, fitHeight)));
+
+    return CGSizeMake(fitWidth, fitHeight);
+}
+
+// retrieve stream size based on configuration and orientation
+- (CGSize)nativeContentSizeForScreenSize:(CGSize)currentScreenSize {
+    TemporarySettings *settings = [self valueForKey:@   "_settings"];
+    // long displayMode = [[ShareDataDB shared] readFrameSettings].displayMode;
+    
+    if (displayMode == 0) {   // 0: Duplicate PC Display
+        return [self duplicateModeContentSizeForScreenSize:currentScreenSize];
+    } else {                  // 1: Seperate Display, 2: Virtual Display (iPhone Optimized)
+        return [self optimizedModeContentSizeForScreenSize:currentScreenSize];
+    }
+}
+
+// iPhone Optimized mode: should fill the whole screen
+- (CGSize)optimizedModeContentSizeForScreenSize:(CGSize)currentScreenSize {
+    NSLog(@"[RZStream][optimizedMode] iPhone Optimized mode, using full screen size: %f x %f", currentScreenSize.width, currentScreenSize.height);
+    return currentScreenSize;  // return the current screen size
+}
+
+// Duplicate PC Display mode: should scale the PC display to fit the screen
+- (CGSize)duplicateModeContentSizeForScreenSize:(CGSize)currentScreenSize {
+    TemporarySettings *settings = [self valueForKey:@"_settings"];
+    int streamWidth = [settings.hostWidth intValue];
+    int streamHeight = [settings.hostHeight intValue];
+    
+    // calculate the aspect fit size
+    CGSize adjustedSize = [self calculateAspectFitSize:CGSizeMake(streamWidth, streamHeight) screenSize:currentScreenSize];
+    NSLog(@"[RZStream][duplicateMode] Duplicate PC Display mode, host x %d y: %d, adjustedSize: %f x %f", streamWidth, streamHeight);
+    return adjustedSize;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    _loadingView = (StreamLoadingView *) [[NSBundle mainBundle] loadNibNamed:@"StreamLoadingView" owner:self options:nil].firstObject;
-    _loadingView.frame = [[UIScreen mainScreen] bounds];
-    [self.view addSubview:self.loadingView];
-//    _shouldReturnToNexus = YES;
-    
-    //BIA-1387, remove streaming view zoom action
-    UIScrollView *scrollView = [self valueForKey:@"_scrollView"];
-    if (scrollView) {
-        NSLog(@"Accessed _scrollView during initialization");
-        scrollView.minimumZoomScale = 1.0;
-        scrollView.maximumZoomScale = 1.0;
-    }
+
+    self.lastScaleSize = CGSizeZero;
+    self.initialPortrait = [RzUtils isPortrait];
+    lastOrientationIsPortrait = self.initialPortrait;
+    displayMode = [[ShareDataDB shared] readFrameSettings].displayMode;
+    NSLog(@"[RZStream] Initial orientation: %s\n", self.initialPortrait ? "Portrait" : "Landscape");
+
+    // Remove parent class default subviews to avoid resize inconsistencies
+    [self removeBaseSubviews];
+    // add all view to root container
+    [self setupUI];
+    [self layoutStreamViews];
 
     errorCodeRegister = @"";
     
     //recode start streaming event
-    TemporarySettings *_settings = [self valueForKey:@"_settings"];
-    NSDictionary *dimension = @{ @"neuron_app_version ": [RzUtils getAppVersion],
-                                 @"display_mode": _settings.displayMode==0 ? @"Duplicate PC Display" : @"iPhone Optimized",
-                                 @"negotiated_res": [NSString stringWithFormat:@"%@x%@", _settings.width, _settings.height] ,
-                                 @"refresh_rate": [NSString stringWithFormat:@"%@", _settings.framerate] };
     NSString *gameName = ShareDataDB.shared.currentLaunchGame.name ?: @"Desktop";
+    TemporarySettings *_settings = [self valueForKey:@"_settings"];
+    int32_t newWidth = [_settings.width intValue];
+    int32_t newHeight = [_settings.height intValue];
+    if(_initialPortrait) {
+        newWidth = [_settings.height intValue];
+        newHeight = [_settings.width intValue];
+    }
+    NSDictionary *dimension = @{@"pc_app_name": gameName,
+                                @"neuron_app_version": [RzUtils getAppVersion],
+                                @"display_mode": _settings.displayMode==0 ? @"Duplicate PC Display" : @"iPhone Optimized",
+                                @"negotiated_res": [NSString stringWithFormat:@"%@x%@", @(newWidth), @(newHeight)],
+                                @"refresh_rate": [NSString stringWithFormat:@"%@", _settings.framerate]};
     NeuronEvent *event = [NeuronEvent createEventWithEventAction:@"neuron_stream_started" eventLabel:gameName dimension:dimension];
     [[ShareDataDB shared] writeNeuronEvent:event];
     startStreamingTime = (long long)([[NSDate date] timeIntervalSince1970] * 1000);
@@ -97,18 +191,31 @@ typedef enum : NSUInteger {
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     
+    NSString *gameName = ShareDataDB.shared.currentLaunchGame.name ?: @"Desktop";
     long long durationMs = (long long)([[NSDate date] timeIntervalSince1970] * 1000)-startStreamingTime;
     TemporarySettings *_settings = [self valueForKey:@"_settings"];
-    NSDictionary *dimension = @{ @"neuron_app_version ": [RzUtils getAppVersion],
+    int32_t newWidth = [_settings.width intValue];
+    int32_t newHeight = [_settings.height intValue];
+    if(_initialPortrait) {
+        newWidth = [_settings.height intValue];
+        newHeight = [_settings.width intValue];
+    }
+    NSDictionary *dimension = @{ @"pc_app_name": gameName,
+                                 @"neuron_app_version": [RzUtils getAppVersion],
                                  @"display_mode": _settings.displayMode==0 ? @"Duplicate PC Display" : @"iPhone Optimized",
-                                 @"negotiated_res": [NSString stringWithFormat:@"%@x%@", _settings.height, _settings.width] ,
+                                 @"negotiated_res": [NSString stringWithFormat:@"%@x%@", @(newHeight), @(newWidth)],
                                  @"refresh_rate": [NSString stringWithFormat:@"%@", _settings.framerate],
                                  @"total_duration_ms": [NSString stringWithFormat:@"%lld", durationMs]};
-    NSString *gameName = ShareDataDB.shared.currentLaunchGame.name ?: @"Desktop";
     NeuronEvent *event = [NeuronEvent createEventWithEventAction:@"neuron_stream_ended" eventLabel:gameName dimension:dimension];
     [[ShareDataDB shared] writeNeuronEvent:event];
     
     [[ShareDataDB shared] resetCurrentLaunchGameData];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    NSLog(@"[RZStream] viewDidAppear: bounds %fx%f\n", self.view.bounds.size.width, self.view.bounds.size.height);
+    [self updateViewScale:self.view.bounds.size];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -130,8 +237,184 @@ typedef enum : NSUInteger {
     isCancelStreamingRetry = true;
 }
 
-- (BOOL)prefersHomeIndicatorAutoHidden {
-    return true;
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    [self layoutStreamViews];                       // config layout again
+    NSLog(@"[RZStream] viewDidLayoutSubviews: bounds %fx%f\n", self.view.bounds.size.width, self.view.bounds.size.height);
+    [self updateViewScale:self.view.bounds.size];   // make sure view scale according to latest bounds
+}
+
+// Animate scale together with rotation/resize
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    NSLog(@"[RZStream] viewWillTransitionToSize: new size %fx%f\n", size.width, size.height);
+    [self checkNeedDisplayLayerUpdate:size];
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        [self updateViewScale:size];
+        // Update video renderer display layer when orientation changes in 
+        // duplicate portrait<->landscape mode for preventing incorrect stream content display size
+        if (isNeedUpdateDisplayLayer) {
+            VideoDecoderRenderer *renderer = [Connection getCurrentRenderer];
+            if (renderer) {
+                NSLog(@"[RZStream] Updating video decoder renderer display layer for orientation change");
+                [renderer updateDisplayLayer];
+                isNeedUpdateDisplayLayer = false;
+            }
+    }
+
+    } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        [self updateViewScale:size];
+    }];
+}
+
+// set update flag since video renderer display layout only need to be updated when orientation changed
+- (void)checkNeedDisplayLayerUpdate:(CGSize)size {
+    if ([RzUtils isPortrait] != lastOrientationIsPortrait){
+        lastOrientationIsPortrait = [RzUtils isPortrait];
+        isNeedUpdateDisplayLayer = true;
+        return;
+    }
+}
+
+// Calculate root container screen size based on initial orientation and display mode for better display when orientation changes
+- (CGSize)calculateRootContainerViewSize {
+    CGSize nativeScreenSize = UIScreen.mainScreen.bounds.size;
+    CGFloat shortSide = MIN(nativeScreenSize.width, nativeScreenSize.height);
+    CGFloat longSide = MAX(nativeScreenSize.width, nativeScreenSize.height);
+    
+    if (_initialPortrait && displayMode == 0) {  // Duplicate PC Display mode and initial portrait
+        // For initial portrait in duplicate mode, use current orientation
+        if (nativeScreenSize.width > nativeScreenSize.height) {
+            return CGSizeMake(longSide, shortSide); // landscape
+        } else {
+            return CGSizeMake(shortSide, longSide); // portrait
+        }
+    } else {                                    // iPhone Optimized mode or initial landscape in duplicate mode
+        if (_initialPortrait) {
+            return CGSizeMake(shortSide, longSide);
+        } else {
+            return CGSizeMake(longSide, shortSide);
+        }
+    }
+}
+
+- (void)storePCResolutionWidth:(CGFloat)width height:(CGFloat)height withLogMessage:(NSString *)message {
+    [[NSUserDefaults standardUserDefaults] setFloat:width forKey:@"RZStreamPCWidth"];
+    [[NSUserDefaults standardUserDefaults] setFloat:height forKey:@"RZStreamPCHeight"];
+    NSLog(@"[RZStream] %@", message);
+}
+
+- (void)updateViewScale:(CGSize)size {
+    self.lastScaleSize = size;
+
+    CGSize screenSize = [self calculateRootContainerViewSize];
+    CGFloat screenW = screenSize.width;
+    CGFloat screenH = screenSize.height;
+
+    const CGFloat winW = size.width;
+    const CGFloat winH = size.height;
+
+    // set no transform to avoid incorrect layout
+    self->_rootContainerView.transform = CGAffineTransformIdentity;
+    
+    // Set rootContainerView frame
+    self->_rootContainerView.frame = (CGRect){ .origin = CGPointZero, .size = screenSize };
+    
+
+    CGFloat scaleX = winW / self->_rootContainerView.frame.size.width;
+    CGFloat scaleY = winH / self->_rootContainerView.frame.size.height;
+    // Log the screen size
+    NSString *orientation = [RzUtils isPortrait] ? @"portrait" : @"landscape";
+    NSLog(@"[RZStream] updateViewScale: initialPortrait=%d, displayMode=%ld, screenW=%f, screenH=%f, winW=%f, winH=%f, RootContainerW=%f, RootContainerH=%f, scaleX=%f, scaleY=%f\n", _initialPortrait, displayMode, screenW, screenH, winW, winH, self->_rootContainerView.frame.size.width, self->_rootContainerView.frame.size.height, scaleX, scaleY);
+
+    // scale & center
+    CGFloat scale = MIN(scaleX, scaleY);
+    self->_rootContainerView.transform = CGAffineTransformMakeScale(scale, scale);
+    self->_rootContainerView.center = CGPointMake(winW / 2.0, winH / 2.0);
+    
+    // Store PC resolution for accurate touch coordinate mapping
+    TemporarySettings *settings = [self valueForKey:@"_settings"];
+    if (displayMode == 0) {   // Duplicate PC Display mode
+        [self storePCResolutionWidth:[settings.hostWidth floatValue] height:[settings.hostHeight floatValue] withLogMessage:[NSString stringWithFormat:@"Stored PC resolution: %.0fx%.0f", [settings.hostWidth floatValue], [settings.hostHeight floatValue]]];
+    } else {
+        // For other modes, check if it's resolutionSafeArea case
+        NeuronFrameSettings *frameSettings = [[ShareDataDB shared] readFrameSettings];
+        CGFloat negotiatedWidth = [settings.width floatValue];
+        CGFloat negotiatedHeight = [settings.height floatValue];
+
+        // Check if this is safearea enabled mode case
+        UIWindow *window = [UIApplication sharedApplication].keyWindow;
+        if (!window) {
+            for (UIWindowScene *scene in [UIApplication sharedApplication].connectedScenes) {
+                if ([scene isKindOfClass:[UIWindowScene class]]) {
+                    window = scene.windows.firstObject;
+                    break;
+                }
+            }
+        }
+
+        if (window) {
+            CGFloat screenScale = window.screen.scale;
+            CGFloat leftArea = window.safeAreaInsets.left;
+            CGFloat rightArea = window.safeAreaInsets.right;
+            CGFloat safeAreaWidth = (window.frame.size.width - leftArea - rightArea) * screenScale;
+            CGFloat fullWidth = window.frame.size.width * screenScale;
+            CGFloat fullHeight = window.frame.size.height * screenScale;
+
+            // If negotiated width matches safe area width, it's safe area mode
+            if (fabs(negotiatedWidth - safeAreaWidth) < 1.0 && fabs(negotiatedHeight - fullHeight) < 1.0) {
+                // This is safe area mode - use safe area width
+                [self storePCResolutionWidth:safeAreaWidth height:fullHeight withLogMessage:[NSString stringWithFormat:@"Stored safe area resolution: %.0fx%.0f", safeAreaWidth, fullHeight]];
+            } else {
+                // other case like resolutionFull, custom, etc..
+                [self storePCResolutionWidth:negotiatedWidth height:negotiatedHeight withLogMessage:[NSString stringWithFormat:@"Stored negotiated resolution: %.0fx%.0f", negotiatedWidth, negotiatedHeight]];
+            }
+        } else {
+            // Fallback to negotiated resolution if window not available
+            [self storePCResolutionWidth:negotiatedWidth height:negotiatedHeight withLogMessage:[NSString stringWithFormat:@"Stored negotiated resolution (fallback): %.0fx%.0f", negotiatedWidth, negotiatedHeight]];
+        }
+    }
+
+    // keep subviews keep original size
+    UIScrollView *rzScroll = [self valueForKey:@"_scrollView"];
+    UIView *rzStream = [self valueForKey:@"_streamView"];
+    CGSize streamSize = [self nativeContentSizeForScreenSize:CGSizeMake(screenW, screenH)];
+    
+    const CGFloat streamW = streamSize.width;
+    const CGFloat streamH = streamSize.height;
+    
+    const CGFloat startPositionX = (screenW - streamW) / 2.0;
+    const CGFloat startPositionY = (screenH - streamH) / 2.0;
+    
+    NSLog(@"[RZStream] updateViewScale frame: winW %f , winH %f , screenW: %f , screenH %f streamSize : %f x %f\n", winW, winH, screenW, screenH, streamW, streamH);
+    NSLog(@"[RZStream] calculated position: startPositionX %f , startPositionY %f\n", startPositionX, startPositionY);
+    
+    if (rzScroll) {
+        rzScroll.transform = CGAffineTransformIdentity;
+        rzScroll.frame = (CGRect){ .origin = CGPointZero, .size = (CGSize){screenW, screenH} };
+        rzScroll.minimumZoomScale = 1.0;
+        rzScroll.maximumZoomScale = 1.0;
+        rzScroll.zoomScale = 1.0;
+        rzScroll.contentOffset = CGPointZero;
+        rzScroll.contentInset = UIEdgeInsetsZero;
+        rzScroll.contentSize = (CGSize){streamW, streamH};
+        if (@available(iOS 11.0, *)) {
+            rzScroll.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+        }
+    }
+    
+    if (rzStream) {
+        rzStream.transform = CGAffineTransformIdentity;
+        rzStream.frame = (CGRect){ .origin = CGPointMake(startPositionX, startPositionY), .size = (CGSize){streamW, streamH} };
+    }
+    if (self->_blurView) {
+        self->_blurView.transform = CGAffineTransformIdentity;
+        self->_blurView.frame = (CGRect){ .origin = CGPointZero, .size = (CGSize){screenW, screenH} };
+    }
+}
+
+- (BOOL)prefersHomeIndicatorAutoHidden { 
+    return true; 
 }
 
 - (void)stageStarting:(const char *)stageName {
@@ -156,8 +439,10 @@ typedef enum : NSUInteger {
 
         dispatch_async(dispatch_get_main_queue(), ^{
             [UIView animateWithDuration:0.3 animations:^{
+                self.loadingViewBg.alpha = 0.0;
                 self.loadingView.alpha = 0.0;
             } completion:^(BOOL finished) {
+                self.loadingViewBg.hidden = YES;
                 self.loadingView.hidden = YES;
                 [self.loadingView streamAppImageStopAnimation];
             }];
@@ -209,19 +494,15 @@ typedef enum : NSUInteger {
 - (void)launchFailed:(NSString *)currentApp device:(NSString *)currentDevice errorCode:(NSInteger)code isSameDevice:(BOOL)isSameDevice completion:(LaunchOptionCompletion)Completion {
     Log(LOG_I, @"Launch failed: %d app:%@ device:%@", code, currentApp, currentDevice);
     if (code == 5036) {
-        if (isSameDevice) {
-            NSString *message = Localized(@"&app is already streaming on &device, would you like to replace the current session or quit? All unsaved data will be lost.");
+        NSString *message = Localized(@"&app is already streaming on &device, would you like to replace the current session or quit? All unsaved data will be lost.");
+        if (currentApp != nil) {
             message = [message stringByReplacingOccurrencesOfString:@"&app" withString:currentApp];
-            message = [message stringByReplacingOccurrencesOfString:@"&device" withString:currentDevice];
-            NSString *title = Localized(@"Streaming session in progress");
-            [self showReplaceAlert:message title:title compltion:Completion];
-        } else {
-            NSString *message = Localized(@"Connection errors detected. Do you want to cancel this connection or replace the previous session?");
-            message = [message stringByReplacingOccurrencesOfString:@"&app" withString:currentApp];
-            message = [message stringByReplacingOccurrencesOfString:@"&device" withString:currentDevice];
-            NSString *title = Localized(@"Reconnecting to PC Streaming");
-            [self showReplaceAlert:message title:title compltion:Completion];
         }
+        if (currentDevice != nil) {
+            message = [message stringByReplacingOccurrencesOfString:@"&device" withString:currentDevice];
+        }
+        NSString *title = Localized(@"Streaming session in progress");
+        [self showReplaceAlert:message title:title compltion:Completion];
     }
 }
 
@@ -343,7 +624,7 @@ typedef enum : NSUInteger {
             _debugMessageLabel.numberOfLines = 0;
             _debugMessageLabel.textColor = [[UIColor whiteColor] colorWithAlphaComponent: 0.8];
             _debugMessageLabel.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.2];
-            [self.view addSubview:_debugMessageLabel];
+            [self.rootContainerView addSubview:_debugMessageLabel];
         }
 //        _debugMessageLabel.text = text;
         
@@ -379,9 +660,9 @@ typedef enum : NSUInteger {
         self.iconView = nil;
     }
     
-    if(self.containerView) {
-        [self.containerView  removeFromSuperview];
-        self.containerView  = nil;
+    if(self.toastContainerView) {
+        [self.toastContainerView removeFromSuperview];
+        self.toastContainerView = nil;
     }
     
     // Create and configure the UITextView
@@ -406,28 +687,26 @@ typedef enum : NSUInteger {
 
     // Create and configure the container UIView
     CGFloat containerPadding = 10;
-    self.containerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, textSize.width + iconSize + containerPadding * 2, textSize.height + containerPadding)];
-    self.containerView.backgroundColor = [UIColor whiteColor];
-    self.containerView.layer.cornerRadius = 3;
-    self.containerView.layer.masksToBounds = YES;
+    self.toastContainerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, textSize.width + iconSize + containerPadding * 2, textSize.height + containerPadding)];
+    self.toastContainerView.backgroundColor = [UIColor whiteColor];
+    self.toastContainerView.layer.cornerRadius = 3;
+    self.toastContainerView.layer.masksToBounds = YES;
 
     // Set frames for textView and iconView within the container
     self.textView.frame = CGRectMake(containerPadding, containerPadding / 2, textSize.width, textSize.height);
-    self.iconView.frame = CGRectMake(CGRectGetMaxX(self.textView.frame), (self.containerView.frame.size.height - iconSize) / 2, iconSize, iconSize);
+    self.iconView.frame = CGRectMake(CGRectGetMaxX(self.textView.frame), (self.toastContainerView.frame.size.height - iconSize) / 2, iconSize, iconSize);
 
     // Add the textView and iconView to the container
-    [self.containerView addSubview:self.textView];
-    [self.containerView addSubview:self.iconView];
+    [self.toastContainerView addSubview:self.textView];
+    [self.toastContainerView addSubview:self.iconView];
 
     // Center the containerView at the bottom of the screen
-    self.containerView.center = CGPointMake(self.view.frame.size.width / 2, self.view.frame.size.height - self.containerView.frame.size.height / 2 - 50);
+    self.toastContainerView.center = CGPointMake(self.rootContainerView.bounds.size.width / 2, self.rootContainerView.bounds.size.height - self.toastContainerView.frame.size.height / 2 - 50);
+    [self.rootContainerView addSubview:self.toastContainerView];
 
-    [self.view addSubview:self.containerView];
-
-    // Animate the appearance of the containerView
-    self.containerView.alpha = 0.0;
+    self.toastContainerView.alpha = 0.0;
     [UIView animateWithDuration:1.0 animations:^{
-        self.containerView.alpha = 1.0;
+        self.toastContainerView.alpha = 1.0;
     } completion:^(BOOL finished) {
         // After 3 seconds, hide the container view with animation
         [self performSelector:@selector(hideToast) withObject:nil afterDelay:2.6];
@@ -436,9 +715,10 @@ typedef enum : NSUInteger {
 
 - (void)hideToast {
     [UIView animateWithDuration:1.0 animations:^{
-        self.containerView.alpha = 0.0;
+        self.toastContainerView.alpha = 0.0;
     } completion:^(BOOL finished) {
-        [self.containerView removeFromSuperview];
+        [self.toastContainerView removeFromSuperview];
+        self.toastContainerView = nil;
     }];
 }
 
@@ -499,11 +779,11 @@ typedef enum : NSUInteger {
                 self->_blurView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
                 
                 StreamLoadingView *reconnectView = (StreamLoadingView *) [[NSBundle mainBundle] loadNibNamed:@"StreamLoadingView" owner:self options:nil].firstObject;
-                reconnectView.frame = [[UIScreen mainScreen] bounds];
+                reconnectView.frame = self.view.bounds;
                 [reconnectView setAsReconnectingStyle];
                 [self->_blurView.contentView addSubview:reconnectView];
             }
-            [self.view addSubview:self->_blurView];
+            [self.rootContainerView addSubview:self->_blurView];
         });
         StreamManager *_streamMan = [self valueForKey:@"_streamMan"];
         [_streamMan stopStream];
@@ -632,4 +912,134 @@ typedef enum : NSUInteger {
 
 //- (BOOL)isAntherDeviceStreaming:(NSString *)deviceName current
 
+- (void)removeBaseSubviews {
+    UILabel *baseStageLabel = [self valueForKey:@"_stageLabel"];
+    if (baseStageLabel) [baseStageLabel removeFromSuperview];
+    UIActivityIndicatorView *baseSpinner = [self valueForKey:@"_spinner"];
+    if (baseSpinner) [baseSpinner removeFromSuperview];
+    UILabel *baseTipLabel = [self valueForKey:@"_tipLabel"];
+    if (baseTipLabel) [baseTipLabel removeFromSuperview];
+    UITextView *baseOverlay = [self valueForKey:@"_overlayView"];
+    if (baseOverlay) [baseOverlay removeFromSuperview];
+}
+
+- (void)pinViewToSuperviewEdges:(UIView *)view superview:(UIView *)superview {
+    view.translatesAutoresizingMaskIntoConstraints = NO;
+    [NSLayoutConstraint activateConstraints:@[
+        [view.leadingAnchor constraintEqualToAnchor:superview.leadingAnchor],
+        [view.trailingAnchor constraintEqualToAnchor:superview.trailingAnchor],
+        [view.topAnchor constraintEqualToAnchor:superview.topAnchor],
+        [view.bottomAnchor constraintEqualToAnchor:superview.bottomAnchor],
+    ]];
+}
+
+- (void)setupUI {
+    // Set the main view's background color to black so that areas outside rootContainerView are black
+    self.view.backgroundColor = [UIColor blackColor];
+    // root container: for scaling & centering on iPad properly, we need to add or move all views into this container
+    _rootContainerView = [[UIView alloc] initWithFrame:self.view.bounds];
+    _rootContainerView.autoresizingMask = UIViewAutoresizingNone;
+    _rootContainerView.userInteractionEnabled = YES;
+    [self.view addSubview:_rootContainerView];
+
+    // Setup _blurView for overlay usage (hidden by default)
+    if (!_blurView) {
+        UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleSystemUltraThinMaterialDark];
+        _blurView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
+        _blurView.translatesAutoresizingMaskIntoConstraints = NO;
+        _blurView.hidden = NO;
+        [_rootContainerView addSubview:_blurView];
+        // Pin _blurView to all edges of rootContainerView
+        [NSLayoutConstraint activateConstraints:@[
+            [_blurView.leadingAnchor constraintEqualToAnchor:_rootContainerView.leadingAnchor],
+            [_blurView.trailingAnchor constraintEqualToAnchor:_rootContainerView.trailingAnchor],
+            [_blurView.topAnchor constraintEqualToAnchor:_rootContainerView.topAnchor],
+            [_blurView.bottomAnchor constraintEqualToAnchor:_rootContainerView.bottomAnchor],
+        ]];
+    }
+
+    // 1.add loading and loadingBg view into rootContainerView and remove constraints
+    _loadingView = (StreamLoadingView *)[[NSBundle mainBundle] loadNibNamed:@"StreamLoadingView" owner:self options:nil].firstObject;
+    // 确保关闭autoresizing masks转换为约束的功能,否则缩放会有问题
+    _loadingView.translatesAutoresizingMaskIntoConstraints = NO;
+    [_rootContainerView addSubview:_loadingView];
+    [self pinViewToSuperviewEdges:_loadingView superview:_rootContainerView];
+
+    _loadingViewBg = [[UIView alloc] init];
+    _loadingViewBg.backgroundColor = [UIColor colorWithRed:68/255.0 green:214/255.0 blue:44/255.0 alpha:1.0];
+    _loadingViewBg.translatesAutoresizingMaskIntoConstraints = NO;
+    [_rootContainerView insertSubview:_loadingViewBg atIndex:0];
+    [self pinViewToSuperviewEdges:_loadingViewBg superview:_rootContainerView];
+
+    // 2.move scroll and stream view into rootContainerView
+    UIScrollView *rzScroll = [self valueForKey:@"_scrollView"];
+    UIView *rzStream = [self valueForKey:@"_streamView"];
+    if (rzScroll && rzScroll.superview != _rootContainerView) {
+        [rzScroll removeFromSuperview];
+        [_rootContainerView addSubview:rzScroll];
+    }
+    if (rzStream && rzStream.superview != (rzScroll ?: _rootContainerView)) {
+        [rzStream removeFromSuperview];
+        [(rzScroll ?: _rootContainerView) addSubview:rzStream];
+    }
+
+    // keep rzScroll zoom scale to 1 to prevent unexpected zooming
+    if (rzScroll) {
+        rzScroll.minimumZoomScale = 1.0;
+        rzScroll.maximumZoomScale = 1.0;
+        rzScroll.zoomScale = 1.0;
+        rzScroll.bouncesZoom = NO;
+        if (@available(iOS 11.0, *)) {
+            rzScroll.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+        }
+    }
+}
+
+- (void)layoutStreamViews {
+    UIScrollView *rzScroll = [self valueForKey:@"_scrollView"];
+    UIView *rzStream = [self valueForKey:@"_streamView"];
+
+    // Get current screen size based on initial orientation
+    CGSize nativeScreenSize = UIScreen.mainScreen.bounds.size;
+    CGFloat shortSide = MIN(nativeScreenSize.width, nativeScreenSize.height);
+    CGFloat longSide  = MAX(nativeScreenSize.width, nativeScreenSize.height);
+    CGSize currentScreenSize;
+    if (_initialPortrait) {
+        currentScreenSize = CGSizeMake(shortSide, longSide);
+    } else {
+        currentScreenSize = CGSizeMake(longSide, shortSide);
+    }
+    
+    CGSize native = [self nativeContentSizeForScreenSize:currentScreenSize];
+    NSLog(@"[RZStream] layoutStreamViews orientation: %@, update native size to %@",
+          [RzUtils isPortrait] ? @"Portrait" : @"Landscape",
+          NSStringFromCGSize(native));
+
+    if (rzScroll) {
+        rzScroll.translatesAutoresizingMaskIntoConstraints = YES;
+        rzScroll.autoresizingMask = UIViewAutoresizingNone;
+        rzScroll.transform = CGAffineTransformIdentity;
+        rzScroll.frame = (CGRect){.origin = CGPointZero, .size = native};
+        rzScroll.contentOffset = CGPointZero;
+        rzScroll.contentInset = UIEdgeInsetsZero;
+        rzScroll.contentSize = native;
+        rzScroll.clipsToBounds = YES;
+        rzScroll.backgroundColor = UIColor.clearColor;
+    }
+
+    if (rzStream) {
+        // UIView *targetSuper = rzScroll ?: self->_rootContainerView;
+        rzStream.translatesAutoresizingMaskIntoConstraints = YES;
+        rzStream.autoresizingMask = UIViewAutoresizingNone;
+        rzStream.transform = CGAffineTransformIdentity;
+        rzStream.frame = (CGRect){.origin = CGPointZero, .size = native};
+        NSLog(@"[RZStream] layoutStreamViews rzStream frame: width %f , height %f", rzStream.frame.size.width, rzStream.frame.size.height);
+        rzStream.clipsToBounds = YES;
+        rzStream.backgroundColor = UIColor.blackColor;
+    }
+
+    if (self.loadingView) {
+        [self->_rootContainerView bringSubviewToFront:self.loadingView];
+    }
+}
 @end

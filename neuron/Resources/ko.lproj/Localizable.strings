@@ -25,7 +25,7 @@
 "Your PC will create a virtual display matching your [iPhone/iPad]’s resolution and refresh rate of %1$s at %2$sHz and stream it to your [iPhone/iPad].\n\nAny screen connected to your PC will be temporarily disabled while streaming." = "PC에서 [iPhone/iPad]의 해상도(%1$s)와 재생률(%2$sHz)에 맞는 가상 디스플레이를 생성하여 [iPhone/iPad]으로 스트리밍합니다.\n\n스트리밍 중에는 PC에 연결된 모든 화면이 일시적으로 비활성화됩니다.";
 "Video Bitrate" = "비디오 비트레이트";
 "Touch Screen Control" = "터치 스크린 제어";
-"Your PC’s connected display will be streamed to your [iPhone/iPad] " = "PC에 연결된 디스플레이가 [iPhone/iPad]으로 스트리밍됩니다";
+"Your PC’s connected display will be streamed to your [iPhone/iPad]." = "PC에 연결된 디스플레이가 [iPhone/iPad]으로 스트리밍됩니다。";
 "Enhances visuals with better contrast, brightness, and color range." = "더 나은 대비, 밝기, 색 범위로 시각적 효과를 향상시킵니다.";
 "Virtual Trackpad" = "가상 트랙패드";
 "Direct Touch" = "직접 터치";
@@ -50,6 +50,8 @@
 "Input PC IP address" = "PC IP 주소 입력";
 "Pairing Request" = "페어링 요청";
 "Enter the code on \"%@\" to complete pairing with your device.\n\nPin Code" = "\"%@\"에 코드를 입력하여 장치와의 페어링을 완료하세요.\n\nPIN 코드";
+"Enter the code on \"%@\" to complete pairing with your device." = "\"%@\"에 코드를 입력하여 장치와의 페어링을 완료하세요.";
+"Pin Code" = "PIN 코드";
 "Remote Play" = "리모트 플레이";
 "Unpair" = "페어링 해제";
 "Pairing Failed" = "페어링 실패";
@@ -147,6 +149,7 @@
 "Local Network" = "로컬 네트워크";
 "Enable seamless streaming between your PC and Nexus." = "PC와 Nexus 간에 끊김 없는 스트리밍을 지원합니다.";
 "ALLOW" = "허용";
+"Allow" = "허용";
 "Done" = "완료";
 "Home" = "홈";
 "Download" = "다운로드";
@@ -215,3 +218,11 @@
 "Streaming session in progress" = "스트리밍 세션 진행 중";
 // 20250602 BIA-1856 miss string
 "Replace" = "교체";
+//20250912 AI translation
+"Stream PC games from your computer to your [iPhone/iPad]." = "PC 게임을 컴퓨터에서 [iPhone/iPad]로 스트리밍합니다.";
+"Video Settings Display Mode" = "비디오 설정 표시 모드";
+"Enhances visuals with better contrast, brightness, and color range. Requires your PC’s connected display to have HDR enabled." = "더 나은 명암, 밝기, 색상 범위로 시각 효과를 향상합니다. PC에 연결된 디스플레이에서 HDR이 활성화되어 있어야 합니다.";
+"Mute PC Speakers While Streaming" = "스트리밍 중 PC 스피커 음소거";
+"Advances Settings" = "고급 설정";
+"Edit Profile" = "프로필 편집";
+"Computer" = "컴퓨터";

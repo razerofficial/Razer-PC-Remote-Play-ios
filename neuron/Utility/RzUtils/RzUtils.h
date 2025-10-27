@@ -67,6 +67,8 @@ NS_ASSUME_NONNULL_BEGIN
 + (BOOL)CheckIPAddressISValidWithIP: (NSString *)address;
 
 + (NSString *)getAppVersion;
+
++ (BOOL)isPortrait;
 @end
 
 NS_ASSUME_NONNULL_END

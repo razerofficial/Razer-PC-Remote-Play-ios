@@ -18,6 +18,9 @@
 #include "opus_multistream.h"
 #import "DevUtils.h"
 
+// Audio recording function declaration
+void LiRecordDecodedAudio(const void* pcmData, int sampleCount, int channelCount);
+
 @implementation Connection {
     SERVER_INFORMATION _serverInfo;
     STREAM_CONFIGURATION _streamConfig;
@@ -279,6 +282,9 @@ void ArDecodeAndPlaySample(char* sampleData, int sampleLength)
     decodeLen = opus_multistream_decode(opusDecoder, (unsigned char *)sampleData, sampleLength,
                                         (short*)audioBuffer, audioConfig.samplesPerFrame, 0);
     if (decodeLen > 0) {
+        // Record decoded PCM audio data if recording is enabled
+        LiRecordDecodedAudio(audioBuffer, decodeLen, audioConfig.channelCount);
+        
         // Provide backpressure on the queue to ensure too many frames don't build up
         // in SDL's audio queue.
         while (SDL_GetQueuedAudioSize(audioDevice) / audioFrameSize > 10) {
@@ -498,6 +504,11 @@ void ClSetControllerLED(uint16_t controllerNumber, uint8_t r, uint8_t g, uint8_t
         LiStopConnection();
     }
     [initLock unlock];
+}
+
++(VideoDecoderRenderer*) getCurrentRenderer
+{
+    return renderer;
 }
 
 @end

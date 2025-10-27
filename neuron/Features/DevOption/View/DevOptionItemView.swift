@@ -32,7 +32,7 @@ class DevOptionItemView {
         
         let label = UILabel.init()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.boldSystemFont(ofSize: 18)
+        label.font = UIFont.dynamic(size: 18, weight: .bold)
         label.numberOfLines = 0
         label.textColor = .white
         label.text = title
@@ -54,7 +54,7 @@ class DevOptionItemView {
         
         let label = UILabel.init()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.boldSystemFont(ofSize: 18)
+        label.font = UIFont.dynamic(size: 18, weight: .bold)
         label.numberOfLines = 0
         label.textColor = .white
         label.text = title
@@ -71,7 +71,7 @@ class DevOptionItemView {
     class func titleLab(_ title:String) -> UILabel {
         let label = UILabel.init()
         label.text = title
-        label.font = UIFont.boldSystemFont(ofSize: 20)
+        label.font = UIFont.dynamic(size: 20, weight: .bold)
         label.textColor = .white
         label.numberOfLines = 0
         label.backgroundColor = Color.hex(0x222222).uiColor()
@@ -82,7 +82,7 @@ class DevOptionItemView {
     class func desLab(_ title:String ,_ size:CGFloat) -> UILabel {
         let label = UILabel.init()
         label.text = title
-        label.font = UIFont.systemFont(ofSize: size)
+        label.font = UIFont.dynamic(size: size)
         label.textColor = .white
         label.numberOfLines = 0
         return label

@@ -56,7 +56,7 @@ public class ControllerInputTracker {
     private var trackingStarted: Bool = false
     public var isTraking: Bool { get { return trackingStarted } }
     public var isConnected: Bool { get { 
-        return (connectedController != nil)
+        return (connectedController != nil) || isHardwareKeyboardActive()
     } }
     public var shouldPassThumbstickEvent : Bool = false
     
@@ -84,8 +84,13 @@ public class ControllerInputTracker {
             .sink { [weak self] (thumbstick, element) in
                 self?.handleThumbstickEvent(thumbstick: thumbstick, element: element)
             }.store(in: &longTermSubcriptions)
+        setupKeyboardSupport()
     }
-
+    public func keyboardStartTracking() {
+        Logger.info("🎹ControllerInputTracker keyboardHandlingViewController becomeFirstResponder")
+        self.keyboardHandlingViewController?.becomeFirstResponder()
+    }
+    
     public func startTracking() {
         
         if trackingStarted {
@@ -317,7 +322,7 @@ public class ControllerInputTracker {
     }
     
     
-    private func handleFaceButtonInputsCombo(button: GamePadButton, pressed:Bool) {
+    func handleFaceButtonInputsCombo(button: GamePadButton, pressed:Bool) {
         //cancel combo timer
         self.cancelComboTimer()
         isDapadPressing = pressed
@@ -408,7 +413,7 @@ public class ControllerInputTracker {
         comboTimer?.resume()
     }
     
-    private func handleFaceButtonInputs(button: GamePadButton, state: ButtonState = .Down) {
+    func handleFaceButtonInputs(button: GamePadButton, state: ButtonState = .Down) {
         Logger.debug("ZZZ Button Pressed: \(button.description)")
         self.delegate?.handleFaceButtonInputs(button: button, state: state)
     }
@@ -422,4 +427,32 @@ public class ControllerInputTracker {
         }
     }
     
+    var keyboardHandlingViewController: KeyboardHandlingViewController? = nil
+    func setupKeyboardSupport() {
+        DispatchQueue.main.async {
+            guard let window = UIApplication.shared.windows.first else { return }
+            
+            // Create keyboard handling view controller
+            let keyboardVC = KeyboardHandlingViewController()
+            self.keyboardHandlingViewController = keyboardVC
+            
+            // Add directly to window to ensure it receives keyboard events
+            keyboardVC.view.frame = window.bounds
+            keyboardVC.view.backgroundColor = UIColor.clear
+            keyboardVC.view.isUserInteractionEnabled = false // Don't block touches
+            window.addSubview(keyboardVC.view)
+            
+            // Make it first responder to receive keyboard events
+            keyboardVC.becomeFirstResponder()
+        }
+    }
+    
+    func isHardwareKeyboardActive() -> Bool {
+        guard let keyboardHandlingViewController = keyboardHandlingViewController else {
+            Logger.debug("⚠️ keyboardHandlingViewController is nil")
+            return false
+        }
+        Logger.debug("isHardwareKeyboardActive: \(keyboardHandlingViewController.hasReceivedHardwareKeyboardEvent)")
+        return keyboardHandlingViewController.hasReceivedHardwareKeyboardEvent
+    }
 }

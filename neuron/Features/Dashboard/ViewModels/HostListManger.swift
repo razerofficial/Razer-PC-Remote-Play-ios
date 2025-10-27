@@ -137,7 +137,7 @@ class HostListManger: NSObject {
         view.isHidden = false
         view.backgroundColor = Color.hex(0x000000, alpha: 0.5).uiColor()
         let title = SettingsRouter.titleLab("Connecting…".localize())
-        title.font = UIFont.systemFont(ofSize: 18)
+        title.font = UIFont.dynamic(size: 18)
         
         let des = SettingsRouter.desLab("Please ensure Razer Cortex is running.".localize(), 14)
         
@@ -301,42 +301,42 @@ extension HostListManger {
         self.isReflashing = true
         
         let pairedHostsCopy = self.pairedHosts
+        let allHostCopy = self.allHosts
+        var tmpPairedHosts = [TemporaryHost]()
+        var tmpNetHosts = [TemporaryHost]()
         
-        self.pairedHosts = [TemporaryHost]()
-        self.netHosts = [TemporaryHost]()
+//        self.pairedHosts = [TemporaryHost]()
+//        self.netHosts = [TemporaryHost]()
         
-        for host in self.allHosts {
+        for host in allHostCopy {
             if let tmpHost = host as? TemporaryHost {
                 if tmpHost.pairState == .paired {
-                    self.pairedHosts.append(tmpHost)
+                    tmpPairedHosts.append(tmpHost)
                 }else if tmpHost.state != .offline  &&  tmpHost.pairState != .paired {
-                    self.netHosts.append(tmpHost)
+                    tmpNetHosts.append(tmpHost)
                 }
             }
         }
         
         for host in pairedHostsCopy {
-            if self.netHosts.contains(where: {$0.uuid == host.uuid}) {
+            if tmpNetHosts.contains(where: {$0.uuid == host.uuid}) {
                 print("unpair share hosts count :\(pairedHostsCopy.count) writeManuallyUnpairedHostDataToshareDB")
                 ShareDataDB.shared().writeManuallyUnpairedHostDataToshareDB(host.uuid)
             }
         }
         
 
-        let sortedPairHostList = self.pairedHosts.sorted{ $0.name < $1.name}
-        self.pairedHosts = sortedPairHostList
-        
-        let sortedNetHostList = self.netHosts.sorted{ $0.name < $1.name}
-        self.netHosts = sortedNetHostList
-        
+        let sortedPairHostList = tmpPairedHosts.sorted{ $0.name < $1.name}
+        let sortedNetHostList = tmpNetHosts.sorted{ $0.name < $1.name}
+
         //check pair hosts if changed  YES:save data to sharedb
         let shareHostList = ShareDataDB.shared().getShareHostList()
-        if shareHostList.count != self.pairedHosts.count {
+        if shareHostList.count != sortedPairHostList.count {
             if self.differentCount < DifferentCountMax {
                 self.differentCount = self.differentCount + 1
             }else{
                 self.differentCount = 0
-                print("different share hosts count :\(shareHostList.count) , paired host count :\(self.pairedHosts.count)")
+                print("different share hosts count :\(shareHostList.count) , paired host count :\(sortedPairHostList.count)")
                 ShareDataDB.shared().wirteHostListDataToShare()
             }
         }else{
@@ -345,6 +345,8 @@ extension HostListManger {
         
         //self.reloadContentView()
         DispatchQueue.main.async {
+            self.pairedHosts = sortedPairHostList
+            self.netHosts = sortedNetHostList
             self.pairHostListSubject.send(self.pairedHosts)
             self.netHostListSubject.send(self.netHosts)
         }
@@ -374,28 +376,31 @@ extension HostListManger : DiscoveryCallback {
     
     func updateAllHosts(_ hosts: [Any]!) {
         
-        allHosts = NSMutableArray.init(array: hosts)
-        pairedHosts = [TemporaryHost]()
-        netHosts = [TemporaryHost]()
+//        allHosts = NSMutableArray.init(array: hosts)
+//        pairedHosts = [TemporaryHost]()
+//        netHosts = [TemporaryHost]()
         
-        for host in allHosts {
+        var tmpPairedHosts = [TemporaryHost]()
+        var tmpNetHosts = [TemporaryHost]()
+        
+        for host in hosts {
             if let tmpHost = host as? TemporaryHost {
                 if tmpHost.pairState == .paired {
-                    pairedHosts.append(tmpHost)
+                    tmpPairedHosts.append(tmpHost)
                 }else if  (tmpHost.state == .online  || tmpHost.state == .unknown )  &&  tmpHost.pairState != .paired {
-                    netHosts.append(tmpHost)
+                    tmpNetHosts.append(tmpHost)
                 }
             }
         }
         
-        let sortedPairHostList = self.pairedHosts.sorted{ $0.name < $1.name}
-        self.pairedHosts = sortedPairHostList
-        
-        let sortedNetHostList = self.netHosts.sorted{ $0.name < $1.name}
-        self.netHosts = sortedNetHostList
+        let sortedPairHostList = tmpPairedHosts.sorted{ $0.name < $1.name}
+        let sortedNetHostList = tmpNetHosts.sorted{ $0.name < $1.name}
         
         DispatchQueue.main.async {
             //self.reloadContentView()
+            self.allHosts = NSMutableArray.init(array: hosts)
+            self.pairedHosts = sortedPairHostList
+            self.netHosts = sortedNetHostList
             self.pairHostListSubject.send(self.pairedHosts)
             self.netHostListSubject.send(self.netHosts)
         }

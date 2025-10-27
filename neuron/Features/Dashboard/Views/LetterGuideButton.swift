@@ -17,6 +17,11 @@
 
 import SwiftUI
 
+let LetterGuideButtonRadius = 24.0
+let LetterGuideButtonHeight = 48.0
+let LetterGuideButtonAddSpace = 10.0
+let LetterGuideButtonTrailingSpace = 18.0
+
 enum ControllerButtonType {
     case Button_A
     case Button_B
@@ -62,7 +67,10 @@ private struct LetterCircle: View {
     var letterColor: Color = Color.Onyx
     
     var body: some View {
-        Text(letter).sfProTextFont(weight: .bold, size: 16.0, textColor: letterColor)
+        Text(letter)
+            .font(.system(size: 16, weight: .bold))
+            .foregroundColor(letterColor)
+//            .sfProTextFont(weight: .bold, size: 16.0, textColor: letterColor)
             .frame(width: 28, height: 28, alignment: .center)
             .cornerRadius(14)
             .background(circleColor)
@@ -88,10 +96,12 @@ struct LetterGuideButton: View {
     var backgroundColor : Color = Color.Onyx.opacity(0.5)
     var textColor : Color = Color.white
     //可以修改左右边距，不同UI需求不同，默认是10
-    var addSpace : CGFloat = 10.0
+    var addSpace : CGFloat = LetterGuideButtonAddSpace
+    var trailingSpace : CGFloat = LetterGuideButtonTrailingSpace
     var action : (()->Void)? = nil
     var letterCircleStyle:LetterCircleStyle = .Default
     var isNeedStrokeBorder:Bool = false
+    var blurStyle: UIBlurEffect.Style = .light
     
     var body: some View {
         
@@ -107,62 +117,62 @@ struct LetterGuideButton: View {
                     LetterCircle(letter: buttonInfo.letter, circleColor: buttonInfo.circleColor, letterColor: buttonInfo.letterColor)
                     Spacer().frame(width: 8)
                 }
-                Text(title).sfProTextFont(weight: .bold, size: 14.0, textColor: textColor)
+                Text(title)
+                    .font(.system(size: 17, weight: .medium))
+                    .foregroundColor(textColor)
+//                    .sfProTextFont(weight: .medium, size: 17.0, textColor: textColor)
             }
-            .frame(height: 44)
+            .frame(height: LetterGuideButtonHeight)
             .padding(.leading, addSpace)
-            .padding(.trailing, addSpace)
+            .padding(.trailing, trailingSpace)
             .background(backgroundColor)
-            .cornerRadius(22)
+            .cornerRadius(LetterGuideButtonRadius)
             .overlay(
-                RoundedRectangle(cornerRadius: 22)
+                RoundedRectangle(cornerRadius: LetterGuideButtonRadius)
                     .stroke(isNeedStrokeBorder ? Color.RazerGreen:Color.clear, lineWidth: 2)
             )
         }
-//        .buttonStyle(LargeScaleButtonStyle(scale: 1.05))
-
         
-//        return HStack {
-//            LetterCircle(letter:buttonInfo.0, circleColor:buttonInfo.1)
-//            Spacer().frame(width: 8)
-//            Text(title).sfProTextFont(weight: .bold, size: 14.0, textColor: textColor)
-//        }
-//        .frame(height: 40)
-//        .padding(.leading, 10)
-//        .padding(.trailing, 10)
-//        .background(backgroundColor)
-//        .cornerRadius(20)
-//        .onTapGesture {
-//            if self.action != nil {
-//                self.action!()
-//            }
-//        }
     }
 }
 
 struct BlurLetterGuideButton: View {
     var buttonType : ControllerButtonType = .Button_A
     var title:String = ""
+    var backgroundColor : Color = Color.Onyx.opacity(0.5)
     var textColor : Color = Color.white
     //可以修改左右边距，不同UI需求不同，默认是10
-    var addSpace : CGFloat = 10.0
+    var addSpace : CGFloat = 20.0
     var action : (()->Void)? = nil
     var letterCircleStyle:LetterCircleStyle = .Default
     var isNeedStrokeBorder:Bool = false
     var blurStyle: UIBlurEffect.Style = .light
     
     var body: some View {
-        LetterGuideButton(
-            buttonType: buttonType,
-            title: title,
-            backgroundColor: Color.clear,
-            textColor: textColor,
-            addSpace: addSpace,
-            action: action,
-            letterCircleStyle: letterCircleStyle,
-            isNeedStrokeBorder: isNeedStrokeBorder)
-        .background(BlurView(style: blurStyle))
-        .cornerRadius(22)
+        
+        if #available(iOS 26.0, *) {
+            LetterGuideButton(
+                buttonType: buttonType,
+                title: title,
+                backgroundColor: backgroundColor,
+                textColor: textColor,
+                action: action,
+                letterCircleStyle: letterCircleStyle,
+                isNeedStrokeBorder: isNeedStrokeBorder)
+            .compatibleGlassTouchEffect()
+        } else {
+            
+            LetterGuideButton(
+                buttonType: buttonType,
+                title: title,
+                backgroundColor: backgroundColor,
+                textColor: textColor,
+                action: action,
+                letterCircleStyle: letterCircleStyle,
+                isNeedStrokeBorder: isNeedStrokeBorder)
+            .background(BlurView(style: blurStyle))
+            .cornerRadius(LetterGuideButtonRadius)
+        }
     }
     
 }

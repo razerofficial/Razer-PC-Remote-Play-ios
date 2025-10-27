@@ -21,15 +21,29 @@ static BOOL _useCoreHaptics = NO;
 }
 
 -(void)cleanup API_AVAILABLE(ios(14.0), tvos(14.0)) {
-    if (_hapticPlayer != nil) {
-        [_hapticPlayer cancelAndReturnError:nil];
-        _hapticPlayer = nil;
+    @try {
+        if (_hapticPlayer != nil) {
+            NSError* error = nil;
+            [_hapticPlayer cancelAndReturnError:&error];
+            if (error) {
+                Log(LOG_W, @"Controller %d: cancelAndReturnError failed: %@", _playerIndex, error);
+            }
+            _hapticPlayer = nil;
+        }
+    } @catch (NSException *exception) {
+        Log(LOG_W, @"Controller %d: Exception during hapticPlayer cancel: %@", _playerIndex, exception);
     }
-    if (_hapticEngine != nil) {
-        [_hapticEngine stopWithCompletionHandler:nil];
-        _hapticEngine = nil;
+
+    @try {
+        if (_hapticEngine != nil) {
+            [_hapticEngine stopWithCompletionHandler:nil];
+            _hapticEngine = nil;
+        }
+    } @catch (NSException *exception) {
+        Log(LOG_W, @"Controller %d: Exception during hapticEngine stop: %@", _playerIndex, exception);
     }
 }
+
 
 -(void)setMotorAmplitude:(unsigned short)amplitude API_AVAILABLE(ios(14.0), tvos(14.0)) {
     NSError* error;

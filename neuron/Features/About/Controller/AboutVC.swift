@@ -130,7 +130,7 @@ class AboutVC : RZBaseVC {
         appNameLabel.text = getAppName()
         appNameLabel.textColor = .white
         appNameLabel.textAlignment = .center
-        appNameLabel.font = UIFont.boldSystemFont(ofSize: IsIpad() ? 20 : 18)
+        appNameLabel.font = UIFont.dynamic(size: IsIpad() ? 20 : 18, weight: .bold)
         
         contentView.addSubview(appNameLabel)
         
@@ -138,7 +138,7 @@ class AboutVC : RZBaseVC {
         appVersionLabel.text = getAppVersion()
         appVersionLabel.textColor = Color.hex(0x999999).uiColor()
         appVersionLabel.textAlignment = .center
-        appVersionLabel.font = UIFont.systemFont(ofSize: IsIpad() ? 16 : 14, weight:.medium)
+        appVersionLabel.font = UIFont.dynamic(size: IsIpad() ? 16 : 14, weight:.medium)
         
         contentView.addSubview(appVersionLabel)
         
@@ -146,7 +146,7 @@ class AboutVC : RZBaseVC {
         appCopyrightLabel.text = getCopyRight()
         appCopyrightLabel.textColor = .white
         appCopyrightLabel.textAlignment = .center
-        appCopyrightLabel.font = UIFont.systemFont(ofSize: IsIpad() ? 16 : 14)
+        appCopyrightLabel.font = UIFont.dynamic(size: IsIpad() ? 16 : 14)
         
         contentView.addSubview(appCopyrightLabel)
         
@@ -154,7 +154,7 @@ class AboutVC : RZBaseVC {
         allRightsLabel.text = "All rights reserved.".localize()
         allRightsLabel.textColor = .white
         allRightsLabel.textAlignment = .center
-        allRightsLabel.font = UIFont.systemFont(ofSize: IsIpad() ? 16 : 14)
+        allRightsLabel.font = UIFont.dynamic(size: IsIpad() ? 16 : 14)
         
         contentView.addSubview(allRightsLabel)
         
@@ -165,7 +165,7 @@ class AboutVC : RZBaseVC {
         }
         appICPLabel.textColor = .white
         appICPLabel.textAlignment = .center
-        appICPLabel.font = UIFont.systemFont(ofSize: IsIpad() ? 16 : 14)
+        appICPLabel.font = UIFont.dynamic(size: IsIpad() ? 16 : 14)
 
         contentView.addSubview(appICPLabel)
         
@@ -173,7 +173,7 @@ class AboutVC : RZBaseVC {
         centerLineLabel.text = ""
         centerLineLabel.textColor = .white
         centerLineLabel.textAlignment = .center
-        centerLineLabel.font = UIFont.systemFont(ofSize: 14)
+        centerLineLabel.font = UIFont.dynamic(size: 14)
 
         contentView.addSubview(centerLineLabel)
         
@@ -182,7 +182,7 @@ class AboutVC : RZBaseVC {
         let termsOfServiceButton = UIButton(type: .custom)
         termsOfServiceButton.setTitle("Terms of Service".localize(), for: .normal)
         termsOfServiceButton.titleLabel?.textAlignment = .right
-        termsOfServiceButton.titleLabel?.font = UIFont.systemFont(ofSize: IsIpad() ? 16 : 14)
+        termsOfServiceButton.titleLabel?.font = UIFont.dynamic(size: IsIpad() ? 16 : 14)
         termsOfServiceButton.setTitleColor(isTermsOfServiceHighlighted() ? textHighlightColor : textColor, for: .normal)
         termsOfServiceButton.contentHorizontalAlignment = .right
         termsOfServiceButton.addTarget(self, action: #selector(onTermsOfServiceClicked), for: .touchUpInside)
@@ -193,7 +193,7 @@ class AboutVC : RZBaseVC {
         divider.text = "|"
         divider.textColor = .white
         divider.textAlignment = .center
-        divider.font = UIFont.systemFont(ofSize: 14)
+        divider.font = UIFont.dynamic(size: 14)
 
         contentView.addSubview(divider)
 
@@ -201,7 +201,7 @@ class AboutVC : RZBaseVC {
         privacyPolicyButton.setTitle("Privacy Policy".localize(), for: .normal)
         privacyPolicyButton.titleLabel?.textAlignment = .left
         privacyPolicyButton.contentHorizontalAlignment = .left
-        privacyPolicyButton.titleLabel?.font = UIFont.systemFont(ofSize: IsIpad() ? 16 : 14)
+        privacyPolicyButton.titleLabel?.font = UIFont.dynamic(size: IsIpad() ? 16 : 14)
         privacyPolicyButton.setTitleColor(isPrivacyPolicyHighlighted() ? textHighlightColor : textColor, for: .normal)
         privacyPolicyButton.addTarget(self, action: #selector(onPrivacyPolicyClicked), for: .touchUpInside)
         
@@ -210,7 +210,7 @@ class AboutVC : RZBaseVC {
         let openSourceNoticeButton = UIButton(type: .custom)
         openSourceNoticeButton.setTitle("Open Source Software Notice".localize(), for: .normal)
         openSourceNoticeButton.titleLabel?.textAlignment = .center
-        openSourceNoticeButton.titleLabel?.font = UIFont.systemFont(ofSize: IsIpad() ? 16 : 14)
+        openSourceNoticeButton.titleLabel?.font = UIFont.dynamic(size: IsIpad() ? 16 : 14)
         openSourceNoticeButton.setTitleColor(isOpenSourceNoticeHighlighted() ? textHighlightColor : textColor, for: .normal)
         openSourceNoticeButton.addTarget(self, action: #selector(onOpenSourceNoticeClicked), for: .touchUpInside)
         

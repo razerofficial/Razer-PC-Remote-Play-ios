@@ -274,7 +274,7 @@ class SettingsAdddHostVC: RZBaseVC , PairCallback {
     
     lazy var textField : UITextField = {
         let field = UITextField.init()
-        field.font = UIFont.italicSystemFont(ofSize: 14)
+        field.font = UIFont.dynamic(size: 14)
         field.placeholder = "Enter the IP address of your computer.".localize()
         field.placeholderColor = Color.hex(0x999999).uiColor()
         field.backgroundColor = .white
@@ -287,7 +287,7 @@ class SettingsAdddHostVC: RZBaseVC , PairCallback {
         view.isHidden = true
         view.backgroundColor = Color.hex(0x000000, alpha: 0.5).uiColor()
         let title = SettingsRouter.titleLab("Connecting…".localize())
-        title.font = UIFont.systemFont(ofSize: 18)
+        title.font = UIFont.dynamic(size: 18)
         
         let des = SettingsRouter.desLab("Please ensure Razer Cortex is running.".localize(), 14)
         

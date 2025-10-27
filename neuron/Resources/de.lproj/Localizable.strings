@@ -25,7 +25,7 @@
 "Your PC will create a virtual display matching your [iPhone/iPad]’s resolution and refresh rate of %1$s at %2$sHz and stream it to your [iPhone/iPad].\n\nAny screen connected to your PC will be temporarily disabled while streaming." = "Dein PC erzeugt ein virtuelles Display passend zur Auflösung deines [iPhone/iPad]s mit einer Aktualisierungsrate von %1$s bei %2$s Hz und streamt den Inhalt zu deinem [iPhone/iPad].\n\nBeim Streaming werden alle Bildschirme deines PCs vorübergehend ausgeschaltet.";
 "Video Bitrate" = "Video-Bitrate";
 "Touch Screen Control" = "Touchscreen-Steuerung";
-"Your PC’s connected display will be streamed to your [iPhone/iPad] " = "Der Bildschirminhalt deines PCs wird auf dein [iPhone/iPad] gestreamt. ";
+"Your PC’s connected display will be streamed to your [iPhone/iPad]." = "Der Bildschirminhalt deines PCs wird auf dein [iPhone/iPad] gestreamt.";
 "Enhances visuals with better contrast, brightness, and color range." = "Verbessert Kontrast, Helligkeit und Farbbereich bei der Darstellung.";
 "Virtual Trackpad" = "Virtuelles Trackpad";
 "Direct Touch" = "Direct Touch";
@@ -50,6 +50,8 @@
 "Input PC IP address" = "PC-IP-Adresse eingeben";
 "Pairing Request" = "Kopplungsanfrage";
 "Enter the code on \"%@\" to complete pairing with your device.\n\nPin Code" = "Gib den Code \"%@\" ein, um die Kopplung mit deinem Gerät abzuschließen.\n\nPIN-Code";
+"Enter the code on \"%@\" to complete pairing with your device." = "Gib den Code \"%@\" ein, um die Kopplung mit deinem Gerät abzuschließen.";
+"Pin Code" = "PIN-Code";
 "Remote Play" = "Remote Play";
 "Unpair" = "Trennen";
 "Pairing Failed" = "Kopplung fehlgeschlagen";
@@ -147,6 +149,7 @@
 "Local Network" = "Lokales Netzwerk";
 "Enable seamless streaming between your PC and Nexus." = "Übergangsloses Streaming zwischen PC und Nexus aktivieren.";
 "ALLOW" = "ZULASSEN";
+"Allow" = "Zulassen";
 "Done" = "Fertig";
 "Home" = "Home";
 "Download" = "Download";
@@ -215,3 +218,11 @@
 "Streaming session in progress" = "Streaming-Session läuft ...";
 // 20250602 BIA-1856 miss string
 "Replace" = "Ersetzen";
+//20250912 AI translation
+"Stream PC games from your computer to your [iPhone/iPad]." = "Streame PC-Spiele von deinem Computer auf dein [iPhone/iPad].";
+"Video Settings Display Mode" = "Anzeige-Modus für Videoeinstellungen";
+"Enhances visuals with better contrast, brightness, and color range. Requires your PC’s connected display to have HDR enabled." = "Verbessert die Darstellung mit besserem Kontrast, Helligkeit und Farbumfang. Erfordert, dass das angeschlossene PC-Display HDR aktiviert hat.";
+"Mute PC Speakers While Streaming" = "PC-Lautsprecher während des Streamings stummschalten";
+"Advances Settings" = "Erweiterte Einstellungen";
+"Edit Profile" = "Profil bearbeiten";
+"Computer" = "Computer";

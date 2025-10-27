@@ -68,9 +68,11 @@ static const double X1_MOUSE_SPEED_DIVISOR = 2.5;
 #else
     // iOS uses RelativeTouchHandler or AbsoluteTouchHandler depending on user preference
     if (settings.absoluteTouchMode) {
+        NSLog(@"[RzStream][StreamView] Using AbsoluteTouchHandler");
         self->touchHandler = [[AbsoluteTouchHandler alloc] initWithView:self];
     }
     else {
+        NSLog(@"[RzStream][StreamView] Using RelativeTouchHandler");
         self->touchHandler = [[RelativeTouchHandler alloc] initWithView:self];
     }
     
@@ -177,6 +179,21 @@ static const double X1_MOUSE_SPEED_DIVISOR = 2.5;
 }
 
 - (CGSize) getVideoAreaSize {
+    // Get actual PC resolution from NSUserDefaults (set by RZStreamFrameViewController)
+    CGFloat pcWidth = [[NSUserDefaults standardUserDefaults] floatForKey:@"RZStreamPCWidth"];
+    CGFloat pcHeight = [[NSUserDefaults standardUserDefaults] floatForKey:@"RZStreamPCHeight"];
+    
+    NSLog(@"[RzStream][StreamView] getVideoAreaSize - pcWidth: %.0f, pcHeight: %.0f, streamAspectRatio: %.4f", 
+          pcWidth, pcHeight, streamAspectRatio);
+    
+    // If we have actual PC resolution, use it instead of streamAspectRatio to avoid duplicate display mode touch event shift
+    if (pcWidth > 0 && pcHeight > 0) {
+        NSLog(@"[RzStream][StreamView] Using actual PC resolution: %.0fx%.0f", pcWidth, pcHeight);
+        return CGSizeMake(pcWidth, pcHeight);
+    }
+    
+    // Fallback to original calculation
+    NSLog(@"[RzStream][StreamView] Using original aspect ratio calculation");
     if (self.bounds.size.width > self.bounds.size.height * streamAspectRatio) {
         return CGSizeMake(self.bounds.size.height * streamAspectRatio, self.bounds.size.height);
     } else {
@@ -185,6 +202,59 @@ static const double X1_MOUSE_SPEED_DIVISOR = 2.5;
 }
 
 - (CGPoint) adjustCoordinatesForVideoArea:(CGPoint)point {
+    NSLog(@"[RzStream][StreamView] adjustCoordinatesForVideoArea input: (%.2f,%.2f)", point.x, point.y);
+    
+    // Get actual PC resolution
+    CGFloat pcWidth = [[NSUserDefaults standardUserDefaults] floatForKey:@"RZStreamPCWidth"];
+    CGFloat pcHeight = [[NSUserDefaults standardUserDefaults] floatForKey:@"RZStreamPCHeight"];
+    
+    if (pcWidth > 0 && pcHeight > 0) {
+        // Calculate the actual video area within the StreamView
+        CGFloat pcAspectRatio = pcWidth / pcHeight;
+        CGSize videoSize;
+        CGPoint videoOrigin;
+        
+        if (self.bounds.size.width > self.bounds.size.height * pcAspectRatio) {
+            // Video is centered horizontally with black bars on sides
+            videoSize = CGSizeMake(self.bounds.size.height * pcAspectRatio, self.bounds.size.height);
+        } else {
+            // Video is centered vertically with black bars on top/bottom
+            videoSize = CGSizeMake(self.bounds.size.width, self.bounds.size.width / pcAspectRatio);
+        }
+        
+        videoOrigin = CGPointMake((self.bounds.size.width - videoSize.width) / 2,
+                                 (self.bounds.size.height - videoSize.height) / 2);
+        
+        // NSLog(@"[RzStream][StreamView] Video area: origin(%.2f,%.2f) size(%.2fx%.2f)", 
+        //       videoOrigin.x, videoOrigin.y, videoSize.width, videoSize.height);
+        
+        // Check if point is within the actual video area
+        if (point.x < videoOrigin.x || point.x > videoOrigin.x + videoSize.width ||
+            point.y < videoOrigin.y || point.y > videoOrigin.y + videoSize.height) {
+            NSLog(@"[RzStream][StreamView] Touch outside video area, ignoring");
+            return CGPointMake(-1, -1); // Return invalid coordinates to signal out-of-bounds
+        }
+        
+        // Convert touch coordinates to video area coordinates
+        CGFloat videoX = point.x - videoOrigin.x;
+        CGFloat videoY = point.y - videoOrigin.y;
+        
+        // Scale to PC resolution
+        CGFloat scaleX = pcWidth / videoSize.width;
+        CGFloat scaleY = pcHeight / videoSize.height;
+        
+        CGPoint result = CGPointMake(videoX * scaleX, videoY * scaleY);
+
+        NSLog(@"[RzStream][StreamView] Video area mapping: (%.2f,%.2f) -> (%.2f,%.2f) -> (%.2f,%.2f), scale: %.4fx%.4f",
+              point.x, point.y, videoX, videoY, result.x, result.y, scaleX, scaleY);
+        
+        return result;
+    }
+    
+    // Fallback to original method
+    printf("[StreamView] Using fallback coordinate adjustment\n");
+    NSLog(@"[RzStream][StreamView] Using fallback coordinate adjustment");
+    
     // These are now relative to the StreamView, however we need to scale them
     // further to make them relative to the actual video portion.
     float x = point.x - self.bounds.origin.x;
@@ -327,6 +397,7 @@ static const double X1_MOUSE_SPEED_DIVISOR = 2.5;
     }
     
     Log(LOG_D, @"Touch down");
+    NSLog(@"[RzStream][StreamView] TouchesBegan called with %lu touches", (unsigned long)[touches count]);
     
     // Notify of user interaction and start expiration timer
     [self startInteractionTimer];
@@ -344,6 +415,9 @@ static const double X1_MOUSE_SPEED_DIVISOR = 2.5;
 #endif
     
     if (![onScreenControls handleTouchDownEvent:touches]) {
+        NSLog(@"[RzStream][StreamView] touchHandler object: %@", touchHandler);
+        NSLog(@"[RzStream][StreamView] touchHandler class: %@", [touchHandler class]);
+        NSLog(@"[RzStream][StreamView] Passing touch to touchHandler (RelativeTouchHandler)");
         // We still inform the touch handler even if we're going trigger the
         // keyboard activation gesture. This is important to ensure the touch
         // handler has a consistent view of touch events to correctly suppress
@@ -543,7 +617,10 @@ static const double X1_MOUSE_SPEED_DIVISOR = 2.5;
     hasUserInteracted = YES;
     
     if (![onScreenControls handleTouchMovedEvent:touches]) {
+        NSLog(@"[RzStream][StreamView] Passing touchMoved to touchHandler");
         [touchHandler touchesMoved:touches withEvent:event];
+    } else {
+        NSLog(@"[RzStream][StreamView] Touch movement handled by onScreenControls");
     }
 }
 
@@ -632,8 +709,21 @@ static const double X1_MOUSE_SPEED_DIVISOR = 2.5;
 
 #if !TARGET_OS_TV
 - (void) updateCursorLocation:(CGPoint)location isMouse:(BOOL)isMouse {
+    NSLog(@"*** [StreamView] updateCursorLocation called ***");
+    NSLog(@"[RzStream][StreamView] Input touch location: (%.2f,%.2f), isMouse: %d", location.x, location.y, isMouse);
+    
     CGPoint normalizedLocation = [self adjustCoordinatesForVideoArea:location];
+    
+    // Check if coordinates are valid (not out-of-bounds)
+    if (normalizedLocation.x < 0 || normalizedLocation.y < 0) {
+        NSLog(@"[RzStream][StreamView] Touch outside video area, not sending mouse event");
+        return;
+    }
+    
     CGSize videoSize = [self getVideoAreaSize];
+    
+    NSLog(@"[RzStream][StreamView] After coordinate adjustment: (%.2f,%.2f), videoSize: %.2fx%.2f", 
+          normalizedLocation.x, normalizedLocation.y, videoSize.width, videoSize.height);
     
     // Send the mouse position relative to the video region if it has changed
     // if we're receiving coordinates from a real mouse.
@@ -644,13 +734,23 @@ static const double X1_MOUSE_SPEED_DIVISOR = 2.5;
     // mouse motion when using a Citrix X1 mouse.
     if (normalizedLocation.x != lastMouseX || normalizedLocation.y != lastMouseY || !isMouse) {
         if (lastMouseX != 0 || lastMouseY != 0 || !isMouse) {
+            printf("[StreamView] SENDING MOUSE POSITION TO REMOTE: (%.2f,%.2f) in video area %.2fx%.2f\n", 
+                   normalizedLocation.x, normalizedLocation.y, videoSize.width, videoSize.height);
+            NSLog(@"[RzStream][StreamView] SENDING MOUSE POSITION TO REMOTE: (%.2f,%.2f) in video area %.2fx%.2f", 
+                  normalizedLocation.x, normalizedLocation.y, videoSize.width, videoSize.height);
             LiSendMousePositionEvent(normalizedLocation.x, normalizedLocation.y, videoSize.width, videoSize.height);
+        } else {
+            printf("[StreamView] Skipping initial mouse position (lastMouseX=0, lastMouseY=0)\n");
+            NSLog(@"[RzStream][StreamView] Skipping initial mouse position (lastMouseX=0, lastMouseY=0)");
         }
         
         if (isMouse) {
             lastMouseX = normalizedLocation.x;
             lastMouseY = normalizedLocation.y;
         }
+    } else {
+        printf("[StreamView] Skipping mouse position (no change from last position)\n");
+        NSLog(@"[RzStream][StreamView] Skipping mouse position (no change from last position)");
     }
 }
 

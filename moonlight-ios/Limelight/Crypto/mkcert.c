@@ -10,6 +10,7 @@
 #include <OpenSSL/rsa.h>
 #include <openssl/x509.h>
 #include <OpenSSL/rand.h>
+#include <TargetConditionals.h>
 
 static const int NUM_BITS = 2048;
 static const int SERIAL = 0;
@@ -82,6 +83,7 @@ struct CertKeyPair generateCertKeyPair(void) {
     mkcert(&x509, &pkey, NUM_BITS, SERIAL, NUM_YEARS);
     
     char* pass = "limelight";
+    
     p12 = PKCS12_create(pass,
                         "GameStream",
                         pkey,
@@ -92,11 +94,23 @@ struct CertKeyPair generateCertKeyPair(void) {
                         2048,
                         -1, // disable the automatic MAC
                         0);
-    // MAC it ourselves with SHA1 since iOS refuses to load anything else.
-    PKCS12_set_mac(p12, pass, -1, NULL, 0, 1, EVP_sha1());
     
     if (p12 == NULL) {
-        printf("Error generating a valid PKCS12 certificate.\n");
+        printf("Error generating a valid PKCS12 certificate. falling back to default algorithms (simulator case)\n");
+        p12 = PKCS12_create(pass,
+                            "GameStream",
+                            pkey,
+                            x509,
+                            NULL,
+                            0, // Use default algorithm for key encryption
+                            0, // Use default algorithm for cert encryption
+                            2048,
+                            1, // enable automatic MAC with default algorithm
+                            0);
+    } else {
+        // MAC it ourselves with SHA1 since iOS refuses to load anything else.
+        PKCS12_set_mac(p12, pass, -1, NULL, 0, 1, EVP_sha1());
+
     }
     
     BIO_free(bio_err);

@@ -17,6 +17,7 @@
 
 import UIKit
 import SnapKit
+import SwiftUI
 //import SwiftUICore
 
 protocol CustomNavigationBarDelegate:AnyObject {
@@ -46,13 +47,47 @@ class CustomNavigationBar: UIView {
     private func setupViews(title: String, leftButtonTitle: String?, rightButtonTitle: String?, delegate: CustomNavigationBarDelegate?) {
         // Back button
         backButton = UIButton(type: .system)
-        backButton.setImage(UIImage(systemName: "chevron.backward"), for: .normal) // Use system icon
-        backButton.tintColor = .white // Set icon color to white
-        backButton.imageView?.contentMode = .center // Keep icon aspect ratio
-//        backButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 20)
-        backButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: -10)
-        backButton.setTitle(leftButtonTitle, for: .normal)
-        backButton.titleLabel?.font = UILabel().font
+        
+        if #available(iOS 26.0, *) {
+            var config = UIButton.Configuration.clearGlass()
+            config.image = UIImage(systemName: "chevron.backward")
+            config.buttonSize = IsIpad() ? .large : .medium
+            backButton.configuration = config
+            backButton.tintColor = .white // Set icon color to white
+            
+//            let width = IsIpad() ? 44.0 : 36.0
+//            let hostingController = UIHostingController(rootView: GlassEffectView.init(radius:width/2.0,color: SettingsUtil.shared.glassBgColor()))
+//            hostingController.view.backgroundColor = .clear
+//            
+//            if let glassView = hostingController.view {
+//                let imageView = UIImageView.init(image: UIImage(systemName: "chevron.backward"))
+//                imageView.tintColor = .white
+//                backButton.addSubview(glassView)
+//                glassView.snp.makeConstraints { make in
+//                    make.center.equalToSuperview()
+//                    make.width.height.equalTo(width)
+//                }
+//                
+//                backButton.addSubview(imageView)
+//                imageView.snp.makeConstraints { make in
+//                    make.center.equalToSuperview()
+//                }
+//                
+//                glassView.isUserInteractionEnabled = false
+//                imageView.isUserInteractionEnabled = false
+//                
+//                backButton.frame = CGRect(x: 0, y: 0, width: width, height: width)
+//            }
+            
+        }else{
+            backButton.setImage(UIImage(systemName: "chevron.backward"), for: .normal) // Use system icon
+            backButton.tintColor = .white // Set icon color to white
+            backButton.imageView?.contentMode = .center // Keep icon aspect ratio
+            //        backButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 20)
+            backButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: -10)
+            backButton.setTitle(leftButtonTitle, for: .normal)
+            backButton.titleLabel?.font = UIFont.dynamic(size: 17)
+        }
         backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
         self.addSubview(backButton)
 
@@ -61,6 +96,7 @@ class CustomNavigationBar: UIView {
         titleLabel.text = title
         titleLabel.textColor = .white // Set text color to white
         titleLabel.textAlignment = .center
+        titleLabel.font = UIFont.dynamic(size: 17)
         self.addSubview(titleLabel)
 
         // Right button
@@ -81,6 +117,7 @@ class CustomNavigationBar: UIView {
         backButton.snp.makeConstraints { make in
             make.left.equalTo(DeviceLeftSpace)
             make.centerY.equalToSuperview()
+//            make.width.equalTo(50)
         }
 
         // Title label constraints
@@ -108,5 +145,9 @@ class CustomNavigationBar: UIView {
         print("Right button tapped")
         // You can add specific logic for the right button here
         self.delegate?.rightButtonTapped()
+    }
+    
+    func updateNavbarTitle(title: String) {
+        titleLabel.text = title.localize()
     }
 }

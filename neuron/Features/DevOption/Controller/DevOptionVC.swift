@@ -37,6 +37,7 @@ class DevOptionVC: RZBaseVC {
     
     var showSeparateScreenOptionTitleLabel: UILabel? = nil
     var enableSaveLogOptionTitleLabel: UILabel? = nil
+    var enableSaveAudioOptionTitleLabel: UILabel? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -131,7 +132,6 @@ class DevOptionVC: RZBaseVC {
             make.left.equalTo(titleLabSpaceLeft)
             make.right.equalTo(-titleLabSpaceLeft)
         }
-
         
         let exportLogGesture = UITapGestureRecognizer(target: self, action: #selector(exportLogAction(_:)))
         let exportLogView = DevOptionItemView.itemView("Export Log File".localize())
@@ -142,7 +142,7 @@ class DevOptionVC: RZBaseVC {
             make.left.equalTo(titleLabSpaceLeft)
             make.right.equalTo(-titleLabSpaceLeft)
         }
-        
+
         let cleanLogGesture = UITapGestureRecognizer(target: self, action: #selector(cleanLogAction(_:)))
         let cleanLogView = DevOptionItemView.itemView("Clean Log".localize())
         cleanLogView.addGestureRecognizer(cleanLogGesture)
@@ -151,9 +151,40 @@ class DevOptionVC: RZBaseVC {
             make.top.equalTo(exportLogView.snp.bottom).offset(30)
             make.left.equalTo(titleLabSpaceLeft)
             make.right.equalTo(-titleLabSpaceLeft)
-            make.bottom.equalTo(contentView.snp.bottom).offset(-50)
         }
         
+        let enableSaveAudioGesture = UITapGestureRecognizer(target: self, action: #selector(enableSaveAudioOption(_:)))
+        let (enableSaveAudioView, enableSaveAudioLable) = DevOptionItemView.changeableItemView("Save Streaming Audio" + (isEnableSaveAudioDisplayMode ? " (ON)" : " (OFF)"))
+        enableSaveAudioOptionTitleLabel = enableSaveAudioLable
+        enableSaveAudioView.addGestureRecognizer(enableSaveAudioGesture)
+        contentView.addSubview(enableSaveAudioView)
+        enableSaveAudioView.snp.makeConstraints { make in
+            make.top.equalTo(cleanLogView.snp.bottom).offset(30)
+            make.left.equalTo(titleLabSpaceLeft)
+            make.right.equalTo(-titleLabSpaceLeft)
+        }
+
+        let exportAudioGesture = UITapGestureRecognizer(target: self, action: #selector(exportAudioAction(_:)))
+        let exportAudioView = DevOptionItemView.itemView("Export Streaming Audio")
+        exportAudioView.addGestureRecognizer(exportAudioGesture)
+        contentView.addSubview(exportAudioView)
+        exportAudioView.snp.makeConstraints { make in
+            make.top.equalTo(enableSaveAudioView.snp.bottom).offset(30)
+            make.left.equalTo(titleLabSpaceLeft)
+            make.right.equalTo(-titleLabSpaceLeft)
+        }
+        
+        let cleanAudioGesture = UITapGestureRecognizer(target: self, action: #selector(cleanAudioAction(_:)))
+        let cleanAudioView = DevOptionItemView.itemView("Delete Streaming Audio")
+        cleanAudioView.addGestureRecognizer(cleanAudioGesture)
+        contentView.addSubview(cleanAudioView)
+        cleanAudioView.snp.makeConstraints { make in
+            make.top.equalTo(exportAudioView.snp.bottom).offset(30)
+            make.left.equalTo(titleLabSpaceLeft)
+            make.right.equalTo(-titleLabSpaceLeft)
+            make.bottom.equalTo(contentView.snp.bottom).offset(-50)
+        }
+                
         contentView.layoutIfNeeded()
         scrollView.contentSize = CGSize(width: 0 , height: contentView.frame.height)
         
@@ -223,6 +254,15 @@ class DevOptionVC: RZBaseVC {
         SettingsRouter.shared.shareLogEnableSave = newValue
     }
     
+    @objc func enableSaveAudioOption(_ sender: UITapGestureRecognizer) {
+        let newValue = !isEnableSaveAudioDisplayMode
+        setEnableSaveAudioDisplayMode(value: newValue)
+        enableSaveAudioOptionTitleLabel?.text = "Save Streaming Audio" + (newValue ? " (ON)" : " (OFF)")
+        
+        // Note: Audio recording will be automatically controlled by streaming state
+        // We just save the preference here
+    }
+    
     @objc func exportLogAction(_ sender: UITapGestureRecognizer) {
 
         if SettingsRouter.shared.shareLogExcportIng {
@@ -256,6 +296,44 @@ class DevOptionVC: RZBaseVC {
     
     @objc func cleanLogAction(_ sender: UITapGestureRecognizer) {
         DevLogger.shared.cleanLog()
+    }
+    
+    @objc func exportAudioAction(_ sender: UITapGestureRecognizer) {
+        // Get documents directory path
+        let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+        let pcmPath = "\(documentsPath)/audio_streaming_pcm.wav"
+        
+        // Check if PCM WAV file exists
+        if !FileManager.default.fileExists(atPath: pcmPath) {
+            Toast.show(text: "No audio files found")
+            return
+        }
+        
+        let fileURL = URL(fileURLWithPath: pcmPath)
+        let activityViewController = UIActivityViewController(activityItems: [fileURL], applicationActivities: nil)
+
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            activityViewController.popoverPresentationController?.sourceView = self.view
+            activityViewController.popoverPresentationController?.sourceRect = CGRect(x: 100, y: 100, width: 200, height: 200)
+        }
+        self.present(activityViewController, animated: true, completion: nil)
+    }
+    
+    @objc func cleanAudioAction(_ sender: UITapGestureRecognizer) {
+        let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+        let pcmPath = "\(documentsPath)/audio_streaming_pcm.wav"
+        
+        do {
+            // Delete PCM WAV file if it exists
+            if FileManager.default.fileExists(atPath: pcmPath) {
+                try FileManager.default.removeItem(atPath: pcmPath)
+                Toast.show(text: "Audio file deleted")
+            } else {
+                Toast.show(text: "No audio file found to delete")
+            }
+        } catch {
+            Toast.show(text: "Failed to delete audio file")
+        }
     }
     
     @objc class func log(_ msg:String) {

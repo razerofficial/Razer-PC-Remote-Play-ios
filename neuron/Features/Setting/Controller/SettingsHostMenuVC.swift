@@ -60,7 +60,7 @@ class SettingsHostMenuVC: RZBaseVC {
         
         let buttonStackView = UIStackView(arrangedSubviews: [startPlayButton,buttonDivider,removeButton])
         buttonStackView.axis = .vertical
-        buttonStackView.layer.cornerRadius = 10.0
+        buttonStackView.layer.cornerRadius = 26
         buttonStackView.clipsToBounds = true
         view.addSubview(buttonStackView)
         buttonStackView.snp.makeConstraints { make in
@@ -149,7 +149,7 @@ class SettingsHostMenuVC: RZBaseVC {
     
     //MARK: - Lazy - UI
     lazy var customNavBar:CustomNavigationBar = {
-        let nav = CustomNavigationBar(title: host?.name ?? "", leftButtonTitle: "Settings".localize(), rightButtonTitle: nil, delegate: self)
+        let nav = CustomNavigationBar(title: host?.name ?? "", leftButtonTitle: "".localize(), rightButtonTitle: nil, delegate: self)
         return nav
     }()
     
@@ -180,10 +180,10 @@ class SettingsHostMenuVC: RZBaseVC {
         title.snp.makeConstraints { make in
             make.left.equalTo(20)
             make.right.equalTo(-20)
-            make.top.equalTo(10)
+            make.centerY.equalToSuperview()
         }
         button.snp.makeConstraints { make in
-            make.height.equalTo(40)
+            make.height.equalTo(52)
         }
         button.addTarget(self, action: #selector(removeDecice), for: .touchUpInside)
         return button
@@ -201,11 +201,11 @@ class SettingsHostMenuVC: RZBaseVC {
         title.snp.makeConstraints { make in
             make.left.equalTo(20)
             make.right.equalTo(-20)
-            make.top.equalTo(10)
+            make.centerY.equalToSuperview()
         }
         
         button.snp.makeConstraints { make in
-            make.height.equalTo(40)
+            make.height.equalTo(52)
         }
         button.addTarget(self, action: #selector(startPlay), for: .touchUpInside)
         return button

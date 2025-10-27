@@ -37,7 +37,8 @@ public class RZHandleResponder: NSObject , ObservableObject , ControllerButtonDe
     
     private var isTracking:Bool = false
     
-    @Published var connected:Bool = ControllerInputTracker.shared.isConnected
+    @Published var connected:Bool = ControllerInputTracker.shared.isConnected || ControllerInputTracker.shared.isHardwareKeyboardActive() 
+    private var keyboardStatusSubscription: AnyCancellable?
     
     lazy var trackingQueue:OperationQueue = {
         let op = OperationQueue.init()
@@ -64,6 +65,21 @@ public class RZHandleResponder: NSObject , ObservableObject , ControllerButtonDe
                 }
             }
         }
+        // Observe hardware keyboard status changes
+        func observeKeyboardVC() {
+            if let keyboardVC = ControllerInputTracker.shared.keyboardHandlingViewController {
+                keyboardStatusSubscription = keyboardVC.$hasReceivedHardwareKeyboardEvent
+                    .receive(on: DispatchQueue.main)
+                    .sink { [weak self] value in
+                        self?.connected = ControllerInputTracker.shared.isConnected || value
+                    }
+            } else {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    observeKeyboardVC()
+                }
+            }
+        }
+        observeKeyboardVC()
     }
     
     func shouleTracking() -> Bool {
@@ -80,7 +96,7 @@ public class RZHandleResponder: NSObject , ObservableObject , ControllerButtonDe
     }
     
     func isConnected() -> Bool {
-        return ControllerInputTracker.shared.isConnected
+        return ControllerInputTracker.shared.isConnected || ControllerInputTracker.shared.isHardwareKeyboardActive()
     }
     
     func stopTracking(){

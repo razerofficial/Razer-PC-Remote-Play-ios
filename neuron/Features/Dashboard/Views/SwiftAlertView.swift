@@ -1,25 +1,42 @@
-/*
- * Copyright (C) 2024 Razer Inc.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+//
+//  SwiftAlertView.swift
+//  SwiftAlertView
+//
+//  Created by Dinh Quan on 8/26/15.
+//  Copyright (c) 2015 Dinh Quan. All rights reserved.
+//
+// This code is distributed under the terms and conditions of the MIT license.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
 
 import UIKit
 import SwiftUI
 import CocoaLumberjack
+import SnapKit
 
 public class SwiftAlertView: UIView {
+    /// 根據 SettingsUtil.shared.windowsScale 設定縮放比例
+    private func applyWindowScale() {
+        let scale = DashboardViewModel.shared.portraitBaseScale//SettingsUtil.shared.windowsScale
+        print("SwiftAlertView applyWindowScale: \(scale)")
+        self.transform = CGAffineTransform(scaleX: scale, y: scale)
+    }
     
     public enum Style {
         //case auto
@@ -79,10 +96,6 @@ public class SwiftAlertView: UIView {
     public var isDismissOnOutsideTapped = false
     public var dimAlpha: CGFloat = 0.4
     public var dimBackgroundColor: UIColor? = .init(white: 0, alpha: 0.4)
-    
-    
-    //when has textfiled , text is empty , click ok show respond
-    public var respondOnOkClickWhenTextFiledIsEmpty = true
 
     public var appearTime = 0.2
     public var disappearTime = 0.1
@@ -111,7 +124,7 @@ public class SwiftAlertView: UIView {
     // MARK: Constants
     
     private let kSeparatorWidth: CGFloat = 0.5
-    private var kDefaultWidth: CGFloat = 270.0
+    private var kDefaultWidth: CGFloat = IsIOS26() ? 300.0 : 270.0
     private let kDefaultHeight: CGFloat = 144.0
     private let kDefaultTitleSizeMargin: CGFloat = 20.0
     private let kDefaultMessageSizeMargin: CGFloat = 20.0
@@ -142,12 +155,14 @@ public class SwiftAlertView: UIView {
     private var attributedMessage: NSAttributedString?
     private var viewWidth: CGFloat = 0
     private var viewHeight: CGFloat = 0
-    private var isMoveUpWithKeyboard = false
+    // private var isMoveUpWithKeyboard = false
     
     private var onButtonClicked: ((_ buttonId: String) -> Void)?
     var onCancelClicked: (() -> Void)?
     private var onActionButtonClicked: ((_ buttonIndex: Int) -> (Void))?
     private var onTextChanged: ((_ text: String?, _ textFieldIndex: Int) -> Void)?
+    
+    private var bgView:UIView?//UIVisualEffectView?
 
     // MARK: Initialization
     
@@ -155,6 +170,10 @@ public class SwiftAlertView: UIView {
     @Environment(\.colorScheme) var colorScheme
     public init(title: String? = nil, message: String? = nil, alertButtons: [AlertButton], colorScheme: SwiftUI.ColorScheme) {
         super.init(frame: CGRect(x: 0, y: 0, width: kDefaultWidth, height: kDefaultHeight))
+        applyWindowScale()
+        // observe keyboard show/hide notifications to move up the alert view
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
         
         // cache params
         self.title = title
@@ -204,6 +223,7 @@ public class SwiftAlertView: UIView {
     // @Environment(\.colorScheme) var colorScheme
     public init(title: String? = nil, attributedMessage: NSAttributedString? = nil, alertButtons: [AlertButton], colorScheme: SwiftUI.ColorScheme) {
         super.init(frame: CGRect(x: 0, y: 0, width: kDefaultWidth, height: kDefaultHeight))
+    applyWindowScale()
         
         // cache params
         self.title = title
@@ -267,7 +287,11 @@ public class SwiftAlertView: UIView {
                                        dark: UIColor(red: 75.0/255, green: 77.0/255, blue: 79.0/255, alpha: 1.0))
                 alertButton.view!.backgroundColor = focusColor
             } else{
-                let bgColor = color(light: lightModeBackgroundColor, dark: darkModeBackgroundColor)
+                var bgColor = color(light: lightModeBackgroundColor, dark: darkModeBackgroundColor)
+                if #available(iOS 26.0, *) {
+                    bgColor = color(light: UIColor(red: 192.0/255, green: 195.0/255, blue: 199.0/255, alpha: 0.1),
+                                    dark: UIColor(red: 75.0/255, green: 77.0/255, blue: 79.0/255, alpha: 0.1))
+                }
                 alertButton.view!.backgroundColor = bgColor
             }
         }
@@ -307,8 +331,10 @@ public class SwiftAlertView: UIView {
     // show the alert view at center of screen
     public func show() {
         isShowing = true
-        if let window = UIApplication.shared.connectedScenes.filter({$0.activationState == .foregroundActive}).compactMap({$0 as? UIWindowScene}).first?.windows.filter({$0.isKeyWindow}).first {
+        if let window = currentWindowScene()?.windows.filter({$0.isKeyWindow}).first {
             show(in: window)
+        } else {
+            isShowing = false
         }
     }
     
@@ -317,13 +343,13 @@ public class SwiftAlertView: UIView {
         layoutElementBeforeShowing()
         
         let isFocusTextField = isFocusTextFieldWhenShowing && !textFields.isEmpty
-        var showY = (view.frame.size.height - viewHeight)/2
-        if isFocusTextField {
-            showY -= kMoveUpWithKeyboardDistance
-            isMoveUpWithKeyboard = true
-        }
+        // var showY = (view.frame.size.height - viewHeight)/2
+        // if isFocusTextField {
+        //     showY -= kMoveUpWithKeyboardDistance
+        //     isMoveUpWithKeyboard = true
+        // }
         
-        frame = CGRect(x: (view.frame.size.width - viewWidth)/2, y: showY, width: viewWidth, height: viewHeight)
+        frame = CGRect(x: (view.frame.size.width - viewWidth)/2, y: (view.frame.size.height - viewHeight)/2, width: viewWidth, height: viewHeight)
 
         if isDimBackgroundWhenShowing {
             dimView = UIView(frame: view.bounds)
@@ -333,6 +359,9 @@ public class SwiftAlertView: UIView {
                 dimView!.backgroundColor = UIColor(white: 0, alpha: CGFloat(dimAlpha))
             }
             view.addSubview(dimView!)
+            dimView?.snp.makeConstraints { make in
+                make.edges.equalToSuperview()
+            }
             let recognizer = UITapGestureRecognizer(target: self, action: #selector(outsideTapped(_:)))
             dimView!.addGestureRecognizer(recognizer)
         }
@@ -345,6 +374,15 @@ public class SwiftAlertView: UIView {
 
         view.addSubview(self)
         view.bringSubviewToFront(self)
+        
+        snp.makeConstraints { make in
+            // make.center.equalTo(view) will cause alert view position change when use tap text field again and behind the keyboard
+            make.centerX.equalTo(view)
+//            make.top.equalTo(view).offset((view.frame.size.height - viewHeight)/2)
+            make.centerY.equalTo(view)
+            make.width.equalTo(viewWidth)
+            make.height.equalTo(viewHeight)
+        }
         
         switch transitionType {
         case .default:
@@ -393,7 +431,10 @@ public class SwiftAlertView: UIView {
     public func dismiss() {
         
         isShowing = false
-        
+        // stop observing keyboard notifications
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+
         self.delegate?.willDismissAlertView?(self)
 
         for textField in textFields {
@@ -469,7 +510,7 @@ public class SwiftAlertView: UIView {
 extension SwiftAlertView {
 
     private func printLog(_ msg:String) {
-        Logger.info("SwiftAlertView > " + msg)
+        DDLogInfo("SwiftAlertView > " + msg)
     }
 
     private func setUpDefaultValue() {
@@ -494,6 +535,12 @@ extension SwiftAlertView {
         transitionType = .default
         //buttonTitleColor = UIColor(red: 0, green: 0.478431, blue: 1, alpha: 1)
         layer.cornerRadius = CGFloat(cornerRadius)
+        
+        //ios26
+        if #available(iOS 26.0, *) {
+            self.cornerConfiguration = .uniformCorners(radius: 34.0)
+            isHideSeparator = true
+        }
     }
     
     private func setUpElements() {
@@ -518,6 +565,14 @@ extension SwiftAlertView {
             let buttonView = UIButton(type: .custom)
             buttonView.setTitle(alertButton.title, for: .normal)
             alertButton.view = buttonView
+            //GlassEffect
+            if #available(iOS 26.0, *) {
+//                var config = UIButton.Configuration.glass()
+//                config.title = alertButton.title
+//                buttonView.configuration = config
+                buttonView.layer.cornerRadius = buttonHeight / 2.0
+                buttonView.layer.masksToBounds = true
+            }
             addSubview(alertButton.view!)
         }
     }
@@ -525,12 +580,55 @@ extension SwiftAlertView {
     private func setUpDefaultAppearance() {
         self.backgroundColor = lightModeBackgroundColor// UIColor(red: 245.0/255, green: 245.0/255, blue: 245.0/255, alpha: 1)
         
+        if #available(iOS 26.0, *) {
+            
+            self.backgroundColor = .clear
+            
+            if bgView == nil {
+                
+//                bgView = UIVisualEffectView()
+//                bgView?.contentView.backgroundColor = .clear
+//                bgView?.backgroundColor = .init(hex: 0x000000, alpha: 0.1)
+//                bgView?.layer.cornerRadius = 34.0
+//
+//                let glassEffect = UIGlassEffect.init(style: .regular)
+//                glassEffect.tintColor = .clear
+//                glassEffect.isInteractive = true
+//                bgView?.effect = glassEffect
+//
+//                insertSubview(bgView!, at: 0)
+//                bgView?.snp.makeConstraints { make in
+//                    make.edges.equalToSuperview()
+//                }
+                
+                let hostingController = UIHostingController(rootView: GlassEffectView.init(radius:34.0,color: SettingsUtil.shared.glassBgColor()))
+                hostingController.view.backgroundColor = .clear
+                if let view = hostingController.view {
+                    bgView = view
+                    insertSubview(view, at: 0)
+                    view.snp.makeConstraints { make in
+                        make.edges.equalToSuperview()
+                    }
+                }
+                
+//                backgroundColor = .clear
+//                layer.cornerRadius = 0.0
+//                clipsToBounds = false
+            }
+
+        }
+        
         if title != nil {
             titleLabel.numberOfLines = 0
             titleLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
             titleLabel.textColor = UIColor.black
             titleLabel.font = UIFont.boldSystemFont(ofSize: 17)
-            titleLabel.textAlignment = NSTextAlignment.center
+            if #available(iOS 26.0, *) {
+                titleLabel.textAlignment = NSTextAlignment.left
+            } else {
+                titleLabel.textAlignment = NSTextAlignment.center
+            }
+            
             titleLabel.backgroundColor = .clear
         }
         
@@ -542,7 +640,11 @@ extension SwiftAlertView {
             //if title == nil {
             //    messageLabel.font = UIFont.boldSystemFont(ofSize: 17)
             //}
-            messageLabel.textAlignment = .center
+            if #available(iOS 26.0, *) {
+                messageLabel.textAlignment = .left
+            } else {
+                messageLabel.textAlignment = .center
+            }
             messageLabel.backgroundColor = .clear
         }
         
@@ -554,7 +656,11 @@ extension SwiftAlertView {
             //if title == nil {
             //    messageLabel.font = UIFont.boldSystemFont(ofSize: 17)
             //}
-            messageLabel.textAlignment = .center
+            if #available(iOS 26.0, *) {
+                messageLabel.textAlignment = .left
+            } else {
+                messageLabel.textAlignment = .center
+            }
             messageLabel.backgroundColor = .clear
         }
         
@@ -571,6 +677,7 @@ extension SwiftAlertView {
             alertButton.view?.tag = buttonTagDictionary.getTagValue(buttonId: alertButton.id)
             // set view colors
             alertButton.view?.backgroundColor = .clear
+            
             // set text style
             if alertButton.type == .confirm {
                 alertButton.view?.setTitleColor(blueTextColor, for: .normal)
@@ -589,6 +696,24 @@ extension SwiftAlertView {
             //} else {
             //    button.titleLabel?.font = UIFont.systemFont(ofSize: 17)
             //}
+            
+            //
+            if #available(iOS 26.0, *) {
+               let bgColor = color(light: UIColor(red: 192.0/255, green: 195.0/255, blue: 199.0/255, alpha: 0.1),
+                                dark: UIColor(red: 75.0/255, green: 77.0/255, blue: 79.0/255, alpha: 0.1))
+                alertButton.view?.backgroundColor = bgColor
+                
+                // set text style
+                if alertButton.type == .confirm {
+                    alertButton.view?.setTitleColor(Color.hex(0x44D62C).uiColor(), for: .normal)
+                }
+                if alertButton.type == .normal {
+                    alertButton.view?.setTitleColor(.white, for: .normal)
+                }
+                if alertButton.type == .cancel {
+                    alertButton.view?.setTitleColor(.white, for: .normal)
+                }
+            }
         }
     }
     
@@ -664,11 +789,84 @@ extension SwiftAlertView {
         
         // buttons
         if alertButtons.count == 2 {
-            viewHeight = topPartHeight + buttonHeight
+            
+            var buttonWidth = viewWidth/2
+            var letfSpace = 0.0
+            var midSpace = 0.0
+            var buttonBottomSpace = 0.0
+            //ios26
+            if #available(iOS 26.0, *) {
+                letfSpace = 14.0
+                midSpace = 16.0
+                buttonWidth = buttonWidth - letfSpace - midSpace / 2.0
+                buttonBottomSpace = 14.0
+            }
+            
+            var singleLine:Bool = false
+            for button in alertButtons {
+                if let font = button.view?.titleLabel?.font {
+                    let width = button.title.textAutoWidth(height: buttonHeight, font: font)
+                    if width > (buttonWidth - 20) {
+                        singleLine = true
+                    }
+                }
+            }
+            
+            drawButtonInSingleLine(singleLine, topPartHeight: topPartHeight)
+
+        } else {
+            drawButtonInSingleLine(true, topPartHeight: topPartHeight)
+        }
+    }
+    
+    func drawButtonInSingleLine(_ single: Bool , topPartHeight: CGFloat ) {
+        if single {
+            var buttonWidth = viewWidth
+            var letfSpace = 0.0
+            var buttonBottomSpace = 0.0
+            var buttonSpace = 0.0
+            //ios26
+            if #available(iOS 26.0, *) {
+                letfSpace = 14.0
+                buttonWidth = buttonWidth - letfSpace * 2.0
+                buttonBottomSpace = 14.0
+                buttonSpace = 10.0
+            }
+            
+            viewHeight = topPartHeight + (buttonHeight + buttonSpace) * CGFloat(alertButtons.count) + buttonBottomSpace
+            
+            var j = 1
+            for alertButton in alertButtons.reversed() {
+                let button = alertButton.view!
+                button.frame = CGRect(x: letfSpace , y: viewHeight - (buttonHeight + buttonSpace) * CGFloat(j) - buttonBottomSpace, width: buttonWidth, height: buttonHeight)
+                j += 1
+                if !isHideSeparator {
+                    let lineView = UIView(frame: CGRect(x: 0, y: button.frame.origin.y, width: viewWidth, height: kSeparatorWidth))
+                    lineView.backgroundColor = separatorColor
+                    addSubview(lineView)
+                }
+            }
+            
+        }else{
+            
+            var buttonWidth = viewWidth/2
+            var letfSpace = 0.0
+            var midSpace = 0.0
+            var buttonBottomSpace = 0.0
+            //ios26
+            if #available(iOS 26.0, *) {
+                letfSpace = 14.0
+                midSpace = 16.0
+                buttonWidth = buttonWidth - letfSpace - midSpace / 2.0
+                buttonBottomSpace = 14.0
+            }
+            
+            viewHeight = topPartHeight + buttonHeight + buttonBottomSpace
             let leftButton = alertButtons[0].view!
             let rightButton = alertButtons[1].view!
-            leftButton.frame = CGRect(x: 0, y: viewHeight-buttonHeight, width: viewWidth/2, height: buttonHeight)
-            rightButton.frame = CGRect(x: viewWidth/2, y: viewHeight-buttonHeight, width: viewWidth/2, height: buttonHeight)
+            
+            leftButton.frame = CGRect(x: letfSpace, y: viewHeight-buttonHeight - buttonBottomSpace, width: buttonWidth, height: buttonHeight)
+            rightButton.frame = CGRect(x: viewWidth/2 + midSpace / 2.0 , y: viewHeight-buttonHeight - buttonBottomSpace, width: buttonWidth, height: buttonHeight)
             
             if !isHideSeparator {
                 let horLine = UIView(frame: CGRect(x: 0, y: leftButton.frame.origin.y, width: viewWidth, height: kSeparatorWidth))
@@ -678,20 +876,6 @@ extension SwiftAlertView {
                 let verLine = UIView(frame: CGRect(x: viewWidth/2, y: leftButton.frame.origin.y, width: kSeparatorWidth, height: leftButton.frame.size.height))
                 verLine.backgroundColor = separatorColor
                 addSubview(verLine)
-            }
-
-        } else {
-            viewHeight = topPartHeight + buttonHeight * CGFloat(alertButtons.count)
-            var j = 1
-            for alertButton in alertButtons.reversed() {
-                let button = alertButton.view!
-                button.frame = CGRect(x: 0, y: viewHeight-buttonHeight*CGFloat(j), width: viewWidth, height: buttonHeight)
-                j += 1
-                if !isHideSeparator {
-                    let lineView = UIView(frame: CGRect(x: 0, y: button.frame.origin.y, width: viewWidth, height: kSeparatorWidth))
-                    lineView.backgroundColor = separatorColor
-                    addSubview(lineView)
-                }
             }
         }
     }
@@ -723,7 +907,9 @@ extension SwiftAlertView {
     private func updateAlertStyle() {
         titleLabel.textColor = color(light: .black, dark: .white)
         messageLabel.textColor = color(light: .black, dark: .white)
-        backgroundColor = color(light: lightModeBackgroundColor, dark: darkModeBackgroundColor)
+        if IsIOS26() == false {
+            backgroundColor = color(light: lightModeBackgroundColor, dark: darkModeBackgroundColor)
+        }
         separatorColor = color(light: UIColor(red: 196.0/255, green: 196.0/255, blue: 201.0/255, alpha: 1.0), dark: UIColor(white: 0.4, alpha: 1))
         
         for textField in textFields {
@@ -749,16 +935,6 @@ extension SwiftAlertView {
         let tagValue = button.tag
         let buttonId = buttonTagDictionary.getButtonId(tagValue: tagValue)
         
-        if respondOnOkClickWhenTextFiledIsEmpty == false  {
-            var textFiledView:UITextField?
-            for textField in self.textFields {
-                textFiledView = textField
-            }
-            if textFiledView?.text?.isEmpty == true && buttonId.uppercased() == "OK" {
-                return
-            }
-        }
-        
         //let buttonIndex = button.tag
         
         //delegate?.alertView?(self, clickedButtonAtIndex: buttonIndex)
@@ -778,9 +954,7 @@ extension SwiftAlertView {
         } else if buttonIndex == cancelButtonIndex {
             dismiss()
         }*/
-        if isDismissOnActionButtonClicked {
-            dismiss()
-        }
+        dismiss()
     }
     
     @objc func outsideTapped(_ recognizer: UITapGestureRecognizer) {
@@ -862,19 +1036,59 @@ extension SwiftAlertView: UITextFieldDelegate {
         return true
     }
     
-    public func textFieldDidBeginEditing(_ textField: UITextField) {
-        if isMoveUpWithKeyboard { return }
-        self.isMoveUpWithKeyboard = true
+    // public func textFieldDidBeginEditing(_ textField: UITextField) {
+    //     if isMoveUpWithKeyboard { return }
+    //     self.isMoveUpWithKeyboard = true
+    //     UIView.animate(withDuration: 0.2) {
+    //         self.frame = self.frame.offsetBy(dx: 0, dy: -self.kMoveUpWithKeyboardDistance)
+    //     }
+    // }
+    
+    // public func textFieldDidEndEditing(_ textField: UITextField) {
+    //     if !isMoveUpWithKeyboard { return }
+    //     self.isMoveUpWithKeyboard = false
+    //     UIView.animate(withDuration: 0.2) {
+    //         self.frame = self.frame.offsetBy(dx: 0, dy: self.kMoveUpWithKeyboardDistance)
+    //     }
+    // }
+
+    // MARK: - Keyboard Handling
+    @objc private func keyboardWillShow(_ notification: Notification) {
+        guard let userInfo = notification.userInfo,
+              let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect,
+              let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) else { return }
+        let keyboardHeight = keyboardFrame.height
+        let windowHeight = window.bounds.height
+        let alertHeight = self.bounds.height
+        let minTop: CGFloat = 20
+        let newTopOffset = max((windowHeight - alertHeight - keyboardHeight) / 2, minTop)
+
+        guard let superview = self.superview else {
+            print("[SwiftAlertView] keyboardWillShow: superview is nil, skip updating constraints.")
+            return
+        }
+
+        snp.updateConstraints { make in
+            make.centerY.equalTo(superview).offset(-keyboardHeight/2)
+        }
+
         UIView.animate(withDuration: 0.2) {
-            self.frame = self.frame.offsetBy(dx: 0, dy: -self.kMoveUpWithKeyboardDistance)
+            superview.layoutIfNeeded()
         }
     }
-    
-    public func textFieldDidEndEditing(_ textField: UITextField) {
-        if !isMoveUpWithKeyboard { return }
-        self.isMoveUpWithKeyboard = false
-        UIView.animate(withDuration: 0.2) {
-            self.frame = self.frame.offsetBy(dx: 0, dy: self.kMoveUpWithKeyboardDistance)
+
+    @objc private func keyboardWillHide(_ notification: Notification) {
+        if let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
+            let windowHeight = window.bounds.height
+            let newTopOffset = (windowHeight - self.bounds.height) / 2
+            
+            snp.updateConstraints { make in
+                make.centerY.equalToSuperview()
+            }
+            
+            UIView.animate(withDuration: 0.2) {
+                self.superview?.layoutIfNeeded()
+            }
         }
     }
 }

@@ -344,7 +344,7 @@
                            [self getCurrentPCScale],
                            config.width, config.height, [NSUUID UUID].UUIDString];
     urlString = [self updateURLStringWithBaseURL:urlString];
-    Log(LOG_I, @"Requesting: %@", urlString);
+    Log(LOG_I, @"[RzStream]Requesting: %@", urlString);
     // This blocks while the app is launching
     return [self createRequestFromString:urlString timeout:LONG_TIMEOUT_SEC];
 }
@@ -468,34 +468,49 @@
     
     SecIdentityCopyCertificate(identity, &certificate);
     
-    return [[NSArray alloc] initWithObjects:(__bridge id)certificate, nil];
+    if (certificate == nil) {
+        return nil;
+    } else {
+        return [[NSArray alloc] initWithObjects:(__bridge id)certificate, nil];
+    }
 }
 
 // Returns the identity
 - (SecIdentityRef)getClientCertificate {
     SecIdentityRef identityApp = nil;
-    NSData *p12NSData = [CryptoManager readP12FromFile];
-    CFDataRef p12Data = CFBridgingRetain(p12NSData);
-    
-    CFStringRef password = CFSTR("limelight");
-    const void *keys[] = { kSecImportExportPassphrase };
-    const void *values[] = { password };
-    CFDictionaryRef options = CFDictionaryCreate(NULL, keys, values, 1, NULL, NULL);
-    CFArrayRef items = CFArrayCreate(NULL, 0, 0, NULL);
-    OSStatus securityError = SecPKCS12Import(p12Data, options, &items);
 
-    if (securityError == errSecSuccess) {
-        //Log(LOG_D, @"Success opening p12 certificate. Items: %ld", CFArrayGetCount(items));
+    NSData *p12NSData = [CryptoManager readP12FromFile];
+    if (!p12NSData || ![p12NSData isKindOfClass:[NSData class]] || p12NSData.length == 0) {
+        Log(LOG_E,@"[HttpManager] Invalid P12 data");
+        return nil;
+    }
+
+    CFDataRef p12Data = (__bridge CFDataRef)p12NSData;
+
+    // Set password
+    CFStringRef password = CFSTR("limelight");
+    const void *keys[]   = { kSecImportExportPassphrase };
+    const void *values[] = { password };
+    CFDictionaryRef options = CFDictionaryCreate(NULL, keys, values, 1,
+                                                 &kCFTypeDictionaryKeyCallBacks,
+                                                 &kCFTypeDictionaryValueCallBacks);
+
+    // Notice: Do not create CFArray in advance.
+    CFArrayRef items = NULL;
+    OSStatus status = SecPKCS12Import(p12Data, options, &items);
+
+    if (status == errSecSuccess && items != NULL && CFArrayGetCount(items) > 0) {
         CFDictionaryRef identityDict = CFArrayGetValueAtIndex(items, 0);
         identityApp = (SecIdentityRef)CFDictionaryGetValue(identityDict, kSecImportItemIdentity);
+        CFRetain(identityApp); // Prevent the SecPKCS12Import from becoming invalid after being released
     } else {
-        Log(LOG_E, @"Error opening Certificate.");
+        Log(LOG_E,@"[HttpManager] Error opening Certificate. Status = %d", (int)status);
     }
-    
-    CFRetain(p12Data);
-    CFRelease(options);
-    CFRelease(password);
-    
+
+    if (items) CFRelease(items);
+    if (options) CFRelease(options);
+    // ⚠️ Do not CFRelease(password)
+
     return identityApp;
 }
 
@@ -543,6 +558,7 @@
         NSArray* certArray = [self getCertificate:identity];
         NSURLCredential* newCredential = [NSURLCredential credentialWithIdentity:identity certificates:certArray persistence:NSURLCredentialPersistencePermanent];
         completionHandler(NSURLSessionAuthChallengeUseCredential, newCredential);
+        if (identity) CFRelease(identity);
     }
     else
     {

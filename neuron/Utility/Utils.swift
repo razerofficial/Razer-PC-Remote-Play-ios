@@ -35,6 +35,10 @@ var isEnableSaveLogDisplayMode: Bool {
     return UserDefaults.standard.bool(forKey: "isEnableSaveLogSetting")
 }
 
+var isEnableSaveAudioDisplayMode: Bool {
+    return UserDefaults.standard.bool(forKey: "isEnableSaveAudioSetting")
+}
+
 func setShowSeparateScreenDisplayMode(value: Bool) {
     if var devOption = ShareDataDB.shared().readDevOptionsDataFromShare() as? [String: Any]{
         devOption["isShowSeparateScreenInSetting"] = value
@@ -46,6 +50,11 @@ func setShowSeparateScreenDisplayMode(value: Bool) {
 
 func setEnableSaveLogDisplayMode(value: Bool) {
     UserDefaults.standard.set(value, forKey: "isEnableSaveLogSetting")
+    UserDefaults.standard.synchronize()
+}
+
+func setEnableSaveAudioDisplayMode(value: Bool) {
+    UserDefaults.standard.set(value, forKey: "isEnableSaveAudioSetting")
     UserDefaults.standard.synchronize()
 }
 

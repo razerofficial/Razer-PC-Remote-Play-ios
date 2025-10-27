@@ -16,6 +16,8 @@
  */
 
 #import "RzUtils.h"
+#include <objc/objc.h>
+#include <MacTypes.h>
 #import "TemporaryApp.h"
 #import "DataManager.h"
 #import "StreamConfiguration.h"
@@ -136,6 +138,7 @@ static TemporaryHost* currentStreamingHost;
 
     streamConfig.height = [streamSettings.height intValue];
     streamConfig.width = [streamSettings.width intValue];
+    printf("[RZStream][streamConfigForStreamApp]Selected resolution: %dx%d\n", streamConfig.width, streamConfig.height);
     #if TARGET_OS_TV
     // Don't allow streaming 4K on the Apple TV HD
     struct utsname systemInfo;
@@ -298,6 +301,19 @@ static BOOL isNeedContinueLaunchGame = NO;
     NSString *appVersion = infoDictionary[@"CFBundleShortVersionString"];
     NSString *buildVersion = infoDictionary[@"CFBundleVersion"];
     return [NSString stringWithFormat:@"%@(%@)",appVersion,buildVersion];
+}
+
++ (BOOL)isPortrait {
+    for (UIScene *s in [UIApplication sharedApplication].connectedScenes) {
+        if (s.activationState == UISceneActivationStateForegroundActive &&
+            [s isKindOfClass:[UIWindowScene class]]) {
+            UIInterfaceOrientation o = ((UIWindowScene *)s).interfaceOrientation;
+            // printf("[RzStream][RzUtils][isPortrait] Current orientation: %ld\n", (long)o);
+            return UIInterfaceOrientationIsPortrait(o);
+        }
+    }
+    // printf("[RzStream][RzUtils][isPortrait] Unable to determine current orientation\n");
+    return false; // Default to portrait if undetermined
 }
 
 @end

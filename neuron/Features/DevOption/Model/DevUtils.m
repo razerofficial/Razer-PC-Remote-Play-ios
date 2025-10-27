@@ -64,11 +64,12 @@ static video_stats_t global;
 }
 
 - (void)setupNotifications {
+    __weak typeof(self) weakSelf = self;
     [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillTerminateNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull notification) {
-        [self saveStatsToShareDB];
+        [weakSelf saveStatsToShareDB];
     }];
     [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillResignActiveNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull notification) {
-        [self saveStatsToShareDB];
+        [weakSelf saveStatsToShareDB];
     }];
 }
 

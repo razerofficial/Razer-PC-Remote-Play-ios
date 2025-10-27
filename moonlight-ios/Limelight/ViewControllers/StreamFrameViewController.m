@@ -130,11 +130,13 @@
     [self.view addGestureRecognizer:_playPauseTapGestureRecognizer];
 
 #else
-    _exitSwipeRecognizer = [[UIScreenEdgePanGestureRecognizer alloc] initWithTarget:self action:@selector(edgeSwiped)];
-    _exitSwipeRecognizer.edges = UIRectEdgeLeft;
+    // BIA-2075 support stagemgr resizable window
+    _exitSwipeRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleExitStreaming:)];
+    _exitSwipeRecognizer.maximumNumberOfTouches = 1;
+    // BIA-2159 resolve virtual touchpad movement issue 
+    _exitSwipeRecognizer.cancelsTouchesInView = NO;
     _exitSwipeRecognizer.delaysTouchesBegan = NO;
     _exitSwipeRecognizer.delaysTouchesEnded = NO;
-    
     [self.view addGestureRecognizer:_exitSwipeRecognizer];
 #endif
     
@@ -491,6 +493,8 @@
 - (void) stageFailed:(const char*)stageName withError:(int)errorCode portTestFlags:(int)portTestFlags {
     Log(LOG_I, @"Stage %s failed: %d", stageName, errorCode);
     
+    const char *safeStageName = stageName ?: "<invalid>";
+    
 //    unsigned int portTestResults = LiTestClientConnectivity(CONN_TEST_SERVER, 443, portTestFlags);
     unsigned int portTestResults = 0;
 
@@ -498,7 +502,7 @@
         // Allow the display to go to sleep now
         [UIApplication sharedApplication].idleTimerDisabled = NO;
         
-        NSString* message = [NSString stringWithFormat:Localized(@"%s failed with error %d"), stageName, errorCode];
+        NSString* message = [NSString stringWithFormat:Localized(@"%s failed with error %d"), safeStageName, errorCode];
         if (portTestResults != ML_TEST_RESULT_INCONCLUSIVE && portTestResults != 0) {
             message = [message stringByAppendingString:[NSString stringWithFormat:@"\n\n%@",Localized(@"Your device's network connection is blocking Razer PC Remote Play. Streaming may not work while connected to this network.")]];
         }
@@ -716,5 +720,27 @@
     return [GCMouse mice].count > 0;
 }
 #endif
+
+- (void)handleExitStreaming:(UIPanGestureRecognizer *)gesture {
+    CGPoint location = [gesture locationInView:self.view];
+    CGPoint translation = [gesture translationInView:self.view];
+    CGFloat triggerRegion = self.view.frame.size.width * 0.2; // must trigger within 20% of view width
+    CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
+    CGFloat viewWidth = self.view.frame.size.width;
+    CGFloat dynamicThreshold = fmax(20, 120.0 * (viewWidth / screenWidth)); //full screen: 120, half screen: 60 , min: 20
+    static NSTimeInterval panStartTime = 0;
+    if (gesture.state == UIGestureRecognizerStateBegan) {
+        if (location.x > triggerRegion) return;
+        panStartTime = [[NSProcessInfo processInfo] systemUptime];
+    }
+    if (gesture.state == UIGestureRecognizerStateEnded && translation.x > dynamicThreshold) {
+        NSTimeInterval now = [[NSProcessInfo processInfo] systemUptime];
+        NSTimeInterval duration = now - panStartTime;
+        if (duration <= 0.75) {
+            printf("exit streaming triggered: L.x=%.2f T.x=%.2f SW: %.2f VW: %.2f threshold: %.2f duration: %.3f\n", location.x, translation.x, screenWidth, viewWidth, dynamicThreshold, duration);
+            [self edgeSwiped];
+        }
+    }
+}
 
 @end

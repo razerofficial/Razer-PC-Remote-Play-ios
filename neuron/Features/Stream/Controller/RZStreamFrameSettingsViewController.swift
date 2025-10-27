@@ -33,7 +33,8 @@ class RZStreamFrameSettingsViewController: RZBaseVC {
         view.addSubview(hostVC.view)
         hostVC.view.translatesAutoresizingMaskIntoConstraints = false
         hostVC.view.snp.makeConstraints { make in
-            make.left.top.bottom.right.equalTo(0)
+            make.left.top.bottom.equalTo(0)
+            make.right.equalTo(0)
         }
         hostVC.didMove(toParent: self)
         view.backgroundColor = .black

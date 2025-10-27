@@ -47,7 +47,7 @@ class Toast {
         let label = UILabel(frame: CGRect.zero)
         label.textColor = .black
         label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 16)
+        label.font = UIFont.dynamic(size: 16)
         label.text = text
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping

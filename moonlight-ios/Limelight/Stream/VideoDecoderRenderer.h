@@ -20,6 +20,7 @@
 - (void)start;
 - (void)stop;
 - (void)setHdrMode:(BOOL)enabled;
+- (void)updateDisplayLayer; // Public method to reinitialize display layer
 
 - (int)submitDecodeBuffer:(unsigned char *)data length:(int)length bufferType:(int)bufferType decodeUnit:(PDECODE_UNIT)du;
 

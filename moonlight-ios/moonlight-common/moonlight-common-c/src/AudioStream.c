@@ -1,5 +1,115 @@
 #include "Limelight-internal.h"
 
+#include <stdint.h>
+#include <string.h>
+
+// Audio recording variables
+static FILE* pcmRecordingFile = NULL;
+static bool isPCMRecordingEnabled = false;
+static char pcmFilePath[512] = {0};
+
+static bool pcmRecorder_isRecording(void) {
+    return pcmRecordingFile != NULL && isPCMRecordingEnabled;
+}
+
+static void pcmRecorder_startRecording(const OPUS_MULTISTREAM_CONFIGURATION* config) {
+    isPCMRecordingEnabled = true;
+    if (pcmRecordingFile != NULL) return;
+
+    const char* homeDir = getenv("HOME");
+    if (!homeDir) {
+        Limelog("Failed to get HOME directory for PCM recording\n");
+        return;
+    }
+    
+    snprintf(pcmFilePath, sizeof(pcmFilePath), "%s/Documents/audio_streaming_pcm.wav", homeDir);
+
+    pcmRecordingFile = fopen(pcmFilePath, "wb");
+    if (pcmRecordingFile) {
+        // Write WAV header (44 bytes) - we'll update the file size later
+        unsigned char wavHeader[44] = {
+            'R','I','F','F', 0,0,0,0, 'W','A','V','E',  // RIFF header
+            'f','m','t',' ', 16,0,0,0,                      // fmt chunk
+            1,0,                                         // PCM format
+            0,0,                                         // channels (filled later)
+            0,0,0,0,                           // sample rate (filled later)
+            0,0,0,0,                           // byte rate (filled later)
+            0,0,                                         // block align (filled later)
+            16,0,                                        // bits per sample
+            'd','a','t','a', 0,0,0,0                        // data chunk
+        };
+        
+        if (config) {
+            // Set channels (2 bytes, little endian)
+            wavHeader[22] = (unsigned char)(config->channelCount & 0xFF);
+            wavHeader[23] = (unsigned char)((config->channelCount >> 8) & 0xFF);
+            
+            // Set sample rate (4 bytes, little endian)
+            wavHeader[24] = (unsigned char)(config->sampleRate & 0xFF);
+            wavHeader[25] = (unsigned char)((config->sampleRate >> 8) & 0xFF);
+            wavHeader[26] = (unsigned char)((config->sampleRate >> 16) & 0xFF);
+            wavHeader[27] = (unsigned char)((config->sampleRate >> 24) & 0xFF);
+            
+            // Calculate byte rate (sample rate * channels * bytes per sample)
+            uint32_t byteRate = config->sampleRate * config->channelCount * 2;
+            wavHeader[28] = (unsigned char)(byteRate & 0xFF);
+            wavHeader[29] = (unsigned char)((byteRate >> 8) & 0xFF);
+            wavHeader[30] = (unsigned char)((byteRate >> 16) & 0xFF);
+            wavHeader[31] = (unsigned char)((byteRate >> 24) & 0xFF);
+            
+            // Set block align (channels * bytes per sample)
+            uint16_t blockAlign = config->channelCount * 2;
+            wavHeader[32] = (unsigned char)(blockAlign & 0xFF);
+            wavHeader[33] = (unsigned char)((blockAlign >> 8) & 0xFF);
+        }
+        
+        fwrite(wavHeader, 1, sizeof(wavHeader), pcmRecordingFile);
+        fflush(pcmRecordingFile);
+        
+        Limelog("PCM recording started: %s\n", pcmFilePath);
+    } else {
+        Limelog("Failed to start PCM recording\n");
+    }
+}
+
+static void pcmRecorder_stopRecording(void) {
+    if (pcmRecordingFile) {
+        // Update WAV header with actual file size
+        long fileSize = ftell(pcmRecordingFile);
+        if (fileSize > 44) {
+            // Update RIFF chunk size (file size - 8)
+            fseek(pcmRecordingFile, 4, SEEK_SET);
+            uint32_t riffSize = (uint32_t)(fileSize - 8);
+            fwrite(&riffSize, 4, 1, pcmRecordingFile);
+            
+            // Update data chunk size (file size - 44)
+            fseek(pcmRecordingFile, 40, SEEK_SET);
+            uint32_t dataSize = (uint32_t)(fileSize - 44);
+            fwrite(&dataSize, 4, 1, pcmRecordingFile);
+        }
+        
+        fclose(pcmRecordingFile);
+        pcmRecordingFile = NULL;
+        isPCMRecordingEnabled = false;
+        Limelog("PCM recording stopped\n");
+    }
+}
+
+static void pcmRecorder_appendPCMData(const void* pcmData, int sampleCount, int channelCount) {
+    if (pcmRecordingFile && isPCMRecordingEnabled && pcmData && sampleCount > 0) {
+        // PCM data is 16-bit signed integers
+        size_t dataSize = sampleCount * channelCount * sizeof(short);
+        fwrite(pcmData, 1, dataSize, pcmRecordingFile);
+        fflush(pcmRecordingFile);
+    }
+}
+
+// External function to be called from ArDecodeAndPlaySample
+void LiRecordDecodedAudio(const void* pcmData, int sampleCount, int channelCount) {
+    pcmRecorder_appendPCMData(pcmData, sampleCount, channelCount);
+}
+
+
 static SOCKET rtpSocket = INVALID_SOCKET;
 
 static LINKED_BLOCKING_QUEUE packetQueue;
@@ -402,6 +512,9 @@ void stopAudioStream(void) {
         Limelog("No audio traffic was ever received from the host!\n");
     }
 
+    // Stop PCM recording
+    pcmRecorder_stopRecording();
+
     AudioCallbacks.stop();
 
     PltInterruptThread(&receiveThread);
@@ -463,6 +576,9 @@ int startAudioStream(void* audioContext, int arFlags) {
             return err;
         }
     }
+
+    // Start PCM audio recording if enabled
+    pcmRecorder_startRecording(&chosenConfig);
 
     return 0;
 }

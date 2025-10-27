@@ -53,6 +53,7 @@ class ControllerInputDelegate : NSObject {
     func startTracking() {
         shouldTrackInputs = true
         ControllerInputTracker.shared.delegate = self
+        ControllerInputTracker.shared.keyboardStartTracking()
     }
 }
 

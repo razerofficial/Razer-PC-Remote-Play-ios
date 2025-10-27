@@ -210,6 +210,38 @@ extension View {
         //self.overlay(UIKitAppear(action: action).disabled(true))
         self.background(UIKitAppear(action: action).disabled(true))
     }
+    
+    @ViewBuilder
+    func compatibleGlassEffect(radius: CGFloat? = nil) -> some View {
+        if #available(iOS 26.0, *) {
+            Group {
+                if let radius = radius {
+                    self.glassEffect(in: .rect(cornerRadius: radius ) )
+                } else {
+                    self.glassEffect()
+                }
+            }
+        } else {
+            // Fallback on earlier versions
+            self
+        }
+    }
+    
+    @ViewBuilder
+    func compatibleGlassTouchEffect(radius: CGFloat? = nil) -> some View {
+        if #available(iOS 26.0, *) {
+            Group {
+                if let radius = radius {
+                    self.glassEffect( .clear.interactive(true) ,in: .rect(cornerRadius: radius ) )
+                } else {
+                    self.glassEffect( .clear.interactive(true) )
+                }
+            }
+        } else {
+            // Fallback on earlier versions
+            self
+        }
+    }
 }
 ///Use UIKitAppear To fix onAppear bug
 private struct UIKitAppear: UIViewControllerRepresentable {

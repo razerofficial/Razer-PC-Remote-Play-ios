@@ -22,23 +22,33 @@ import SnapKit
 import CocoaLumberjack
 import SwiftUI
 
-let MenuViewBgWidth = CGFloat(UIScreen.main.bounds.size.width*0.343) - 70 - 10
-let MenuViewWidth:CGFloat = MenuViewBgWidth//IsIpad() ? 352 : 215
+
 
 class SettingsMenuVC: RZBaseVC , UITableViewDelegate , UITableViewDataSource {
+    
+//    var MenuViewBgWidth = CGFloat(SettingsRouter.shared.currentAppWindowSize().width*0.33) - SettingsUtil.shared.getMenuButtonLeftPadding() - SettingsUtil.shared.getMenuButtonRightPadding()
+    
+    var MenuViewBgWidth: CGFloat = 0.0
     
     var selecetdIndexPath = IndexPath(row: 0, section: 0)
     var selecteView:UIView?
     
     var streamConfig: StreamConfiguration = StreamConfiguration()
     
+    var bgView:UIView = UIView.init()
     
+    var widthConstraint: Constraint?
+    var heightConstraint: Constraint?
+    
+    var orientation: UIInterfaceOrientation = UIApplication.shared.keyWindowInConnectedScenes?.windowScene?.interfaceOrientation ?? .unknown
 
     override func viewDidLoad() {
         super.viewDidLoad()
         //设置router的navigationController
         SettingsRouter.shared.navigationController = self.navigationController
         // Do any additional setup after loading the view.
+        MenuViewBgWidth = self.view.bounds.size.width
+        orientation = UIApplication.shared.keyWindowInConnectedScenes?.windowScene?.interfaceOrientation ?? .unknown
         setupView()
 
         handel.reloadCallBack = { [self] in
@@ -49,6 +59,12 @@ class SettingsMenuVC: RZBaseVC , UITableViewDelegate , UITableViewDataSource {
         setupNotifications()
         
         NotificationCenter.default.addObserver(self, selector: #selector(willResignActiveNotification), name: UIApplication.willResignActiveNotification, object: nil)
+        
+//        NotificationCenter.default.addObserver(
+//                    self,
+//                    selector: #selector(orientationChange),
+//                    name: UIDevice.orientationDidChangeNotification,
+//                    object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -72,7 +88,72 @@ class SettingsMenuVC: RZBaseVC , UITableViewDelegate , UITableViewDataSource {
                 vc.reloadContentView()
             }
         }
+//        updateWindowRatio()
     }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+//        let newOrientation = UIApplication.shared.windows.first?.windowScene?.interfaceOrientation ?? .unknown
+//        if newOrientation == orientation {
+//            coordinator.animate { _ in
+//                
+//            } completion: { _ in
+//                DispatchQueue.main.asyncAfter(deadline: .now(), execute: {
+//                    self.updateWindowRatio()
+//                })
+//            }
+//        }else {
+//            orientation = newOrientation
+//        }
+    }
+    
+    private var pendingRotationSize: CGSize?
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+    }
+    
+    @objc
+    func orientationChange() {
+     
+        if IsIpad() == false {
+            return
+        }
+        
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: {
+//            self.remakeContraint()
+//        })
+        
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
+//            for view in self.bgView.subviews {
+//                view.snp.removeConstraints()
+//                view.removeFromSuperview()
+//                
+//            }
+//            self.bgView.snp.removeConstraints()
+//            self.bgView.removeFromSuperview()
+//            
+//            self.setupView()
+//        })
+    }
+    
+    @objc
+    func updateWindowRatio() {
+        
+        if IsIpad() == false {
+            return
+        }
+        
+        SettingsRouter.shared.updateWindowSize()
+        let ratioX = SettingsRouter.shared.ScaleX
+        
+        print("new scale = \(ratioX)")
+        let transform = CGAffineTransform.identity.scaledBy(x: ratioX, y: ratioX)
+        self.view.transform = transform
+        
+    }
+    
+    
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
@@ -82,15 +163,85 @@ class SettingsMenuVC: RZBaseVC , UITableViewDelegate , UITableViewDataSource {
         NotificationCenter.default.removeObserver(self)
     }
     
+    func remakeContraint() {
+        
+        if IsIpad() == false {
+            return
+        }
+        
+        bgView.snp.remakeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
+        customNavBar.snp.remakeConstraints { make in
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(44.0)
+            if IsIpad() {
+                make.top.equalTo(20)
+            } else {
+                make.top.equalToSuperview()
+            }
+        }
+        
+        menuTable.snp.remakeConstraints { make in
+            make.left.equalTo(70)
+            make.top.equalTo(IsIpad() ? 44 : 0)
+            make.width.equalToSuperview().multipliedBy(0.33).offset(-70)
+            make.bottom.equalTo(0)
+        }
+        
+        line.snp.remakeConstraints { make in
+            make.bottom.equalTo(0)
+            make.top.equalTo(customNavBar.snp.bottom)
+            make.left.equalTo(menuTable.snp.right).offset(12)
+            make.width.equalTo(1.0/ScreenScale)
+        }
+        
+        contentView.snp.remakeConstraints { make in
+            make.left.equalTo(line.snp.right).offset(1)
+            make.bottom.equalTo(0)
+            make.top.equalTo(IsIpad() ? 44 : 0)
+            make.right.equalTo(-SettingsUtil.shared.getSubViewRightPadding())
+        }
+        
+        
+        for menuList in menuArray {
+            for menu in menuList {
+                menu.view.isHidden = true
+                contentView.addSubview(menu.view)
+                menu.view.snp.remakeConstraints { make in
+                    make.edges.equalToSuperview()
+                }
+            }
+        }
+        
+        selecteView = menuArray[safe:selecetdIndexPath.section]?[safe:selecetdIndexPath.row]?.view
+        selecteView?.isHidden = false
+    }
+    
     func setupView() {
         //set back ground color
         view.backgroundColor = .black
-        
-        //add contents
-        view.addSubview(menuTable)
-        view.addSubview(line)
-        view.addSubview(contentView)
-        view.addSubview(customNavBar)
+
+        if IsIpad() {
+            view.addSubview(bgView)
+            
+            bgView.snp.makeConstraints { make in
+                make.edges.equalToSuperview()
+            }
+            
+            //add contents
+            bgView.addSubview(menuTable)
+            bgView.addSubview(line)
+            bgView.addSubview(contentView)
+            bgView.addSubview(customNavBar)
+        }else{
+            //add contents
+            view.addSubview(menuTable)
+            view.addSubview(line)
+            view.addSubview(contentView)
+            view.addSubview(customNavBar)
+        }
 
         customNavBar.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
@@ -101,11 +252,10 @@ class SettingsMenuVC: RZBaseVC , UITableViewDelegate , UITableViewDataSource {
                 make.top.equalToSuperview()
             }
         }
-        
-        menuTable.snp.makeConstraints { make in
-            make.left.equalTo(IsIpad() ? 25 : DeviceLeftSpace)
+        menuTable.snp.remakeConstraints { make in
+            make.left.equalTo(70)
             make.top.equalTo(IsIpad() ? 44 : 0)
-            make.width.equalTo(MenuViewWidth)
+            make.width.equalToSuperview().multipliedBy(0.33).offset(-80)
             make.bottom.equalTo(0)
         }
         
@@ -118,8 +268,9 @@ class SettingsMenuVC: RZBaseVC , UITableViewDelegate , UITableViewDataSource {
         
         contentView.snp.makeConstraints { make in
             make.left.equalTo(line.snp.right).offset(1)
-            make.bottom.right.equalTo(0)
+            make.bottom.equalTo(0)
             make.top.equalTo(IsIpad() ? 44 : 0)
+            make.right.equalTo(-SettingsUtil.shared.getSubViewRightPadding())
         }
         
         
@@ -164,6 +315,8 @@ class SettingsMenuVC: RZBaseVC , UITableViewDelegate , UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
         changeSelectedItem(indexPath: indexPath)
+        let currentMenu = menuArray[indexPath.section][indexPath.row]
+        customNavBar.updateNavbarTitle(title: currentMenu.title)
     }
     
     //MARK: - tableview data source
@@ -194,7 +347,7 @@ class SettingsMenuVC: RZBaseVC , UITableViewDelegate , UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let list = menuArray[safe: indexPath.section]
         let item = list?[safe: indexPath.row]
-        return item?.height ?? 40.0
+        return item?.height ?? SettingsUtil.shared.getMenuBGHeight()
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -223,7 +376,7 @@ class SettingsMenuVC: RZBaseVC , UITableViewDelegate , UITableViewDataSource {
     //MARK: - Lazy - UI
     
     lazy var customNavBar:CustomNavigationBar = {
-        let nav = CustomNavigationBar(title: "Settings".localize(), leftButtonTitle: "Home".localize(), rightButtonTitle: nil, delegate: self)
+        let nav = CustomNavigationBar(title: menuArray.first?.first?.title ?? "", leftButtonTitle: "".localize(), rightButtonTitle: nil, delegate: self)
         return nav
     }()
     
@@ -316,15 +469,15 @@ class SettingsMenuVC: RZBaseVC , UITableViewDelegate , UITableViewDataSource {
             .font: titleLabel.font!
         ]
         // 计算文本的高度
-        let width: CGFloat = MenuViewWidth - 15.0 * 2.0 // 你想要的固定宽度
+        let width: CGFloat = MenuViewBgWidth - 15.0 * 2.0 // 你想要的固定宽度
         let size = CGSize(width: width, height: CGFloat.greatestFiniteMagnitude)
         let options: NSStringDrawingOptions = [.usesLineFragmentOrigin, .usesFontLeading]
         let rect = text.boundingRect(with: size, options: options, attributes: attributes, context: nil)
         
-        if rect.height > 40.0 {
-            return 60.0
+        if rect.height > SettingsUtil.shared.getMenuBGHeight() {
+            return SettingsUtil.shared.getMenuBGHeight() + 20
         }
-        return 40.0
+        return SettingsUtil.shared.getMenuBGHeight()
     }
 }
 

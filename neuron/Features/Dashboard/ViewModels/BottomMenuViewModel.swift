@@ -66,6 +66,7 @@ enum BottomMenuItemType: Hashable {
     case unpair
     case start_play
     case retry
+    case settings
 }
 
 fileprivate
@@ -86,6 +87,7 @@ extension BottomMenuItemType {
         case .unpair: return .Button_Y
         case .start_play: return  .Button_A
         case .retry: return  .Button_A
+        case .settings: return  .Button_A
         }
     }
     var title: String {
@@ -93,17 +95,18 @@ extension BottomMenuItemType {
         case .favorite(let isSelected): return isSelected ? "Unfavorite".localize() : "Favorite".localize()
         case .play: return "Play".localize()
         case .detail: return "Details".localize()
-        case .appStore: return "View on App Store".localize().uppercased()
-        case .fullScreen: return "Full Screen View".localize().uppercased()
-        case .xBox: return "Play Xbox Cloud Game".localize().uppercased()
-        case .hide: return "Hide".localize().uppercased()
-        case .view: return "View".localize().uppercased()
-        case .delete: return "Remove".localize().uppercased()
-        case .setup: return "Setup".localize().uppercased()
-        case .pair: return "Pair".localize().uppercased()
-        case .unpair: return "Unpair".localize().uppercased()
-        case .start_play: return "Remote Play".localize().uppercased()
-        case .retry: return "Retry".localize().uppercased()
+        case .appStore: return "View on App Store".localize()
+        case .fullScreen: return "Full Screen View".localize()
+        case .xBox: return "Play Xbox Cloud Game".localize()
+        case .hide: return "Hide".localize()
+        case .view: return "View".localize()
+        case .delete: return "Remove".localize()
+        case .setup: return "Setup".localize()
+        case .pair: return "Pair".localize()
+        case .unpair: return "Unpair".localize()
+        case .start_play: return "Remote Play".localize()
+        case .retry: return "Retry".localize()
+        case .settings: return "Settings".localize()
         }
     }
 }

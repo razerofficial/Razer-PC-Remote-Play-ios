@@ -26,7 +26,7 @@ extension NSNotification.Name {
 
 class DashboardVC: RZBaseVC {
     
-    let dashboardViewModel = DashboardViewModel()
+    let dashboardViewModel = DashboardViewModel.shared
     let localNetworkAuthorization = LocalNetworkAuthorization()
 
     override func viewDidLoad() {
@@ -39,6 +39,7 @@ class DashboardVC: RZBaseVC {
         //Swift-UI
         let contentView = DashboardView(viewModel: dashboardViewModel )
         let hostingController = UIHostingController(rootView: contentView)
+        hostingController.view.backgroundColor = .black
         
         addChild(hostingController)
         view.addSubview(hostingController.view)
@@ -73,6 +74,14 @@ class DashboardVC: RZBaseVC {
         dashboardViewModel.isDashboardAppear = false
     }
     
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        // DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+        //     // 更新布局或执行其他必要的操作
+        //     // self.updateWindowRatio(size: size)
+        // }
+    }
+        
     @objc func willStartStreaming() {
         maybeGotoTutorialPage()
     }
@@ -105,8 +114,8 @@ class DashboardVC: RZBaseVC {
     func gotoTutorialPage() {
         dashboardViewModel.isDashboardAppear = false
         dashboardViewModel.dismissNoLocalNetworkPermissionAlert()
-        let tutorialVC = TutorialViewController.create()
-        tutorialVC.modalPresentationStyle = .fullScreen
+        let tutorialVC = TutorialViewController()
+
         tutorialVC.tutorialDismissCallBack = {
             if RzUtils.isNeedContinueLaunchGame(){
                 SettingsRouter.shared.showStreamLoadingView()
@@ -117,6 +126,7 @@ class DashboardVC: RZBaseVC {
             self.dashboardViewModel.isDashboardAppear = true
             
         }
+        tutorialVC.modalPresentationStyle = .fullScreen
         self.present(tutorialVC, animated: false, completion: nil)
     }
     

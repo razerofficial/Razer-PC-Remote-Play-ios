@@ -36,6 +36,8 @@ let HostCellMoveStep = HostCellHeight + VHostCellSpace
 
 class DashboardViewModel: RZHandleResponder {
     
+    static let shared = DashboardViewModel()
+    
     fileprivate var bag = Set<AnyCancellable>()
     //scroll 
     weak var scroll:UIScrollView?
@@ -48,6 +50,9 @@ class DashboardViewModel: RZHandleResponder {
     //bottom overlay button view model
     @Published var bottomMenuViewModel = BottomMenuViewModel()
     
+    @Published var dynamicRowLimit = HostRowLimit
+    @Published var currentWindowHeight = UIScreen.screenHeight
+    
     let localNetworkAuthorization = LocalNetworkAuthorization()
     
     var isDashboardAppear: Bool = false
@@ -55,27 +60,44 @@ class DashboardViewModel: RZHandleResponder {
     var addressAlertView:SwiftAlertView?
     var wolAlertView:SwiftAlertView?
     
+    private var updatePairedhostFirstTime:Bool = true
+    
     @Published var noLocalNetworkPermissionAlert: SwiftAlertView? = nil
     @Published var isNeedShowNoNetworkPermissonAlert: Bool = false
     @Published var isShowWakeOnLanLoading: Bool = false
     
     @Published var isShowAddManualHostView:Bool = false
     
+    //for stage manage
+    @Published var portraitBaseScale = 1.0  // SettingsPage: Scale based on physical portrait screen width and height length and which is minium
+    @Published var portraitHeight = UIScreen.screenHeight // Current screen Height
+    
     //MARK: - init
-    override init() {
+    override private init() {
         super.init()
         delegate = self
         registerObservers()
     }
     
     func goToSettingVC() {
-        let vc = SettingsMenuVC()
-        vc.title = "Settings".localize()
-        SettingsRouter.shared.navigationController?.pushViewController(vc, animated: true)
+        DispatchQueue.main.async {
+            let vc = SettingsMenuVC()
+            vc.title = "Settings".localize()
+            SettingsRouter.shared.navigationController?.pushViewController(vc, animated: true)
+        }
+//        let vc = SettingsSplitViewController()
+//        vc.modalPresentationStyle = .fullScreen
+//        SettingsRouter.shared.navigationController?.present(vc, animated: true)
+        
     }
     
     func updateBottoMenu(){
         DispatchQueue.main.async { [self] in
+            
+            if deviceSection == .NavSection {
+                bottomMenuViewModel.updateItems([BottomMenuItem.init(type: .settings)])
+            }
+            
             if deviceSection == .PairedSection {
                 if selectedIndex < pairedHosts.count {
                     if let host = pairedHosts[safe: selectedIndex], host.state == .online {
@@ -115,6 +137,19 @@ class DashboardViewModel: RZHandleResponder {
             .pairHostListSubject
             .debounce(for: .seconds(0.5), scheduler: RunLoop.main)
             .sink { hostList in
+                //update focus first time
+                if self.updatePairedhostFirstTime {
+                    if self.deviceSection == .Unknow {
+                        if hostList.count > 0 {
+                            self.deviceSection = .PairedSection
+                        }else if self.netHosts.count > 0 {
+                            self.deviceSection = .NetSection
+                        }else {
+                            self.deviceSection = .AddSection
+                        }
+                    }
+                    self.updatePairedhostFirstTime = false
+                }
                 self.pairedHosts = hostList
                 self.updateBottoMenu()
             }

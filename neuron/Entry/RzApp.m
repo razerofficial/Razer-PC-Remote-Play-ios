@@ -72,6 +72,17 @@
     }];
 }
 
+- (UIViewController*) activeViewController {
+    UIViewController *topController = [UIApplication sharedApplication].keyWindow.rootViewController;
+
+    while (topController.presentedViewController) {
+        topController = topController.presentedViewController;
+    }
+
+    return topController;
+}
+
+
 - (void)startStreaming {
     
     RzTemporaryApp *app = [[ShareDataDB shared] currentLaunchGame];
@@ -80,6 +91,21 @@
     if (!newApp) {
         Log(LOG_E, @"startStreaming: app is null...");
         [SettingsRouter.shared hideStreamLoadingView];
+        return;
+    }
+    
+    if (newApp.host.serverCert == nil || newApp.host.serverCert.length <= 0) {
+        Log(LOG_E, @"startStreaming: host cert is null...");
+        
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:Localized(@"Connection Failed")
+                                                                       message:Localized(@"We couldn’t securely connect to your remote PC. It might have been reset, reinstalled, or its security settings changed. Please re-pair and try again.")
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:Localized(@"Re-pair") style:UIAlertActionStyleDefault handler:^(UIAlertAction* action){
+            [SettingsRouter.shared hideStreamLoadingView];
+            [RzUtils gotoNexus];
+        }]];
+        [[self activeViewController] presentViewController:alert animated:YES completion:nil];
+        
         return;
     }
     

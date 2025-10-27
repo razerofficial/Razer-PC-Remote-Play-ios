@@ -25,7 +25,7 @@
 "Your PC will create a virtual display matching your [iPhone/iPad]’s resolution and refresh rate of %1$s at %2$sHz and stream it to your [iPhone/iPad].\n\nAny screen connected to your PC will be temporarily disabled while streaming." = "PC は、[iPhone/iPad] の解像度とリフレッシュレート (%1$s (%2$sHz)) に合った仮想ディスプレイを作成し、[iPhone/iPad] にストリーミングします。\n\nストリーミング中は、PC に接続されたディスプレイは一時的に使用できなくなります。";
 "Video Bitrate" = "ビデオビットレート";
 "Touch Screen Control" = "タッチスクリーン操作";
-"Your PC’s connected display will be streamed to your [iPhone/iPad] " = "PC に接続されたディスプレイは、[iPhone/iPad] にストリーミングされます。";
+"Your PC’s connected display will be streamed to your [iPhone/iPad]." = "PC に接続されたディスプレイは、[iPhone/iPad] にストリーミングされます。";
 "Enhances visuals with better contrast, brightness, and color range." = "コントラスト、明るさ、色範囲が向上し、映像がより鮮明になります。";
 "Virtual Trackpad" = "バーチャルトラックパッド";
 "Direct Touch" = "ダイレクトタッチ";
@@ -50,6 +50,8 @@
 "Input PC IP address" = "PC の IP アドレスを入力";
 "Pairing Request" = "ペアリング要求";
 "Enter the code on \"%@\" to complete pairing with your device.\n\nPin Code" = "\"%@\" でコードを入力してデバイスとのペアリングを完了します。\n\nPIN コード";
+"Enter the code on \"%@\" to complete pairing with your device." = "\"%@\" でコードを入力してデバイスとのペアリングを完了します。";
+"Pin Code" = "PIN コード";
 "Remote Play" = "リモートプレイ";
 "Unpair" = "ペアリング解除";
 "Pairing Failed" = "ペアリング失敗";
@@ -147,6 +149,7 @@
 "Local Network" = "ローカルネットワーク";
 "Enable seamless streaming between your PC and Nexus." = "PC とNexus間のシームレスなストリーミングを可能にします。";
 "ALLOW" = "許可";
+"Allow" = "許可";
 "Done" = "完了";
 "Home" = "ホーム";
 "Download" = "ダウンロード";
@@ -215,3 +218,11 @@
 "Streaming session in progress" = "ストリーミングセッションを実行しています";
 // 20250602 BIA-1856 miss string
 "Replace" = "置き換え";
+//20250912 AI translation
+"Stream PC games from your computer to your [iPhone/iPad]." = "PCゲームをコンピューターから[iPhone/iPad]にストリーミングします。";
+"Video Settings Display Mode" = "ビデオ設定表示モード";
+"Enhances visuals with better contrast, brightness, and color range. Requires your PC’s connected display to have HDR enabled." = "コントラスト、明るさ、色域を強化します。PCのディスプレイでHDRが有効になっている必要があります。";
+"Mute PC Speakers While Streaming" = "ストリーミング中にPCスピーカーをミュート";
+"Advances Settings" = "詳細設定";
+"Edit Profile" = "プロフィール編集";
+"Computer" = "コンピューター";

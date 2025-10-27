@@ -25,6 +25,9 @@
 - (TemporaryApp *)convert2TemporaryApp {
     NSString *json = [self yy_modelToJSONString];
     TemporaryApp *app = [TemporaryApp yy_modelWithJSON:json];
+    if (self.host.serverCertDataBase64 == nil || self.host.serverCertDataBase64.length == 0) {
+        self.host.serverCertDataBase64 = @"";
+    }
     app.host.serverCert = [[NSData alloc] initWithBase64EncodedString:self.host.serverCertDataBase64 options:NSDataBase64DecodingIgnoreUnknownCharacters];
 //    DiscoveryWorker* worker = [[DiscoveryWorker alloc] initWithHost:app.host uniqueId:@"0123456789ABCDEF"];
 //    [worker discoverHost];

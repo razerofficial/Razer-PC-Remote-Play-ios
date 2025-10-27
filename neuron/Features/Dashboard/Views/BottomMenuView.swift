@@ -25,18 +25,21 @@ struct BottomMenuView: View {
     var body: some View {
 //        guard viewModel.isControllerConnected else { return EmptyView().eraseToAnyView() }
 //        guard ControllerInputTracker.shared.isConnected else { return EmptyView().eraseToAnyView() }
+        let rightSpace = IsIOS26() ? 4.0 : 3.0
+        
         return HStack() {
             Spacer()
             ForEach(viewModel.menuItems, id: \.type) { item in
+                Spacer().frame(width: 20.0)
                 BlurLetterGuideButton(
                     buttonType: viewModel.connected ? item.buttonType : .None ,
-                    title: item.title.localize().uppercased(),
+                    title: item.title.localize(),
+                    backgroundColor: SettingsUtil.shared.lgBtnBgColor(),
                     action: {
                         onButtonClicked(item.type)
                     })
-                Spacer().frame(width: 20.0)
             }
-            Spacer().frame(width: 8.0)
+            Spacer().frame(width: MenuButtonRightSpace + rightSpace)
         }
         .frame(alignment: .leading)
         .eraseToAnyView()
