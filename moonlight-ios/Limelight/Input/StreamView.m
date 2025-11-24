@@ -60,7 +60,7 @@ static const double X1_MOUSE_SPEED_DIVISOR = 2.5;
     [keyInputField setAutocorrectionType:UITextAutocorrectionTypeNo];
     [keyInputField setAutocapitalizationType:UITextAutocapitalizationTypeNone];
     [keyInputField setSpellCheckingType:UITextSpellCheckingTypeNo];
-    [self addSubview:keyInputField];
+    [self insertSubview:keyInputField atIndex:0];
     
 #if TARGET_OS_TV
     // tvOS requires RelativeTouchHandler to manage Apple Remote input
@@ -129,6 +129,18 @@ static const double X1_MOUSE_SPEED_DIVISOR = 2.5;
     // This is critical to ensure keyboard events are delivered to this
     // StreamView and not our parent UIView, especially on tvOS.
     [self becomeFirstResponder];
+}
+
+// Reset keyInputField to initial state to prevent gamepad from triggering keyboard on iPadOS 26
+- (void)resetKeyInputField {
+    [keyInputField removeFromSuperview];
+
+    keyInputField = [[KeyboardInputField alloc] initWithFrame:CGRectZero];
+    [keyInputField setKeyboardType:UIKeyboardTypeDefault];
+    [keyInputField setAutocorrectionType:UITextAutocorrectionTypeNo];
+    [keyInputField setAutocapitalizationType:UITextAutocapitalizationTypeNone];
+    [keyInputField setSpellCheckingType:UITextSpellCheckingTypeNo];
+    [self insertSubview:keyInputField atIndex:0];
 }
 
 - (void)startInteractionTimer {
@@ -430,6 +442,8 @@ static const double X1_MOUSE_SPEED_DIVISOR = 2.5;
                 Log(LOG_D, @"Closing the keyboard");
                 [keyInputField resignFirstResponder];
                 isInputingText = false;
+                // Reset keyInputField to initial state to prevent gamepad from triggering keyboard on iPadOS 26
+                [self resetKeyInputField];
             } else {
                 Log(LOG_D, @"Opening the keyboard");
                 // Prepare the textbox used to capture keyboard events.
@@ -439,7 +453,7 @@ static const double X1_MOUSE_SPEED_DIVISOR = 2.5;
                 // Prepare the toolbar above the keyboard for more options
                 UIToolbar *customToolbarView = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, 44)];
                 
-                UIBarButtonItem *doneBarButton = [self createButtonWithImageNamed:@"DoneIcon.png" backgroundColor:[UIColor clearColor] target:self action:@selector(toolbarButtonClicked:) keyCode:0x00 isToggleable:NO];
+                UIBarButtonItem *doneBarButton = [self createButtonWithImageNamed:@"system:xmark" backgroundColor:[UIColor clearColor] target:self action:@selector(toolbarButtonClicked:) keyCode:0x00 isToggleable:NO];
                 UIBarButtonItem *windowsBarButton = [self createButtonWithImageNamed:@"WindowsIcon.png" backgroundColor:[UIColor blackColor] target:self action:@selector(toolbarButtonClicked:) keyCode:0x5B isToggleable:YES];
                 UIBarButtonItem *tabBarButton = [self createButtonWithImageNamed:@"TabIcon.png" backgroundColor:[UIColor blackColor] target:self action:@selector(toolbarButtonClicked:) keyCode:0x09 isToggleable:NO];
                 UIBarButtonItem *shiftBarButton = [self createButtonWithImageNamed:@"ShiftIcon.png" backgroundColor:[UIColor blackColor] target:self action:@selector(toolbarButtonClicked:) keyCode:0xA0 isToggleable:YES];
@@ -465,19 +479,38 @@ static const double X1_MOUSE_SPEED_DIVISOR = 2.5;
 }
 
 - (UIBarButtonItem *)createButtonWithImageNamed:(NSString *)imageName backgroundColor:(UIColor *)backgroundColor target:(id)target action:(SEL)action keyCode:(NSInteger)keyCode isToggleable:(BOOL)isToggleable {
-    UIImage *image = [UIImage imageNamed:imageName];
+    UIImage *image;
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    CGFloat buttonSize = 36.0;
+
+    if ([imageName hasPrefix:@"system:"]) {
+        NSString *symbolName = [imageName substringFromIndex:7];
+        UIImageSymbolConfiguration *config = [UIImageSymbolConfiguration configurationWithPointSize:40 weight:UIImageSymbolWeightBold scale:UIImageSymbolScaleMedium];
+        UIImage *baseImage = [UIImage systemImageNamed:symbolName withConfiguration:config];
+        // Create symbol with primary color (adaptive appearance)
+        image = [baseImage imageWithTintColor:[UIColor labelColor] renderingMode:UIImageRenderingModeAlwaysOriginal];
+    } else {
+        image = [UIImage imageNamed:imageName];
+    }
+
     [button setImage:image forState:UIControlStateNormal];
-    button.frame = CGRectMake(0, 0, 30, 30);
+    button.frame = CGRectMake(0, 0, buttonSize, buttonSize);
     button.imageView.contentMode = UIViewContentModeScaleAspectFit;
+    button.imageEdgeInsets = UIEdgeInsetsMake(1, 5, 1, 5);
     button.imageView.backgroundColor = backgroundColor;
     button.imageView.layer.cornerRadius = 10.0;
-    button.imageEdgeInsets = UIEdgeInsetsMake(6, 6, 6, 6);
     [button addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
     objc_setAssociatedObject(button, "keyCode", @(keyCode), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     objc_setAssociatedObject(button, "isToggleable", @(isToggleable), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     objc_setAssociatedObject(button, "isOn", @(NO), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    UIBarButtonItem *barButton = [[UIBarButtonItem alloc] initWithCustomView:button];
+
+    // Fixed: image size is too big in iOS 26
+    UIView *container = [[UIView alloc] initWithFrame:CGRectMake(0, 0, buttonSize * 2, buttonSize)];
+    [container addSubview:button];
+    button.frame = container.bounds;
+    UIBarButtonItem *barButton = [[UIBarButtonItem alloc] initWithCustomView:container];
+    barButton.width = buttonSize * 2; // Set width to container width
+
     return barButton;
 }
 
@@ -501,6 +534,8 @@ static const double X1_MOUSE_SPEED_DIVISOR = 2.5;
     if (!keyCode) {
         [keyInputField resignFirstResponder];
         isInputingText = false;
+        // Reset keyInputField to initial state to prevent gamepad from triggering keyboard
+        [self resetKeyInputField];
     }
     else {
         // Send key press event using keyCode parameter, toggle if necessary
@@ -877,6 +912,15 @@ static const double X1_MOUSE_SPEED_DIVISOR = 2.5;
     usleep(50 * 1000);
     LiSendKeyboardEvent(0x0d, KEY_ACTION_UP, 0);
     return NO;
+}
+
+// Reset keyInputField to initial state to prevent gamepad from triggering keyboard on iPadOS 26
+- (BOOL)textFieldShouldEndEditing:(UITextField *)textField {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self resetKeyInputField];
+    });
+    
+    return YES;
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {

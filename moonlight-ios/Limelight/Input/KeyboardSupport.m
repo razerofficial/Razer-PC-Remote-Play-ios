@@ -15,6 +15,8 @@
     if (press.key != nil) {
         return [KeyboardSupport sendKeyEvent:press.key down:down];
     }
+    // Remove this block, as gamepad input also triggers a press.key == null event in apps built with Xcode 26.
+    /*
     else {
         short keyCode;
 
@@ -42,6 +44,8 @@
         
         return YES;
     }
+    */
+    return YES;
 }
 
 + (BOOL)sendKeyEvent:(UIKey*)key down:(BOOL)down API_AVAILABLE(ios(13.4)) {

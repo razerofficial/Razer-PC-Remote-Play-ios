@@ -337,9 +337,9 @@ class SettingsMenuVC: RZBaseVC , UITableViewDelegate , UITableViewDataSource {
         cell.configure(with: item?.title ?? "No Data")
         tableView.separatorStyle = .none
         var heighted = (selecetdIndexPath.section == indexPath.section && selecetdIndexPath.row == indexPath.row)
-        if nextHandel != nil && (nextHandel?.shouleTracking() == true) {
-            heighted = false
-        }
+//        if nextHandel != nil && (nextHandel?.shouleTracking() == true) {
+//            heighted = false
+//        }
         cell.isHeightLight(heighted)
         return cell
     }
