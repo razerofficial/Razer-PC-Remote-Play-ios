@@ -3,12 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 60;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		100024F52C6AFACF009C814D /* SettingsMenuVC+AppEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100024F42C6AFACF009C814D /* SettingsMenuVC+AppEntry.swift */; };
-		10088DCE2B986A5F0020B77F /* SettingsViewController+Neuron.m in Sources */ = {isa = PBXBuildFile; fileRef = 10088DCD2B986A5F0020B77F /* SettingsViewController+Neuron.m */; };
+		00706B9C70DA747DB1320861 /* Pods_neuron_neuronUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A86339C388743C3D6610A33 /* Pods_neuron_neuronUITests.framework */; };
 		100A8B9B2B905BD500D90642 /* RzMainFrameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 100A8B9A2B905BD500D90642 /* RzMainFrameViewController.m */; };
 		10172A432CA2B5DC00B29E7B /* DevUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 10172A422CA2B5DC00B29E7B /* DevUtils.m */; };
 		10172A462CA2BA6F00B29E7B /* StreamingStats.m in Sources */ = {isa = PBXBuildFile; fileRef = 10172A452CA2BA6F00B29E7B /* StreamingStats.m */; };
@@ -20,7 +19,7 @@
 		10172AE02CA50BF800B29E7B /* DevOptionItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10172ADF2CA50BF800B29E7B /* DevOptionItemView.swift */; };
 		10172B032CA681B600B29E7B /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10172B022CA681B600B29E7B /* Toast.swift */; };
 		102424392B8390F900493082 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 102424382B8390F900493082 /* libxml2.tbd */; };
-		1024243A2B83910200493082 /* libmoonlight-common.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 10736F402B838DF70003EFD5 /* libmoonlight-common.a */; };
+		1024243A2B83910200493082 /* libmoonlight-common.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 10736F402B838DF70003EFD5 /* libmoonlight-common.a */; platformFilter = ios; };
 		102424402B8391E300493082 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1024243F2B8391E300493082 /* CoreGraphics.framework */; };
 		102424422B8391F500493082 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 102424412B8391F500493082 /* CoreData.framework */; };
 		102424442B8391FB00493082 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 102424432B8391FB00493082 /* CoreMotion.framework */; };
@@ -38,7 +37,6 @@
 		10736C862B838A170003EFD5 /* neuronTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 10736C852B838A170003EFD5 /* neuronTests.m */; };
 		10736C902B838A170003EFD5 /* neuronUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 10736C8F2B838A170003EFD5 /* neuronUITests.m */; };
 		10736C922B838A170003EFD5 /* neuronUITestsLaunchTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 10736C912B838A170003EFD5 /* neuronUITestsLaunchTests.m */; };
-		10736EA32B838BD00003EFD5 /* iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 10736C9F2B838BD00003EFD5 /* iPhone.storyboard */; };
 		10736EA42B838BD00003EFD5 /* AppCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 10736CA22B838BD00003EFD5 /* AppCollectionView.m */; };
 		10736EA52B838BD00003EFD5 /* TemporaryApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 10736CA52B838BD00003EFD5 /* TemporaryApp.m */; };
 		10736EA62B838BD00003EFD5 /* TemporaryHost.m in Sources */ = {isa = PBXBuildFile; fileRef = 10736CA62B838BD00003EFD5 /* TemporaryHost.m */; };
@@ -88,7 +86,6 @@
 		10736ED42B838BD00003EFD5 /* UIAppView.m in Sources */ = {isa = PBXBuildFile; fileRef = 10736D162B838BD00003EFD5 /* UIAppView.m */; };
 		10736EE12B838BD00003EFD5 /* Logger.m in Sources */ = {isa = PBXBuildFile; fileRef = 10736D272B838BD00003EFD5 /* Logger.m */; };
 		10736EE22B838BD00003EFD5 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 10736D282B838BD00003EFD5 /* Utils.m */; };
-		10736F352B838BD10003EFD5 /* Launch Screen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 10736EA22B838BD00003EFD5 /* Launch Screen.xib */; };
 		10736F382B838BE10003EFD5 /* X1Kit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10736F372B838BE10003EFD5 /* X1Kit.swift */; };
 		1076419A2E5311F500DF367F /* Font+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107641992E5311F400DF367F /* Font+Extension.swift */; };
 		10772D9E2B8ED3DA00A839D1 /* ShareDataDB.m in Sources */ = {isa = PBXBuildFile; fileRef = 10772D9D2B8ED3DA00A839D1 /* ShareDataDB.m */; };
@@ -106,8 +103,8 @@
 		3387D50D2E432F5600C6BF99 /* KeyboardHandlingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3387D50C2E432F5600C6BF99 /* KeyboardHandlingViewController.swift */; };
 		33F79F0D2C9ABDF100535FFC /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 33F79F092C9ABDF100535FFC /* libcrypto.a */; };
 		33F79F0E2C9ABDF100535FFC /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 33F79F0C2C9ABDF100535FFC /* libssl.a */; };
-		3606EDA62C58838000B34526 /* SettingsHostDevicesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3606EDA32C58838000B34526 /* SettingsHostDevicesVC.swift */; };
 		361C50C72D90EAAE00D6A3EC /* DevLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 361C50C62D90EAAE00D6A3EC /* DevLogger.swift */; };
+		3628786D2F512436002AAB06 /* SettingsNeuronHostInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3628786C2F512436002AAB06 /* SettingsNeuronHostInfoView.swift */; };
 		362B87EA2CD07AE300F15F95 /* DashboardVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 362B87DC2CD07AE300F15F95 /* DashboardVC.swift */; };
 		362B87EB2CD07AE300F15F95 /* DashboardViewModel+ControllerInputs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 362B87E22CD07AE300F15F95 /* DashboardViewModel+ControllerInputs.swift */; };
 		362B87EC2CD07AE300F15F95 /* HostListManger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 362B87E42CD07AE300F15F95 /* HostListManger.swift */; };
@@ -125,9 +122,6 @@
 		362B88362CD0CEF000F15F95 /* Color.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 362B88352CD0CEF000F15F95 /* Color.xcassets */; };
 		362B88382CD1CEC200F15F95 /* SettingsRouter+Streaming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 362B88372CD1CEC200F15F95 /* SettingsRouter+Streaming.swift */; };
 		36514A8D2C5A1DB5008793A5 /* SettingsRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36514A8C2C5A1DB5008793A5 /* SettingsRouter.swift */; };
-		36514A9C2C5A1EC1008793A5 /* SettingsHostMenuVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36514A9B2C5A1EC1008793A5 /* SettingsHostMenuVC.swift */; };
-		36514A9E2C5B24CA008793A5 /* SettingsAdddHostVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36514A9D2C5B24CA008793A5 /* SettingsAdddHostVC.swift */; };
-		3652DAC52C573C5800A475CB /* SettingsMenuVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3652DAC42C573C5800A475CB /* SettingsMenuVC.swift */; };
 		3652DAEE2C5745B300A475CB /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3652DAD72C5745B300A475CB /* Array+Extension.swift */; };
 		3652DAF02C5745B300A475CB /* Data+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3652DAD92C5745B300A475CB /* Data+Extension.swift */; };
 		3652DAF12C5745B300A475CB /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3652DADA2C5745B300A475CB /* Date+Extension.swift */; };
@@ -160,9 +154,22 @@
 		3689E0672C69AC3900629595 /* ControllerInputTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3689E0612C69AC3900629595 /* ControllerInputTracker.swift */; };
 		3689E0692C6AF94A00629595 /* RZBaseVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3689E0682C6AF94A00629595 /* RZBaseVC.swift */; };
 		3689E06F2C6B0C1500629595 /* RZHandleResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3689E06E2C6B0C1500629595 /* RZHandleResponder.swift */; };
-		36E2E5872D7846EA00689BC0 /* RZLaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 36E2E5862D7846EA00689BC0 /* RZLaunchScreen.xib */; };
+		36FC08E82F56822700F88134 /* SettingsLocalHostMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36FC08E72F56822700F88134 /* SettingsLocalHostMenuView.swift */; };
+		660F269C2F3AC12C00D4A8F3 /* SettingWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 660F269A2F3AC12C00D4A8F3 /* SettingWebView.swift */; };
+		660F26A12F4ECE4400D4A8F3 /* SettingsSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 660F269F2F4ECE4400D4A8F3 /* SettingsSplitViewController.swift */; };
 		662A2A892DAF9BD500C1968B /* AutoScrollingUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 662A2A882DAF9BD500C1968B /* AutoScrollingUtils.swift */; };
+		664414B62F39757F0053363D /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 664414B52F39757F0053363D /* AboutView.swift */; };
+		664964E42F306FDA0036D8C2 /* SettingsNavigationSplitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 664964E22F306FDA0036D8C2 /* SettingsNavigationSplitView.swift */; };
+		665F4FAA2F5FB49A00F8B1F4 /* RzApp+SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 665F4FA82F5FB49A00F8B1F4 /* RzApp+SettingsVC.swift */; };
 		66985EFC2E7A5844002A3B36 /* SettingsUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66985EFB2E7A5844002A3B36 /* SettingsUtils.swift */; };
+		66E425F22F332274002CC8B3 /* SettingsMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66E425F12F332274002CC8B3 /* SettingsMenuView.swift */; };
+		66E425F52F33230B002CC8B3 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66E425F42F33230B002CC8B3 /* SettingsViewModel.swift */; };
+		66E425F82F3327A8002CC8B3 /* SettingsUIComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66E425F72F3327A8002CC8B3 /* SettingsUIComponents.swift */; };
+		66E425FC2F332866002CC8B3 /* MenuItemList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66E425FA2F332866002CC8B3 /* MenuItemList.swift */; };
+		66E425FE2F333183002CC8B3 /* SettingsMenuItemButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66E425FD2F333183002CC8B3 /* SettingsMenuItemButton.swift */; };
+		66E426012F33339D002CC8B3 /* SettingsRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66E426002F33339D002CC8B3 /* SettingsRoute.swift */; };
+		66E426042F334399002CC8B3 /* SettingsSubContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66E426032F334399002CC8B3 /* SettingsSubContentView.swift */; };
+		66E426082F334A3F002CC8B3 /* SettingsSplitView+BackButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66E426062F334A3F002CC8B3 /* SettingsSplitView+BackButton.swift */; };
 		66EAA23B2CC8A90A00E0C414 /* RZStreamFrameSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66EAA23A2CC8A90A00E0C414 /* RZStreamFrameSettingsViewController.swift */; };
 		66EAA23F2CC8D82E00E0C414 /* NeuronFrameSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66EAA23E2CC8D82E00E0C414 /* NeuronFrameSettingsView.swift */; };
 		66EAA2412CC8DD2B00E0C414 /* NeuronFrameSettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66EAA2402CC8DD2B00E0C414 /* NeuronFrameSettingsViewModel.swift */; };
@@ -173,22 +180,18 @@
 		66EAA25C2CCA367300E0C414 /* BorderModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66EAA24B2CCA367300E0C414 /* BorderModifier.swift */; };
 		66EAA25F2CCA36A700E0C414 /* ChangeObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66EAA25E2CCA36A700E0C414 /* ChangeObserver.swift */; };
 		66EAA2612CCA371400E0C414 /* RoundedCorner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66EAA2602CCA371400E0C414 /* RoundedCorner.swift */; };
+		66F0AACF2F58127300A418C3 /* SettingsViewModel+ControllerInputs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F0AACE2F58127300A418C3 /* SettingsViewModel+ControllerInputs.swift */; };
+		66F0AB012F5EBC1400A418C3 /* SettingsViewController+Neuron.m in Sources */ = {isa = PBXBuildFile; fileRef = 66F0AB002F5EBC1400A418C3 /* SettingsViewController+Neuron.m */; };
 		887C89782CC78EB7006804D0 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 887C89762CC78EB7006804D0 /* Localizable.strings */; };
 		889E10D12C7C528F00126B31 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 889E10D02C7C528F00126B31 /* Utils.swift */; };
 		88E519312C747518002B66F2 /* licenses.html in Resources */ = {isa = PBXBuildFile; fileRef = 88E519302C747518002B66F2 /* licenses.html */; };
 		88EA975E2D62D6D5003CD63F /* AppStoreReviewHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88EA975D2D62D6D5003CD63F /* AppStoreReviewHandler.swift */; };
-		88EC99A82C770CDC00398352 /* AboutVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88EC99A72C770CDC00398352 /* AboutVC.swift */; };
 		88F408302C7D7A2F00D90373 /* WebVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88F4082F2C7D7A2F00D90373 /* WebVC.swift */; };
-		88FBE80D2C4A176B005B22B3 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 88FBE80C2C4A176B005B22B3 /* Launch Screen.storyboard */; };
+		AE196D4866EB02CE701030B4 /* Pods_neuronTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12A33BF98F50414CD8042D17 /* Pods_neuronTests.framework */; };
+		B2A2ED9DAD83AB3863A7F789 /* Pods_neuron.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 558FB96E9EE7E6B0EC0B7437 /* Pods_neuron.framework */; };
 		B50A8BDF2D94F1DF009B78C6 /* NeuronEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50A8BDE2D94F1DF009B78C6 /* NeuronEvent.swift */; };
-		B51D87D52C5B3D2E0006CF68 /* RZWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B51D87D32C5B3D2E0006CF68 /* RZWebViewController.m */; };
-		B51D87D62C5B3D2E0006CF68 /* RZWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B51D87D42C5B3D2E0006CF68 /* RZWebViewController.xib */; };
 		B51D87E12C5C78F90006CF68 /* DiscoveryManager+Neuron.m in Sources */ = {isa = PBXBuildFile; fileRef = B51D87E02C5C78F90006CF68 /* DiscoveryManager+Neuron.m */; };
-		B560F12E2BFDBDA000F7A6B7 /* StreamFrame.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B560F12D2BFDBDA000F7A6B7 /* StreamFrame.storyboard */; };
 		B560F19A2BFEE0A800F7A6B7 /* StreamLoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = B560F1992BFEE0A800F7A6B7 /* StreamLoadingView.m */; };
-		B560F19C2BFEE0B100F7A6B7 /* StreamLoadingView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B560F19B2BFEE0B100F7A6B7 /* StreamLoadingView.xib */; };
-		B560F1A52BFF2FE600F7A6B7 /* RZAboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B560F1A32BFF2FE600F7A6B7 /* RZAboutViewController.m */; };
-		B560F1A62BFF2FE600F7A6B7 /* RZAboutViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B560F1A42BFF2FE600F7A6B7 /* RZAboutViewController.xib */; };
 		B5A2CA572C48B8BA001ED549 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B5A2CA562C48B8BA001ED549 /* GoogleService-Info.plist */; };
 		B5B87EE72E8914DD0039245F /* TutorialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B87EE42E8914D20039245F /* TutorialView.swift */; };
 		B5B87EED2E8A30000039245F /* TutorialViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B87EEC2E8A2FFE0039245F /* TutorialViewModel.swift */; };
@@ -196,9 +199,13 @@
 		B5CCFC792D07F06500528DBB /* RZServerInfoResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = B5CCFC782D07F06500528DBB /* RZServerInfoResponse.m */; };
 		B5EAF2952CB675F70037FD31 /* RZAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5EAF2942CB675F70037FD31 /* RZAlertView.swift */; };
 		B5F306A52CCA321D006D9BF9 /* TutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F306A42CCA321C006D9BF9 /* TutorialViewController.swift */; };
-		B5FBDC9A0ED263BA4953FD65 /* Pods_neuronTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C05DC2085FF21EA6E100A3FB /* Pods_neuronTests.framework */; };
-		D309BC53A946F613ACA874C9 /* Pods_neuron_neuronUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C69962B5AA550E7B2C30BBD /* Pods_neuron_neuronUITests.framework */; };
-		F2EA3475B5AC23CC577D08E6 /* Pods_neuron.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C4F4043BC1E0AC770D6B395 /* Pods_neuron.framework */; };
+		B7354E2D98C661D8B703E780 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		F0E1D2C3B4A5968701234567 /* StreamFrame.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B560F12D2BFDBDA000F7A6B7 /* StreamFrame.storyboard */; };
+		F0E1D2C3B4A5968701234568 /* StreamLoadingView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B560F19B2BFEE0B100F7A6B7 /* StreamLoadingView.xib */; };
+		F0E1D2C3B4A596870123456B /* RZLaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 36E2E5862D7846EA00689BC0 /* RZLaunchScreen.xib */; };
+		F0E1D2C3B4A596870123456C /* Launch Screen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 10736EA22B838BD00003EFD5 /* Launch Screen.xib */; };
+		F0E1D2C3B4A596870123456D /* iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F0E1D2C3B4A5968701234570 /* iPhone.storyboard */; };
+		F0E1D2C3B4A596870123456E /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F0E1D2C3B4A5968701234571 /* Launch Screen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -233,9 +240,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0C69962B5AA550E7B2C30BBD /* Pods_neuron_neuronUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_neuron_neuronUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		100024F42C6AFACF009C814D /* SettingsMenuVC+AppEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SettingsMenuVC+AppEntry.swift"; sourceTree = "<group>"; };
-		10088DCD2B986A5F0020B77F /* SettingsViewController+Neuron.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "SettingsViewController+Neuron.m"; sourceTree = "<group>"; };
+		02962EF36E16AA6D95AF85E5 /* Pods-neuronTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-neuronTests.release.xcconfig"; path = "Target Support Files/Pods-neuronTests/Pods-neuronTests.release.xcconfig"; sourceTree = "<group>"; };
 		100A8B992B905BD500D90642 /* RzMainFrameViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RzMainFrameViewController.h; sourceTree = "<group>"; };
 		100A8B9A2B905BD500D90642 /* RzMainFrameViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RzMainFrameViewController.m; sourceTree = "<group>"; };
 		100A8B9C2B906B8100D90642 /* constant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = constant.h; sourceTree = "<group>"; };
@@ -271,7 +276,6 @@
 		105D24C32C6B02EE00A6B3BD /* RZStreamFrameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RZStreamFrameViewController.m; sourceTree = "<group>"; };
 		105D24C42C6B02EE00A6B3BD /* RZStreamFrameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RZStreamFrameViewController.h; sourceTree = "<group>"; };
 		105E17CF2C086BF400AE0F06 /* CryptoManager+Neuron.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CryptoManager+Neuron.h"; sourceTree = "<group>"; };
-		106BEF762B9FEB7D00D601B8 /* SettingsViewController+Neuron.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SettingsViewController+Neuron.h"; sourceTree = "<group>"; };
 		10736C632B838A160003EFD5 /* neuron.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = neuron.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		10736C752B838A170003EFD5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		10736C7A2B838A170003EFD5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -281,7 +285,6 @@
 		10736C8B2B838A170003EFD5 /* neuronUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = neuronUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		10736C8F2B838A170003EFD5 /* neuronUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = neuronUITests.m; sourceTree = "<group>"; };
 		10736C912B838A170003EFD5 /* neuronUITestsLaunchTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = neuronUITestsLaunchTests.m; sourceTree = "<group>"; };
-		10736C9F2B838BD00003EFD5 /* iPhone.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = iPhone.storyboard; path = "moonlight-ios/iPhone.storyboard"; sourceTree = "<group>"; };
 		10736CA12B838BD00003EFD5 /* Limelight-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Limelight-Prefix.pch"; sourceTree = "<group>"; };
 		10736CA22B838BD00003EFD5 /* AppCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppCollectionView.m; sourceTree = "<group>"; };
 		10736CA42B838BD00003EFD5 /* DataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataManager.h; sourceTree = "<group>"; };
@@ -670,6 +673,8 @@
 		10D9901B2B8DDC820023BBC6 /* RzSwizzling.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RzSwizzling.h; sourceTree = "<group>"; };
 		10D9901C2B8DDC820023BBC6 /* RzSwizzling.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RzSwizzling.m; sourceTree = "<group>"; };
 		10D990202B8DE0480023BBC6 /* Global-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Global-Prefix.pch"; sourceTree = "<group>"; };
+		12A33BF98F50414CD8042D17 /* Pods_neuronTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_neuronTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		20C1EB65271511D5503717B6 /* Pods-neuron-neuronUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-neuron-neuronUITests.release.xcconfig"; path = "Target Support Files/Pods-neuron-neuronUITests/Pods-neuron-neuronUITests.release.xcconfig"; sourceTree = "<group>"; };
 		332A62802E7931DD001A4589 /* libSDL2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDL2.a; path = "moonlight-ios/libs/SDL2/lib/libSDL2.a"; sourceTree = "<group>"; };
 		332A62822E7931FB001A4589 /* libavcodec.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavcodec.a; path = "moonlight-ios/libs/FFmpeg/lib/libavcodec.a"; sourceTree = "<group>"; };
 		332A62832E7931FB001A4589 /* libavutil.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavutil.a; path = "moonlight-ios/libs/FFmpeg/lib/libavutil.a"; sourceTree = "<group>"; };
@@ -680,8 +685,8 @@
 		3387D50C2E432F5600C6BF99 /* KeyboardHandlingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardHandlingViewController.swift; sourceTree = "<group>"; };
 		33F79F092C9ABDF100535FFC /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = "moonlight-ios/libs/OpenSSL/lib/libcrypto.a"; sourceTree = "<group>"; };
 		33F79F0C2C9ABDF100535FFC /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = "moonlight-ios/libs/OpenSSL/lib/libssl.a"; sourceTree = "<group>"; };
-		3606EDA32C58838000B34526 /* SettingsHostDevicesVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsHostDevicesVC.swift; sourceTree = "<group>"; };
 		361C50C62D90EAAE00D6A3EC /* DevLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevLogger.swift; sourceTree = "<group>"; };
+		3628786C2F512436002AAB06 /* SettingsNeuronHostInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsNeuronHostInfoView.swift; sourceTree = "<group>"; };
 		362B87DC2CD07AE300F15F95 /* DashboardVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardVC.swift; sourceTree = "<group>"; };
 		362B87DE2CD07AE300F15F95 /* CustomBoundleTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomBoundleTool.swift; sourceTree = "<group>"; };
 		362B87E12CD07AE300F15F95 /* DashboardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewModel.swift; sourceTree = "<group>"; };
@@ -699,9 +704,6 @@
 		362B88352CD0CEF000F15F95 /* Color.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Color.xcassets; sourceTree = "<group>"; };
 		362B88372CD1CEC200F15F95 /* SettingsRouter+Streaming.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SettingsRouter+Streaming.swift"; sourceTree = "<group>"; };
 		36514A8C2C5A1DB5008793A5 /* SettingsRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsRouter.swift; sourceTree = "<group>"; };
-		36514A9B2C5A1EC1008793A5 /* SettingsHostMenuVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsHostMenuVC.swift; sourceTree = "<group>"; };
-		36514A9D2C5B24CA008793A5 /* SettingsAdddHostVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsAdddHostVC.swift; sourceTree = "<group>"; };
-		3652DAC42C573C5800A475CB /* SettingsMenuVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsMenuVC.swift; sourceTree = "<group>"; };
 		3652DAD72C5745B300A475CB /* Array+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+Extension.swift"; sourceTree = "<group>"; };
 		3652DAD92C5745B300A475CB /* Data+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Data+Extension.swift"; sourceTree = "<group>"; };
 		3652DADA2C5745B300A475CB /* Date+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
@@ -736,11 +738,25 @@
 		3689E0682C6AF94A00629595 /* RZBaseVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RZBaseVC.swift; sourceTree = "<group>"; };
 		3689E06E2C6B0C1500629595 /* RZHandleResponder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RZHandleResponder.swift; sourceTree = "<group>"; };
 		36E2E5862D7846EA00689BC0 /* RZLaunchScreen.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RZLaunchScreen.xib; sourceTree = "<group>"; };
-		3DF4BA7A6D28537340C7F467 /* Pods-neuron.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-neuron.debug.xcconfig"; path = "Target Support Files/Pods-neuron/Pods-neuron.debug.xcconfig"; sourceTree = "<group>"; };
-		4E1D4CE03341AC0376999810 /* Pods-neuron-neuronUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-neuron-neuronUITests.debug.xcconfig"; path = "Target Support Files/Pods-neuron-neuronUITests/Pods-neuron-neuronUITests.debug.xcconfig"; sourceTree = "<group>"; };
-		52FDA172D85F035BC8B23392 /* Pods-neuronTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-neuronTests.debug.xcconfig"; path = "Target Support Files/Pods-neuronTests/Pods-neuronTests.debug.xcconfig"; sourceTree = "<group>"; };
+		36FC08E72F56822700F88134 /* SettingsLocalHostMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsLocalHostMenuView.swift; sourceTree = "<group>"; };
+		4E23C8A62764E3E35FCB45DF /* Pods-neuron-neuronUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-neuron-neuronUITests.debug.xcconfig"; path = "Target Support Files/Pods-neuron-neuronUITests/Pods-neuron-neuronUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		558FB96E9EE7E6B0EC0B7437 /* Pods_neuron.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_neuron.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		597AEDC3229A565F4D8F9DAE /* Pods-neuronTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-neuronTests.debug.xcconfig"; path = "Target Support Files/Pods-neuronTests/Pods-neuronTests.debug.xcconfig"; sourceTree = "<group>"; };
+		660F269A2F3AC12C00D4A8F3 /* SettingWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingWebView.swift; sourceTree = "<group>"; };
+		660F269F2F4ECE4400D4A8F3 /* SettingsSplitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSplitViewController.swift; sourceTree = "<group>"; };
 		662A2A882DAF9BD500C1968B /* AutoScrollingUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoScrollingUtils.swift; sourceTree = "<group>"; };
+		664414B52F39757F0053363D /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
+		664964E22F306FDA0036D8C2 /* SettingsNavigationSplitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsNavigationSplitView.swift; sourceTree = "<group>"; };
+		665F4FA82F5FB49A00F8B1F4 /* RzApp+SettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RzApp+SettingsVC.swift"; sourceTree = "<group>"; };
 		66985EFB2E7A5844002A3B36 /* SettingsUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsUtils.swift; sourceTree = "<group>"; };
+		66E425F12F332274002CC8B3 /* SettingsMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsMenuView.swift; sourceTree = "<group>"; };
+		66E425F42F33230B002CC8B3 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
+		66E425F72F3327A8002CC8B3 /* SettingsUIComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsUIComponents.swift; sourceTree = "<group>"; };
+		66E425FA2F332866002CC8B3 /* MenuItemList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuItemList.swift; sourceTree = "<group>"; };
+		66E425FD2F333183002CC8B3 /* SettingsMenuItemButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsMenuItemButton.swift; sourceTree = "<group>"; };
+		66E426002F33339D002CC8B3 /* SettingsRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsRoute.swift; sourceTree = "<group>"; };
+		66E426032F334399002CC8B3 /* SettingsSubContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSubContentView.swift; sourceTree = "<group>"; };
+		66E426062F334A3F002CC8B3 /* SettingsSplitView+BackButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SettingsSplitView+BackButton.swift"; sourceTree = "<group>"; };
 		66EAA23A2CC8A90A00E0C414 /* RZStreamFrameSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RZStreamFrameSettingsViewController.swift; sourceTree = "<group>"; };
 		66EAA23E2CC8D82E00E0C414 /* NeuronFrameSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeuronFrameSettingsView.swift; sourceTree = "<group>"; };
 		66EAA2402CC8DD2B00E0C414 /* NeuronFrameSettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeuronFrameSettingsViewModel.swift; sourceTree = "<group>"; };
@@ -753,9 +769,10 @@
 		66EAA25E2CCA36A700E0C414 /* ChangeObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeObserver.swift; sourceTree = "<group>"; };
 		66EAA2602CCA371400E0C414 /* RoundedCorner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedCorner.swift; sourceTree = "<group>"; };
 		66EAA2682CCB309400E0C414 /* Neuron-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Neuron-Bridging-Header.h"; sourceTree = "<group>"; };
-		6C4F4043BC1E0AC770D6B395 /* Pods_neuron.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_neuron.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		7868FFA9A3630370C92644B4 /* Pods-neuron-neuronUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-neuron-neuronUITests.release.xcconfig"; path = "Target Support Files/Pods-neuron-neuronUITests/Pods-neuron-neuronUITests.release.xcconfig"; sourceTree = "<group>"; };
-		7A09FB14D5F87EB422611DF6 /* Pods-neuron.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-neuron.release.xcconfig"; path = "Target Support Files/Pods-neuron/Pods-neuron.release.xcconfig"; sourceTree = "<group>"; };
+		66F0AACE2F58127300A418C3 /* SettingsViewModel+ControllerInputs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SettingsViewModel+ControllerInputs.swift"; sourceTree = "<group>"; };
+		66F0AAFF2F5EBC1400A418C3 /* SettingsViewController+Neuron.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SettingsViewController+Neuron.h"; sourceTree = "<group>"; };
+		66F0AB002F5EBC1400A418C3 /* SettingsViewController+Neuron.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "SettingsViewController+Neuron.m"; sourceTree = "<group>"; };
+		7A86339C388743C3D6610A33 /* Pods_neuron_neuronUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_neuron_neuronUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		881231452D100706003FFE98 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		881231462D100706003FFE98 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		881231472D10070B003FFE98 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
@@ -782,23 +799,14 @@
 		889E10D02C7C528F00126B31 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		88E519302C747518002B66F2 /* licenses.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = licenses.html; sourceTree = "<group>"; };
 		88EA975D2D62D6D5003CD63F /* AppStoreReviewHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStoreReviewHandler.swift; sourceTree = "<group>"; };
-		88EC99A72C770CDC00398352 /* AboutVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutVC.swift; sourceTree = "<group>"; };
 		88F4082F2C7D7A2F00D90373 /* WebVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebVC.swift; sourceTree = "<group>"; };
-		88FBE80C2C4A176B005B22B3 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
-		8D3ECCA76009F8F2A4DAC278 /* Pods-neuronTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-neuronTests.release.xcconfig"; path = "Target Support Files/Pods-neuronTests/Pods-neuronTests.release.xcconfig"; sourceTree = "<group>"; };
 		B50A8BDE2D94F1DF009B78C6 /* NeuronEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeuronEvent.swift; sourceTree = "<group>"; };
-		B51D87D22C5B3D2E0006CF68 /* RZWebViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RZWebViewController.h; sourceTree = "<group>"; };
-		B51D87D32C5B3D2E0006CF68 /* RZWebViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RZWebViewController.m; sourceTree = "<group>"; };
-		B51D87D42C5B3D2E0006CF68 /* RZWebViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RZWebViewController.xib; sourceTree = "<group>"; };
 		B51D87DF2C5C78F90006CF68 /* DiscoveryManager+Neuron.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "DiscoveryManager+Neuron.h"; sourceTree = "<group>"; };
 		B51D87E02C5C78F90006CF68 /* DiscoveryManager+Neuron.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "DiscoveryManager+Neuron.m"; sourceTree = "<group>"; };
 		B560F12D2BFDBDA000F7A6B7 /* StreamFrame.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = StreamFrame.storyboard; sourceTree = "<group>"; };
 		B560F1982BFEE0A800F7A6B7 /* StreamLoadingView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StreamLoadingView.h; sourceTree = "<group>"; };
 		B560F1992BFEE0A800F7A6B7 /* StreamLoadingView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StreamLoadingView.m; sourceTree = "<group>"; };
 		B560F19B2BFEE0B100F7A6B7 /* StreamLoadingView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = StreamLoadingView.xib; sourceTree = "<group>"; };
-		B560F1A22BFF2FE600F7A6B7 /* RZAboutViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RZAboutViewController.h; sourceTree = "<group>"; };
-		B560F1A32BFF2FE600F7A6B7 /* RZAboutViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RZAboutViewController.m; sourceTree = "<group>"; };
-		B560F1A42BFF2FE600F7A6B7 /* RZAboutViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RZAboutViewController.xib; sourceTree = "<group>"; };
 		B5A2CA562C48B8BA001ED549 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B5B87EE42E8914D20039245F /* TutorialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialView.swift; sourceTree = "<group>"; };
 		B5B87EEC2E8A2FFE0039245F /* TutorialViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialViewModel.swift; sourceTree = "<group>"; };
@@ -808,7 +816,11 @@
 		B5CCFC782D07F06500528DBB /* RZServerInfoResponse.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RZServerInfoResponse.m; sourceTree = "<group>"; };
 		B5EAF2942CB675F70037FD31 /* RZAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RZAlertView.swift; sourceTree = "<group>"; };
 		B5F306A42CCA321C006D9BF9 /* TutorialViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialViewController.swift; sourceTree = "<group>"; };
-		C05DC2085FF21EA6E100A3FB /* Pods_neuronTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_neuronTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BCDFEF1461DC01213A8B2553 /* Pods-neuron.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-neuron.debug.xcconfig"; path = "Target Support Files/Pods-neuron/Pods-neuron.debug.xcconfig"; sourceTree = "<group>"; };
+		C24E86E00E35A1E8C663776B /* Pods-neuron.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-neuron.release.xcconfig"; path = "Target Support Files/Pods-neuron/Pods-neuron.release.xcconfig"; sourceTree = "<group>"; };
+		D5939A04B09A7A44B53D060F /* Pods_neuron_tv.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_neuron_tv.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F0E1D2C3B4A5968701234570 /* iPhone.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = iPhone.storyboard; path = "moonlight-ios/iPhone.storyboard"; sourceTree = "<group>"; };
+		F0E1D2C3B4A5968701234571 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -831,7 +843,8 @@
 				1024243A2B83910200493082 /* libmoonlight-common.a in Frameworks */,
 				102424392B8390F900493082 /* libxml2.tbd in Frameworks */,
 				337A9AEB2E793D220084C3F0 /* libSDL2.a in Frameworks */,
-				F2EA3475B5AC23CC577D08E6 /* Pods_neuron.framework in Frameworks */,
+				B7354E2D98C661D8B703E780 /* BuildFile in Frameworks */,
+				B2A2ED9DAD83AB3863A7F789 /* Pods_neuron.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -839,7 +852,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B5FBDC9A0ED263BA4953FD65 /* Pods_neuronTests.framework in Frameworks */,
+				AE196D4866EB02CE701030B4 /* Pods_neuronTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -847,7 +860,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D309BC53A946F613ACA874C9 /* Pods_neuron_neuronUITests.framework in Frameworks */,
+				00706B9C70DA747DB1320861 /* Pods_neuron_neuronUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -857,6 +870,7 @@
 		10088DCB2B986A470020B77F /* Setting */ = {
 			isa = PBXGroup;
 			children = (
+				664414BF2F3976420053363D /* ViewModels */,
 				3652DB0D2C5772D900A475CB /* Controller */,
 				3652DB0C2C5772CE00A475CB /* View */,
 				3652DB0B2C5772BF00A475CB /* Model */,
@@ -961,9 +975,10 @@
 				102424412B8391F500493082 /* CoreData.framework */,
 				1024243F2B8391E300493082 /* CoreGraphics.framework */,
 				102424382B8390F900493082 /* libxml2.tbd */,
-				6C4F4043BC1E0AC770D6B395 /* Pods_neuron.framework */,
-				0C69962B5AA550E7B2C30BBD /* Pods_neuron_neuronUITests.framework */,
-				C05DC2085FF21EA6E100A3FB /* Pods_neuronTests.framework */,
+				558FB96E9EE7E6B0EC0B7437 /* Pods_neuron.framework */,
+				7A86339C388743C3D6610A33 /* Pods_neuron_neuronUITests.framework */,
+				D5939A04B09A7A44B53D060F /* Pods_neuron_tv.framework */,
+				12A33BF98F50414CD8042D17 /* Pods_neuronTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1020,6 +1035,7 @@
 				10736C642B838A160003EFD5 /* Products */,
 				102424362B8390EF00493082 /* Frameworks */,
 				D903611D87E527932D6C1D9B /* Pods */,
+				339C8FC42ECD668200544D89 /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -1050,8 +1066,8 @@
 				10736C752B838A170003EFD5 /* Assets.xcassets */,
 				10736C7A2B838A170003EFD5 /* Info.plist */,
 				10736C7B2B838A170003EFD5 /* main.m */,
-				88FBE80C2C4A176B005B22B3 /* Launch Screen.storyboard */,
 				36E2E5862D7846EA00689BC0 /* RZLaunchScreen.xib */,
+				F0E1D2C3B4A5968701234571 /* Launch Screen.storyboard */,
 			);
 			path = neuron;
 			sourceTree = "<group>";
@@ -1078,8 +1094,8 @@
 			children = (
 				10736F3A2B838DF70003EFD5 /* moonlight-common.xcodeproj */,
 				10736F362B838BE10003EFD5 /* X1Kit */,
-				10736C9F2B838BD00003EFD5 /* iPhone.storyboard */,
 				10736EA22B838BD00003EFD5 /* Launch Screen.xib */,
+				F0E1D2C3B4A5968701234570 /* iPhone.storyboard */,
 				10736D2A2B838BD00003EFD5 /* libs */,
 				10736CA02B838BD00003EFD5 /* Limelight */,
 			);
@@ -1795,6 +1811,7 @@
 				10C1A2372B9088770081B01D /* AppDelegate+Neuron.m */,
 				10D990142B8DDA030023BBC6 /* RzApp.h */,
 				10D990152B8DDA030023BBC6 /* RzApp.m */,
+				665F4FA82F5FB49A00F8B1F4 /* RzApp+SettingsVC.swift */,
 			);
 			path = Entry;
 			sourceTree = "<group>";
@@ -1822,6 +1839,13 @@
 				100A8B9C2B906B8100D90642 /* constant.h */,
 			);
 			path = Config;
+			sourceTree = "<group>";
+		};
+		339C8FC42ECD668200544D89 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "Recovered References";
 			sourceTree = "<group>";
 		};
 		362B87DD2CD07AE300F15F95 /* Controller */ = {
@@ -1925,6 +1949,9 @@
 				36514A8C2C5A1DB5008793A5 /* SettingsRouter.swift */,
 				362B88372CD1CEC200F15F95 /* SettingsRouter+Streaming.swift */,
 				66985EFB2E7A5844002A3B36 /* SettingsUtils.swift */,
+				66E425F72F3327A8002CC8B3 /* SettingsUIComponents.swift */,
+				66E425FA2F332866002CC8B3 /* MenuItemList.swift */,
+				66E426002F33339D002CC8B3 /* SettingsRoute.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1932,8 +1959,16 @@
 		3652DB0C2C5772CE00A475CB /* View */ = {
 			isa = PBXGroup;
 			children = (
+				664964E22F306FDA0036D8C2 /* SettingsNavigationSplitView.swift */,
+				3628786C2F512436002AAB06 /* SettingsNeuronHostInfoView.swift */,
+				36FC08E72F56822700F88134 /* SettingsLocalHostMenuView.swift */,
+				66E426062F334A3F002CC8B3 /* SettingsSplitView+BackButton.swift */,
+				66E426032F334399002CC8B3 /* SettingsSubContentView.swift */,
+				66E425F12F332274002CC8B3 /* SettingsMenuView.swift */,
 				3652DB0E2C57731300A475CB /* SettingsMenuCell.swift */,
 				102DB8B22CE1A85D000594AB /* CustomNavigationBar.swift */,
+				66E425FD2F333183002CC8B3 /* SettingsMenuItemButton.swift */,
+				B5EAF2942CB675F70037FD31 /* RZAlertView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1941,15 +1976,10 @@
 		3652DB0D2C5772D900A475CB /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				10088DCD2B986A5F0020B77F /* SettingsViewController+Neuron.m */,
-				106BEF762B9FEB7D00D601B8 /* SettingsViewController+Neuron.h */,
+				66F0AAFF2F5EBC1400A418C3 /* SettingsViewController+Neuron.h */,
+				66F0AB002F5EBC1400A418C3 /* SettingsViewController+Neuron.m */,
 				3689E0682C6AF94A00629595 /* RZBaseVC.swift */,
-				3652DAC42C573C5800A475CB /* SettingsMenuVC.swift */,
-				3606EDA32C58838000B34526 /* SettingsHostDevicesVC.swift */,
-				36514A9B2C5A1EC1008793A5 /* SettingsHostMenuVC.swift */,
-				36514A9D2C5B24CA008793A5 /* SettingsAdddHostVC.swift */,
-				100024F42C6AFACF009C814D /* SettingsMenuVC+AppEntry.swift */,
-				B5EAF2942CB675F70037FD31 /* RZAlertView.swift */,
+				660F269F2F4ECE4400D4A8F3 /* SettingsSplitViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -1964,6 +1994,31 @@
 				3689E06E2C6B0C1500629595 /* RZHandleResponder.swift */,
 			);
 			path = ControllerInput;
+			sourceTree = "<group>";
+		};
+		664414BA2F3975C40053363D /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		664414BB2F3975DD0053363D /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				664414B52F39757F0053363D /* AboutView.swift */,
+				660F269A2F3AC12C00D4A8F3 /* SettingWebView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		664414BF2F3976420053363D /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				66E425F42F33230B002CC8B3 /* SettingsViewModel.swift */,
+				66F0AACE2F58127300A418C3 /* SettingsViewModel+ControllerInputs.swift */,
+			);
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 		66EAA2422CC8DD2F00E0C414 /* ViewModel */ = {
@@ -1997,7 +2052,6 @@
 		88EC99A42C770CB100398352 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				88EC99A72C770CDC00398352 /* AboutVC.swift */,
 				88F4082F2C7D7A2F00D90373 /* WebVC.swift */,
 			);
 			path = Controller;
@@ -2036,13 +2090,9 @@
 		B560F1A12BFF2FC700F7A6B7 /* About */ = {
 			isa = PBXGroup;
 			children = (
+				664414BB2F3975DD0053363D /* Views */,
+				664414BA2F3975C40053363D /* ViewModels */,
 				88EC99A42C770CB100398352 /* Controller */,
-				B560F1A22BFF2FE600F7A6B7 /* RZAboutViewController.h */,
-				B560F1A32BFF2FE600F7A6B7 /* RZAboutViewController.m */,
-				B560F1A42BFF2FE600F7A6B7 /* RZAboutViewController.xib */,
-				B51D87D22C5B3D2E0006CF68 /* RZWebViewController.h */,
-				B51D87D32C5B3D2E0006CF68 /* RZWebViewController.m */,
-				B51D87D42C5B3D2E0006CF68 /* RZWebViewController.xib */,
 			);
 			path = About;
 			sourceTree = "<group>";
@@ -2050,12 +2100,12 @@
 		D903611D87E527932D6C1D9B /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				3DF4BA7A6D28537340C7F467 /* Pods-neuron.debug.xcconfig */,
-				7A09FB14D5F87EB422611DF6 /* Pods-neuron.release.xcconfig */,
-				4E1D4CE03341AC0376999810 /* Pods-neuron-neuronUITests.debug.xcconfig */,
-				7868FFA9A3630370C92644B4 /* Pods-neuron-neuronUITests.release.xcconfig */,
-				52FDA172D85F035BC8B23392 /* Pods-neuronTests.debug.xcconfig */,
-				8D3ECCA76009F8F2A4DAC278 /* Pods-neuronTests.release.xcconfig */,
+				BCDFEF1461DC01213A8B2553 /* Pods-neuron.debug.xcconfig */,
+				C24E86E00E35A1E8C663776B /* Pods-neuron.release.xcconfig */,
+				4E23C8A62764E3E35FCB45DF /* Pods-neuron-neuronUITests.debug.xcconfig */,
+				20C1EB65271511D5503717B6 /* Pods-neuron-neuronUITests.release.xcconfig */,
+				597AEDC3229A565F4D8F9DAE /* Pods-neuronTests.debug.xcconfig */,
+				02962EF36E16AA6D95AF85E5 /* Pods-neuronTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -2067,14 +2117,14 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 10736C952B838A170003EFD5 /* Build configuration list for PBXNativeTarget "neuron" */;
 			buildPhases = (
-				54ADFEF67EF427D989DB6C8B /* [CP] Check Pods Manifest.lock */,
+				86547B50FB87EC0DBCCCD0D6 /* [CP] Check Pods Manifest.lock */,
 				332A627F2E793142001A4589 /* ShellScript */,
 				29AADE622B870480007584C5 /* ShellScript */,
 				10736C5F2B838A160003EFD5 /* Sources */,
 				10736C602B838A160003EFD5 /* Frameworks */,
 				10736C612B838A160003EFD5 /* Resources */,
-				FA384C84CCDD9FD6D545E3C4 /* [CP] Embed Pods Frameworks */,
 				B5A2CA592C48BCB0001ED549 /* dSYM */,
+				D5878F84445F872D0C87CA27 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -2089,7 +2139,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 10736C982B838A170003EFD5 /* Build configuration list for PBXNativeTarget "neuronTests" */;
 			buildPhases = (
-				7467D3B74D61A9E3EC1CE6EA /* [CP] Check Pods Manifest.lock */,
+				F7B37527ED96117077E29F5A /* [CP] Check Pods Manifest.lock */,
 				10736C7D2B838A170003EFD5 /* Sources */,
 				10736C7E2B838A170003EFD5 /* Frameworks */,
 				10736C7F2B838A170003EFD5 /* Resources */,
@@ -2108,11 +2158,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 10736C9B2B838A170003EFD5 /* Build configuration list for PBXNativeTarget "neuronUITests" */;
 			buildPhases = (
-				274B89C6317C1F86D5DD4495 /* [CP] Check Pods Manifest.lock */,
+				767AA3CAF90D263D69B04CD3 /* [CP] Check Pods Manifest.lock */,
 				10736C872B838A170003EFD5 /* Sources */,
 				10736C882B838A170003EFD5 /* Frameworks */,
 				10736C892B838A170003EFD5 /* Resources */,
-				5A5A73EF3C4AC3C4B3207BEE /* [CP] Embed Pods Frameworks */,
+				54C8ECBAAE6ABA8EEBCA77BC /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -2131,6 +2181,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2600;
 				LastUpgradeCheck = 1520;
 				TargetAttributes = {
 					10736C622B838A160003EFD5 = {
@@ -2207,20 +2258,18 @@
 			files = (
 				10736C762B838A170003EFD5 /* Assets.xcassets in Resources */,
 				10736ED22B838BD00003EFD5 /* Images.xcassets in Resources */,
-				B51D87D62C5B3D2E0006CF68 /* RZWebViewController.xib in Resources */,
-				B560F19C2BFEE0B100F7A6B7 /* StreamLoadingView.xib in Resources */,
-				10736F352B838BD10003EFD5 /* Launch Screen.xib in Resources */,
 				88E519312C747518002B66F2 /* licenses.html in Resources */,
 				362B88362CD0CEF000F15F95 /* Color.xcassets in Resources */,
-				B560F12E2BFDBDA000F7A6B7 /* StreamFrame.storyboard in Resources */,
-				36E2E5872D7846EA00689BC0 /* RZLaunchScreen.xib in Resources */,
-				88FBE80D2C4A176B005B22B3 /* Launch Screen.storyboard in Resources */,
 				887C89782CC78EB7006804D0 /* Localizable.strings in Resources */,
 				10736EAD2B838BD00003EFD5 /* InfoPlist.strings in Resources */,
+				F0E1D2C3B4A5968701234567 /* StreamFrame.storyboard in Resources */,
+				F0E1D2C3B4A5968701234568 /* StreamLoadingView.xib in Resources */,
+				F0E1D2C3B4A596870123456B /* RZLaunchScreen.xib in Resources */,
+				F0E1D2C3B4A596870123456C /* Launch Screen.xib in Resources */,
+				F0E1D2C3B4A596870123456D /* iPhone.storyboard in Resources */,
+				F0E1D2C3B4A596870123456E /* Launch Screen.storyboard in Resources */,
 				362B881F2CD0CD7000F15F95 /* Fonts.bundle in Resources */,
 				B5A2CA572C48B8BA001ED549 /* GoogleService-Info.plist in Resources */,
-				10736EA32B838BD00003EFD5 /* iPhone.storyboard in Resources */,
-				B560F1A62BFF2FE600F7A6B7 /* RZAboutViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2241,28 +2290,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		274B89C6317C1F86D5DD4495 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-neuron-neuronUITests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
 		29AADE622B870480007584C5 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -2298,9 +2325,47 @@
 			shellPath = /bin/sh;
 			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n#!/bin/bash\nset -euo pipefail\n\nROOT=\"$SRCROOT/moonlight-ios/libs\"\n\n# Map Xcode platform -> folder name\ncase \"$PLATFORM_NAME\" in\n  iphoneos)         PLAT=\"iOS\" ;;\n  iphonesimulator)  PLAT=\"iOS-Sim\" ;;\n  appletvos)        PLAT=\"tvOS\" ;;\n  appletvsimulator) PLAT=\"tvOS-Sim\" ;;\n  *) echo \"vvvv Skip: unsupported PLATFORM_NAME=$PLATFORM_NAME\"; exit 0 ;;\nesac\n\necho \"vvvv Selecting libs for $PLATFORM_NAME -> $PLAT , root = $ROOT\"\n\ndo_cp() {\n  local src=\"$1\" dst=\"$2\"\n  if [[ -f \"$src\" ]]; then\n    cp -f \"$src\" \"$dst\"\n    echo \"vvvv copied: $src -> $dst\"\n  else\n    echo \"vvvv WARN: missing $src\"\n  fi\n}\n\n# FFmpeg\ndo_cp \"$ROOT/FFmpeg/lib/$PLAT/libavutil.a\"   \"$ROOT/FFmpeg/lib/libavutil.a\"\ndo_cp \"$ROOT/FFmpeg/lib/$PLAT/libavcodec.a\"  \"$ROOT/FFmpeg/lib/libavcodec.a\"\ndo_cp \"$ROOT/FFmpeg/lib/$PLAT/libavformat.a\" \"$ROOT/FFmpeg/lib/libavformat.a\"\n\n# opus\ndo_cp \"$ROOT/opus/lib/$PLAT/libopus.a\"       \"$ROOT/opus/lib/libopus.a\"\n\n# SDL2\ndo_cp \"$ROOT/SDL2/lib/$PLAT/libSDL2.a\"       \"$ROOT/SDL2/lib/libSDL2.a\"\n\n# OpenSSL\ndo_cp \"$ROOT/OpenSSL/lib/$PLAT/libcrypto.a\"  \"$ROOT/OpenSSL/lib/libcrypto.a\"\ndo_cp \"$ROOT/OpenSSL/lib/$PLAT/libssl.a\"     \"$ROOT/OpenSSL/lib/libssl.a\"\n";
 		};
-		54ADFEF67EF427D989DB6C8B /* [CP] Check Pods Manifest.lock */ = {
+		54C8ECBAAE6ABA8EEBCA77BC /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-neuron-neuronUITests/Pods-neuron-neuronUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-neuron-neuronUITests/Pods-neuron-neuronUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-neuron-neuronUITests/Pods-neuron-neuronUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		767AA3CAF90D263D69B04CD3 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-neuron-neuronUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		86547B50FB87EC0DBCCCD0D6 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -2315,49 +2380,6 @@
 			);
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-neuron-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		5A5A73EF3C4AC3C4B3207BEE /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-neuron-neuronUITests/Pods-neuron-neuronUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-neuron-neuronUITests/Pods-neuron-neuronUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-neuron-neuronUITests/Pods-neuron-neuronUITests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		7467D3B74D61A9E3EC1CE6EA /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-neuronTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -2387,7 +2409,7 @@
 			shellPath = /bin/sh;
 			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
 		};
-		FA384C84CCDD9FD6D545E3C4 /* [CP] Embed Pods Frameworks */ = {
+		D5878F84445F872D0C87CA27 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -2395,17 +2417,35 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-neuron/Pods-neuron-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-neuron/Pods-neuron-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
-			outputPaths = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-neuron/Pods-neuron-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F7B37527ED96117077E29F5A /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-neuronTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -2427,11 +2467,11 @@
 				10736EE12B838BD00003EFD5 /* Logger.m in Sources */,
 				10736EB92B838BD00003EFD5 /* StreamManager.m in Sources */,
 				10736EAA2B838BD00003EFD5 /* mkcert.c in Sources */,
-				B560F1A52BFF2FE600F7A6B7 /* RZAboutViewController.m in Sources */,
 				10736EBE2B838BD00003EFD5 /* HttpResponse.m in Sources */,
-				100024F52C6AFACF009C814D /* SettingsMenuVC+AppEntry.swift in Sources */,
+				66E425F52F33230B002CC8B3 /* SettingsViewModel.swift in Sources */,
 				3652DAFD2C5745B300A475CB /* UINavigationController+Extension.swift in Sources */,
 				66985EFC2E7A5844002A3B36 /* SettingsUtils.swift in Sources */,
+				66E426012F33339D002CC8B3 /* SettingsRoute.swift in Sources */,
 				362B87EA2CD07AE300F15F95 /* DashboardVC.swift in Sources */,
 				362B87EB2CD07AE300F15F95 /* DashboardViewModel+ControllerInputs.swift in Sources */,
 				362B87EC2CD07AE300F15F95 /* HostListManger.swift in Sources */,
@@ -2464,6 +2504,7 @@
 				362B87F92CD08A4600F15F95 /* SwiftAlertView.swift in Sources */,
 				10736EC02B838BD00003EFD5 /* ConnectionHelper.m in Sources */,
 				3652DAFC2C5745B300A475CB /* UIImage+Extension.swift in Sources */,
+				66E425F82F3327A8002CC8B3 /* SettingsUIComponents.swift in Sources */,
 				102DB8B32CE1A85D000594AB /* CustomNavigationBar.swift in Sources */,
 				3689E06F2C6B0C1500629595 /* RZHandleResponder.swift in Sources */,
 				88F408302C7D7A2F00D90373 /* WebVC.swift in Sources */,
@@ -2473,6 +2514,7 @@
 				3689E0692C6AF94A00629595 /* RZBaseVC.swift in Sources */,
 				3689E0672C69AC3900629595 /* ControllerInputTracker.swift in Sources */,
 				66EAA24A2CCA35FB00E0C414 /* View+Extension.swift in Sources */,
+				66E425F22F332274002CC8B3 /* SettingsMenuView.swift in Sources */,
 				103D81C62C100C1D003D0FF0 /* NetworkMonitor.swift in Sources */,
 				66EAA2412CC8DD2B00E0C414 /* NeuronFrameSettingsViewModel.swift in Sources */,
 				108EE0EB2B901B0600094A01 /* RzTemporaryApp.m in Sources */,
@@ -2486,32 +2528,33 @@
 				662A2A892DAF9BD500C1968B /* AutoScrollingUtils.swift in Sources */,
 				3652DB132C5780DD00A475CB /* SettingsMenuItem.swift in Sources */,
 				66EAA2612CCA371400E0C414 /* RoundedCorner.swift in Sources */,
-				36514A9E2C5B24CA008793A5 /* SettingsAdddHostVC.swift in Sources */,
+				36FC08E82F56822700F88134 /* SettingsLocalHostMenuView.swift in Sources */,
 				10736ECF2B838BD00003EFD5 /* LoadingFrameViewController.m in Sources */,
 				10736ECC2B838BD00003EFD5 /* SettingsViewController.m in Sources */,
 				10172A432CA2B5DC00B29E7B /* DevUtils.m in Sources */,
+				664414B62F39757F0053363D /* AboutView.swift in Sources */,
 				3652DB082C5747AC00A475CB /* ScreencastConfig.swift in Sources */,
+				66E425FC2F332866002CC8B3 /* MenuItemList.swift in Sources */,
 				10736EA82B838BD00003EFD5 /* DataManager.m in Sources */,
 				10736EBF2B838BD00003EFD5 /* DiscoveryWorker.m in Sources */,
 				3689E0652C69AC3900629595 /* ButtonEventsConstants.swift in Sources */,
 				10736EA72B838BD00003EFD5 /* TemporarySettings.m in Sources */,
+				665F4FAA2F5FB49A00F8B1F4 /* RzApp+SettingsVC.swift in Sources */,
 				66EAA23F2CC8D82E00E0C414 /* NeuronFrameSettingsView.swift in Sources */,
-				3606EDA62C58838000B34526 /* SettingsHostDevicesVC.swift in Sources */,
 				10736ECB2B838BD00003EFD5 /* Limelight.xcdatamodeld in Sources */,
 				10736EB42B838BD00003EFD5 /* RelativeTouchHandler.m in Sources */,
 				3652DAEE2C5745B300A475CB /* Array+Extension.swift in Sources */,
+				660F26A12F4ECE4400D4A8F3 /* SettingsSplitViewController.swift in Sources */,
 				10736EA62B838BD00003EFD5 /* TemporaryHost.m in Sources */,
-				B51D87D52C5B3D2E0006CF68 /* RZWebViewController.m in Sources */,
 				10736EAB2B838BD00003EFD5 /* CryptoManager.m in Sources */,
+				664964E42F306FDA0036D8C2 /* SettingsNavigationSplitView.swift in Sources */,
 				10736F382B838BE10003EFD5 /* X1Kit.swift in Sources */,
 				361C50C72D90EAAE00D6A3EC /* DevLogger.swift in Sources */,
 				10172A492CA2BAFA00B29E7B /* StatsMeta.m in Sources */,
 				3652DAF32C5745B300A475CB /* Double+Extension.swift in Sources */,
 				3652DAF52C5745B300A475CB /* KeyboardHeightPublisher.swift in Sources */,
-				88EC99A82C770CDC00398352 /* AboutVC.swift in Sources */,
 				10736EBB2B838BD00003EFD5 /* VideoDecoderRenderer.m in Sources */,
 				3652DAF92C5745B300A475CB /* String+Extension.swift in Sources */,
-				36514A9C2C5A1EC1008793A5 /* SettingsHostMenuVC.swift in Sources */,
 				10D990162B8DDA030023BBC6 /* RzApp.m in Sources */,
 				10736EC12B838BD00003EFD5 /* MDNSManager.m in Sources */,
 				338555B62E7950CB005C79EC /* DynamicGridLayoutHelper.swift in Sources */,
@@ -2521,11 +2564,14 @@
 				10423FC42C0EC2C7000679F8 /* RzUtils.m in Sources */,
 				366D17602D83C50800B450FC /* AddManualHostView.swift in Sources */,
 				10736EB82B838BD00003EFD5 /* StreamConfiguration.m in Sources */,
+				66F0AACF2F58127300A418C3 /* SettingsViewModel+ControllerInputs.swift in Sources */,
 				362B87FF2CD0BEDD00F15F95 /* BottomMenuViewModel.swift in Sources */,
 				66EAA25F2CCA36A700E0C414 /* ChangeObserver.swift in Sources */,
 				3652DB0F2C57731300A475CB /* SettingsMenuCell.swift in Sources */,
 				B5F306A52CCA321D006D9BF9 /* TutorialViewController.swift in Sources */,
+				66E425FE2F333183002CC8B3 /* SettingsMenuItemButton.swift in Sources */,
 				10736EB12B838BD00003EFD5 /* KeyboardInputField.m in Sources */,
+				66E426042F334399002CC8B3 /* SettingsSubContentView.swift in Sources */,
 				362B87FB2CD0BE8500F15F95 /* BottomMenuView.swift in Sources */,
 				3652DB112C57798200A475CB /* Color+Extension.swift in Sources */,
 				B5B87EED2E8A30000039245F /* TutorialViewModel.swift in Sources */,
@@ -2538,11 +2584,12 @@
 				66EAA2442CC8EBA100E0C414 /* NeuronFrameSettings.swift in Sources */,
 				10172A4C2CA2BB0E00B29E7B /* AvgFps.m in Sources */,
 				10172ADE2CA4F84500B29E7B /* DevOptionVC.swift in Sources */,
+				66E426082F334A3F002CC8B3 /* SettingsSplitView+BackButton.swift in Sources */,
 				889E10D12C7C528F00126B31 /* Utils.swift in Sources */,
 				10736ECD2B838BD00003EFD5 /* StreamFrameViewController.m in Sources */,
+				66F0AB012F5EBC1400A418C3 /* SettingsViewController+Neuron.m in Sources */,
 				3652DAF12C5745B300A475CB /* Date+Extension.swift in Sources */,
 				10172B032CA681B600B29E7B /* Toast.swift in Sources */,
-				3652DAC52C573C5800A475CB /* SettingsMenuVC.swift in Sources */,
 				66EAA23B2CC8A90A00E0C414 /* RZStreamFrameSettingsViewController.swift in Sources */,
 				10D9901D2B8DDC820023BBC6 /* RzSwizzling.m in Sources */,
 				B51D87E12C5C78F90006CF68 /* DiscoveryManager+Neuron.m in Sources */,
@@ -2551,6 +2598,7 @@
 				3652DAFE2C5745B300A475CB /* UIResponder+Current.swift in Sources */,
 				10C1A2382B9088770081B01D /* AppDelegate+Neuron.m in Sources */,
 				10736EAE2B838BD00003EFD5 /* ComputerScrollView.m in Sources */,
+				3628786D2F512436002AAB06 /* SettingsNeuronHostInfoView.swift in Sources */,
 				10736EC52B838BD00003EFD5 /* AppListResponse.m in Sources */,
 				B5B87EE72E8914DD0039245F /* TutorialView.swift in Sources */,
 				10423FEA2C0F57D7000679F8 /* RzLocalNetworkPermissionService.swift in Sources */,
@@ -2567,8 +2615,8 @@
 				B5EAF2952CB675F70037FD31 /* RZAlertView.swift in Sources */,
 				3652DAFB2C5745B300A475CB /* UIFont+Extension.swift in Sources */,
 				10172AE02CA50BF800B29E7B /* DevOptionItemView.swift in Sources */,
+				660F269C2F3AC12C00D4A8F3 /* SettingWebView.swift in Sources */,
 				10736EBA2B838BD00003EFD5 /* Connection.m in Sources */,
-				10088DCE2B986A5F0020B77F /* SettingsViewController+Neuron.m in Sources */,
 				108EE0E82B901AA400094A01 /* RzTemporaryHost.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2756,7 +2804,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -2767,13 +2815,13 @@
 		};
 		10736C962B838A170003EFD5 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3DF4BA7A6D28537340C7F467 /* Pods-neuron.debug.xcconfig */;
+			baseConfigurationReference = BCDFEF1461DC01213A8B2553 /* Pods-neuron.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = neuron/neuron.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 224;
+				CURRENT_PROJECT_VERSION = 227;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = R2H967U7J8;
@@ -2825,10 +2873,10 @@
 				INFOPLIST_KEY_UIRequiredDeviceCapabilities = armv7;
 				INFOPLIST_KEY_UIRequiresFullScreen = NO;
 				INFOPLIST_KEY_UIStatusBarHidden = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationLandscapeRight;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleLightContent;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2846,9 +2894,11 @@
 					"$(PROJECT_DIR)/moonlight-ios/libs/FFmpeg/lib",
 					"$(PROJECT_DIR)/moonlight-ios/libs/opus/lib",
 				);
-				MARKETING_VERSION = 2.0.2;
+				MARKETING_VERSION = 2.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.razer.neuron;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "neuron/Neuron-Bridging-Header.h";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "Moonlight-Swift.h";
@@ -2859,13 +2909,13 @@
 		};
 		10736C972B838A170003EFD5 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7A09FB14D5F87EB422611DF6 /* Pods-neuron.release.xcconfig */;
+			baseConfigurationReference = C24E86E00E35A1E8C663776B /* Pods-neuron.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = neuron/neuron.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 224;
+				CURRENT_PROJECT_VERSION = 227;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = R2H967U7J8;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
@@ -2892,10 +2942,10 @@
 				INFOPLIST_KEY_UIRequiredDeviceCapabilities = armv7;
 				INFOPLIST_KEY_UIRequiresFullScreen = NO;
 				INFOPLIST_KEY_UIStatusBarHidden = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationLandscapeRight;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleLightContent;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2914,9 +2964,11 @@
 					"$(PROJECT_DIR)/moonlight-ios/libs/FFmpeg/lib",
 					"$(PROJECT_DIR)/moonlight-ios/libs/opus/lib",
 				);
-				MARKETING_VERSION = 2.0.2;
+				MARKETING_VERSION = 2.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.razer.neuron;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "neuron/Neuron-Bridging-Header.h";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "Moonlight-Swift.h";
@@ -2927,7 +2979,7 @@
 		};
 		10736C992B838A170003EFD5 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 52FDA172D85F035BC8B23392 /* Pods-neuronTests.debug.xcconfig */;
+			baseConfigurationReference = 597AEDC3229A565F4D8F9DAE /* Pods-neuronTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -2947,7 +2999,7 @@
 		};
 		10736C9A2B838A170003EFD5 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8D3ECCA76009F8F2A4DAC278 /* Pods-neuronTests.release.xcconfig */;
+			baseConfigurationReference = 02962EF36E16AA6D95AF85E5 /* Pods-neuronTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -2967,7 +3019,7 @@
 		};
 		10736C9C2B838A170003EFD5 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4E1D4CE03341AC0376999810 /* Pods-neuron-neuronUITests.debug.xcconfig */;
+			baseConfigurationReference = 4E23C8A62764E3E35FCB45DF /* Pods-neuron-neuronUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -2985,7 +3037,7 @@
 		};
 		10736C9D2B838A170003EFD5 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7868FFA9A3630370C92644B4 /* Pods-neuron-neuronUITests.release.xcconfig */;
+			baseConfigurationReference = 20C1EB65271511D5503717B6 /* Pods-neuron-neuronUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;

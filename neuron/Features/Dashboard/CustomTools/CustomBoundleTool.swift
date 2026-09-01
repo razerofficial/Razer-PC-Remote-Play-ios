@@ -79,7 +79,7 @@ func IsIOS174()->Bool {
 }
 
 func IsIOS26()->Bool {
-    if #available(iOS 26.0, *) {
+    if #available(iOS 26.0, tvOS 26.0, *) {
         return true
     } else {
         return false

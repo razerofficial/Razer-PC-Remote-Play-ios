@@ -35,6 +35,11 @@
 // it will return the statusBar height if view fully overlaps the statusBar, otherwise returns 0.0f
 static CGFloat statusBarAdjustment( UIView* view )
 {
+#if TARGET_OS_TV
+    // TODO: tvOS doesn't support statusBarFrame, status bar concept doesn't exist on tvOS
+    // tvOS apps are typically fullscreen, so no status bar adjustment needed
+    return 0.0f;
+#else
     CGFloat adjustment = 0.0f;
     UIApplication *app = [UIApplication sharedApplication];
     CGRect viewFrame = [view convertRect:view.bounds toView:[app keyWindow]];
@@ -44,6 +49,7 @@ static CGFloat statusBarAdjustment( UIView* view )
         adjustment = fminf(statusBarFrame.size.width, statusBarFrame.size.height);
 
     return adjustment;
+#endif
 }
 
 
@@ -1384,7 +1390,7 @@ const int FrontViewPositionNone = 0xff;
 - (void)setPrimaryViewController:(UIViewController*)viewController
 {
     _primaryViewController = viewController;
-
+#if !TARGET_OS_TV
     // These are derived from the primary view controller
     if (@available(iOS 11.0, *)) {
         [self setNeedsUpdateOfHomeIndicatorAutoHidden];
@@ -1393,6 +1399,7 @@ const int FrontViewPositionNone = 0xff;
     if (@available(iOS 14.0, *)) {
         [self setNeedsUpdateOfPrefersPointerLocked];
     }
+#endif
 }
 
 - (UIViewController*)childViewControllerForHomeIndicatorAutoHidden
@@ -1422,7 +1429,11 @@ const int FrontViewPositionNone = 0xff;
     void (^animations)(void) = ^(void)
     {
         // Calling this in the animation block causes the status bar to appear/dissapear in sync with our own animation
+#if !TARGET_OS_TV
         [self setNeedsStatusBarAppearanceUpdate];
+#else
+        NSLog(@"TODO: tvOS does not support status bar appearance updates");
+#endif
         
         // We call the layoutSubviews method on the contentView view and send a delegate, which will
         // occur inside of an animation block if any animated transition is being performed

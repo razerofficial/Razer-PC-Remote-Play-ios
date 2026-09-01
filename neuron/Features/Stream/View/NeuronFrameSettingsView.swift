@@ -23,6 +23,7 @@ import Introspect
 struct NeuronFrameSettingsView: View {
 
     @ObservedObject var viewModel: NeuronFrameSettingsViewModel
+    @ObservedObject var settingsVM: SettingsViewModel = SettingsViewModel.shared
     
     private let spaceBetweenView = SettingsUtil.shared.getSubViewSpaceBetweenView()
     private let topPaddingValue = IsIpad() ? CGFloat(35) : CGFloat(35)
@@ -49,8 +50,8 @@ struct NeuronFrameSettingsView: View {
                     
                     VStack(alignment: .leading, spacing: 0) {
                         
-                        Spacer()
-                            .frame(minHeight: topPaddingValue + 20)
+//                        Spacer()
+//                            .frame(minHeight: topPaddingValue + 20)
                         
                         displayModeSelectView
                         
@@ -75,7 +76,11 @@ struct NeuronFrameSettingsView: View {
                         framePacingPicker
                         
                         videoEncoderPicker
-                        
+
+                        if viewModel.isCoreHapticsSupported {
+                            coreHapticsToggle
+                        }
+
                         Spacer()
                             .frame(height: 30)
                     }
@@ -94,8 +99,8 @@ struct NeuronFrameSettingsView: View {
                 .onPreferenceChange(ViewPositionKey.self) { rects in
                     viewPositions.merge(rects) { _, new in new }
                 }
-                .onDataChange(of: viewModel.highlightedUIComponent, perform: { newValue in
-                    scrollToIfNeeded(proxy: proxy, targetID: viewModel.highlightedUIComponent.description)
+                .onDataChange(of: settingsVM.highlightedUIComponent, perform: { newValue in
+                    scrollToIfNeeded(proxy: proxy, targetID: settingsVM.highlightedUIComponent.description)
                 })
             }
             .padding(.leading, 20)
@@ -131,7 +136,7 @@ struct NeuronFrameSettingsView: View {
     }
     
     var displayModeSelectView: some View {
-        let highlighted = viewModel.highlightedUIComponent
+        let highlighted = settingsVM.highlightedUIComponent
         return VStack(alignment: .leading, spacing: 0, content: {
             
             Text("Video Settings Display Mode".localize())
@@ -171,7 +176,7 @@ struct NeuronFrameSettingsView: View {
                         .onTapGesture {
                             //select mode
                             viewModel.lastVC?.updateLastVCHandel()
-                            viewModel.highlightedUIComponent = mode.highlightedUIComponent()
+                            settingsVM.highlightedUIComponent = mode.highlightedUIComponent()
                             viewModel.updateDisplayMode(mode)
                         }
                     Spacer()
@@ -194,7 +199,7 @@ struct NeuronFrameSettingsView: View {
     }
     
     var LimitScreenResolutionTtoSafeAreaToggle: some View {
-        let isHighlighted = viewModel.highlightedUIComponent == .NeuronStreamingSettingsLimitScreenResolutionToSafeAreaToggle
+        let isHighlighted = settingsVM.highlightedUIComponent == .NeuronStreamingSettingsLimitScreenResolutionToSafeAreaToggle
         return HStack {
             Toggle(isOn: $viewModel.LimitScreenResolutionTtoSafeArea, label: {
                 Text("Limit Screen Resolution To Safe Area".localize())
@@ -219,8 +224,8 @@ struct NeuronFrameSettingsView: View {
             }
             .simultaneousGesture(
                 TapGesture()
-                    .onEnded{
-                        viewModel.highlightedUIComponent = .NeuronStreamingSettingsLimitScreenResolutionToSafeAreaToggle
+                    .onEnded{	
+                        settingsVM.highlightedUIComponent = .NeuronStreamingSettingsLimitScreenResolutionToSafeAreaToggle
                     }
             )
         }
@@ -228,7 +233,7 @@ struct NeuronFrameSettingsView: View {
     }
     
     var limitRefreshRateToggle: some View {
-        let isHighlighted = viewModel.highlightedUIComponent == .NeuronStreamingSettingsRefreshRateToggle
+        let isHighlighted = settingsVM.highlightedUIComponent == .NeuronStreamingSettingsRefreshRateToggle
         return HStack {
             Toggle(isOn: $viewModel.limitRefreshRate, label: {
                 Text("Limit Refresh Rate To 60Hz".localize())
@@ -242,7 +247,7 @@ struct NeuronFrameSettingsView: View {
             .simultaneousGesture(
                 TapGesture()
                     .onEnded{
-                        viewModel.highlightedUIComponent = .NeuronStreamingSettingsRefreshRateToggle
+                        settingsVM.highlightedUIComponent = .NeuronStreamingSettingsRefreshRateToggle
                     }
             )
             .onDataChange(of: viewModel.limitRefreshRate) { newValue in
@@ -264,7 +269,7 @@ struct NeuronFrameSettingsView: View {
     }
     
     var bitrateSlider: some View {
-        let isHighlighted = viewModel.highlightedUIComponent == .NeuronStreamingSettingsBitrateSlider
+        let isHighlighted = settingsVM.highlightedUIComponent == .NeuronStreamingSettingsBitrateSlider
         return VStack(alignment: .leading, spacing: 0, content: {
             
             HStack(content: {
@@ -286,8 +291,20 @@ struct NeuronFrameSettingsView: View {
             
             HStack {
                 Spacer().frame(width: spaceBetweenView)
+                #if os(tvOS)
+                TextField("", value: $viewModel.bitrate, formatter: NumberFormatter())
+                    .keyboardType(.decimalPad)
+                    .multilineTextAlignment(.center)
+                    .frame(width: 80)
+                    .onDataChange(of: viewModel.bitrate) { newValue in
+                        //update menu
+                        viewModel.lastVC?.updateLastVCHandel()
+                        viewModel.frameSettings.bitrate = Int32(newValue * 1000)
+                        viewModel.saveSettings()
+                    }
+                #else
                 Slider(value: $viewModel.bitrate, in: 1.0...150.0, step: 0.1) { isChanging in
-                    viewModel.highlightedUIComponent = .NeuronStreamingSettingsBitrateSlider
+                    settingsVM.highlightedUIComponent = .NeuronStreamingSettingsBitrateSlider
                 }
                     .onDataChange(of: viewModel.bitrate) { newValue in
                         //update menu
@@ -297,6 +314,7 @@ struct NeuronFrameSettingsView: View {
                     }
                     .tint(Color(red: 0.27, green: 0.84, blue: 0.17))
                     .foregroundColor(.White)
+                #endif
                 Spacer().frame(width: spaceBetweenView)
             }
             .frame(maxWidth: .infinity, minHeight: SettingsUtil.shared.getMenuBGHeight(), maxHeight: .infinity)
@@ -309,7 +327,7 @@ struct NeuronFrameSettingsView: View {
                     .onEnded{
                         //update menu
                         viewModel.lastVC?.updateLastVCHandel()
-                        viewModel.highlightedUIComponent = .NeuronStreamingSettingsBitrateSlider
+                        settingsVM.highlightedUIComponent = .NeuronStreamingSettingsBitrateSlider
                     }
             )
             Spacer()
@@ -319,7 +337,7 @@ struct NeuronFrameSettingsView: View {
     }
     
     var HDRToggle: some View {
-        let isHighlighted = viewModel.highlightedUIComponent == .NeuronStreamingSettingsHDRToggle
+        let isHighlighted = settingsVM.highlightedUIComponent == .NeuronStreamingSettingsHDRToggle
         return VStack(alignment: .leading, spacing: 0) {
             HStack {
                 Toggle(isOn: $viewModel.frameSettings.enableHdr, label: {
@@ -334,7 +352,7 @@ struct NeuronFrameSettingsView: View {
                 .simultaneousGesture(
                     TapGesture()
                         .onEnded{
-                            viewModel.highlightedUIComponent = .NeuronStreamingSettingsHDRToggle
+                            settingsVM.highlightedUIComponent = .NeuronStreamingSettingsHDRToggle
                         }
                 )
                 .onDataChange(of: viewModel.frameSettings.enableHdr) { newValue in
@@ -370,7 +388,7 @@ struct NeuronFrameSettingsView: View {
     }
     
     var framePacingPicker: some View {
-        let isHighlighted = viewModel.highlightedUIComponent == .NeuronStreamingSettingsFramePacingPicker
+        let isHighlighted = settingsVM.highlightedUIComponent == .NeuronStreamingSettingsFramePacingPicker
         return VStack(alignment: .leading, spacing: 0, content: {
             HStack {
                 Text("Frame Pacing".localize())
@@ -385,13 +403,18 @@ struct NeuronFrameSettingsView: View {
                         Text(type.displayName().localize())
                     }
                 }
+#if !os(tvOS)
                 .pickerStyle(.menu)
+#else
+                .pickerStyle(.segmented)
+// TODO: Discuss if segmented picker is suitable for tvOS
+#endif
                 .accentColor(Color.init(red: 235/255.0, green: 245/255.0, blue: 245/255.0, opacity:0.6))
                 .background(.clear)
                 .simultaneousGesture(
                     TapGesture()
                         .onEnded{
-                            viewModel.highlightedUIComponent = .NeuronStreamingSettingsFramePacingPicker
+                            settingsVM.highlightedUIComponent = .NeuronStreamingSettingsFramePacingPicker
                         }
                 )
                 .onDataChange(of: viewModel.framePacingPreference) { newValue in
@@ -411,7 +434,7 @@ struct NeuronFrameSettingsView: View {
     }
     
     var MuteHostPCToggle: some View {
-        let isHighlighted = viewModel.highlightedUIComponent == .NeuronStreamingSettingsMutePCToggle
+        let isHighlighted = settingsVM.highlightedUIComponent == .NeuronStreamingSettingsMutePCToggle
         return VStack(alignment: .leading, spacing: 0, content: {
             HStack {
                 Toggle(isOn: $viewModel.MuteHostPC, label: {
@@ -426,7 +449,7 @@ struct NeuronFrameSettingsView: View {
                 .simultaneousGesture(
                     TapGesture()
                         .onEnded{
-                            viewModel.highlightedUIComponent = .NeuronStreamingSettingsMutePCToggle
+                            settingsVM.highlightedUIComponent = .NeuronStreamingSettingsMutePCToggle
                         }
                 )
                 .onDataChange(of: viewModel.MuteHostPC) { newValue in
@@ -446,7 +469,7 @@ struct NeuronFrameSettingsView: View {
     }
     
     var autoQuitPicker: some View {
-        let isHighlighted = viewModel.highlightedUIComponent == .NeuronStreamingSettingsAutoQuitPicker
+        let isHighlighted = settingsVM.highlightedUIComponent == .NeuronStreamingSettingsAutoQuitPicker
         return VStack(alignment: .leading, spacing: 0, content: {
             HStack {
                 Text("Automatically Quit Games".localize())
@@ -461,13 +484,18 @@ struct NeuronFrameSettingsView: View {
                         Text(type.displayName().localize())
                     }
                 }
+#if !os(tvOS)
                 .pickerStyle(.menu)
+#else
+                .pickerStyle(.segmented)
+// TODO: Discuss if segmented picker is suitable for tvOS
+#endif
                 .accentColor(Color.init(red: 235/255.0, green: 245/255.0, blue: 245/255.0, opacity:0.6))
                 .background(.clear)
                 .simultaneousGesture(
                     TapGesture()
                         .onEnded{
-                            viewModel.highlightedUIComponent = .NeuronStreamingSettingsAutoQuitPicker
+                            settingsVM.highlightedUIComponent = .NeuronStreamingSettingsAutoQuitPicker
                         }
                 )
                 .onDataChange(of: viewModel.autoQuit) { newValue in
@@ -499,7 +527,7 @@ struct NeuronFrameSettingsView: View {
     }
     
     var touchScreenControlPicker: some View {
-        let isHighlighted = viewModel.highlightedUIComponent == .NeuronStreamingSettingsTouchScreenPicker
+        let isHighlighted = settingsVM.highlightedUIComponent == .NeuronStreamingSettingsTouchScreenPicker
         return VStack(alignment: .leading, spacing: 0, content: {
             
             HStack {
@@ -515,13 +543,18 @@ struct NeuronFrameSettingsView: View {
                         Text(type.displayName().localize())
                     }
                 }
+#if !os(tvOS)
                 .pickerStyle(.menu)
+#else
+                .pickerStyle(.segmented)
+// TODO: Discuss if segmented picker is suitable for tvOS
+#endif
                 .accentColor(Color.init(red: 235/255.0, green: 245/255.0, blue: 245/255.0, opacity:0.6))
                 .background(.clear)
                 .simultaneousGesture(
                     TapGesture()
                         .onEnded{
-                            viewModel.highlightedUIComponent = .NeuronStreamingSettingsTouchScreenPicker
+                            settingsVM.highlightedUIComponent = .NeuronStreamingSettingsTouchScreenPicker
                         }
                 )
                 .onDataChange(of: viewModel.touchModel) { newValue in
@@ -542,7 +575,7 @@ struct NeuronFrameSettingsView: View {
     
     var videoEncoderPicker: some View {
         
-        let isHighlighted = viewModel.highlightedUIComponent == .NeuronStreamingSettingsVideoEncoderPicker
+        let isHighlighted = settingsVM.highlightedUIComponent == .NeuronStreamingSettingsVideoEncoderPicker
         return VStack(alignment: .leading, spacing: 0, content: {
             
             HStack {
@@ -558,13 +591,18 @@ struct NeuronFrameSettingsView: View {
                         Text(type.displayName().localize())
                     }
                 }
+#if !os(tvOS)
                 .pickerStyle(.menu)
+#else
+                .pickerStyle(.segmented)
+// TODO: Discuss if segmented picker is suitable for tvOS
+#endif
                 .accentColor(Color.init(red: 235/255.0, green: 245/255.0, blue: 245/255.0, opacity:0.6))
                 .background(.clear)
                 .simultaneousGesture(
                     TapGesture()
                         .onEnded{
-                            viewModel.highlightedUIComponent = .NeuronStreamingSettingsVideoEncoderPicker
+                            settingsVM.highlightedUIComponent = .NeuronStreamingSettingsVideoEncoderPicker
                         }
                 )
                 .onDataChange(of: viewModel.videoEncoder) { newValue in
@@ -598,8 +636,8 @@ struct NeuronFrameSettingsView: View {
     
     var limtRefreshRateAndScreenResolutionToggle: some View {
         
-        let isRefreshRateHighlighted = viewModel.highlightedUIComponent == .NeuronStreamingSettingsRefreshRateToggle
-        let isSafeAreaHighlighted = viewModel.highlightedUIComponent == .NeuronStreamingSettingsLimitScreenResolutionToSafeAreaToggle
+        let isRefreshRateHighlighted = settingsVM.highlightedUIComponent == .NeuronStreamingSettingsRefreshRateToggle
+        let isSafeAreaHighlighted = settingsVM.highlightedUIComponent == .NeuronStreamingSettingsLimitScreenResolutionToSafeAreaToggle
         return VStack(alignment: .leading, spacing: 0) {
             if viewModel.isNeedShowLimitRefreshRateToggle() && viewModel.isNeedShowLimitScreenResolutionToSafeAreaToggle() {
                 limitRefreshRateToggle
@@ -668,6 +706,53 @@ struct NeuronFrameSettingsView: View {
     }
     
     
+    var coreHapticsToggle: some View {
+        let isHighlighted = settingsVM.highlightedUIComponent == .NeuronStreamingSettingsCoreHapticsToggle
+        return VStack(alignment: .leading, spacing: 0, content: {
+            HStack {
+                Toggle(isOn: $viewModel.enableCoreHaptics, label: {
+                    Text("iPhone Built-In Haptics".localize())
+                        .foregroundColor(Color.white)
+                        .font(.system(size: 16))
+                        .padding(.leading, spaceBetweenView)
+                        .padding(.top, 6)
+                        .padding(.bottom, 6)
+                })
+                .padding(.trailing, SettingsUtil.shared.getSubViewSpaceBetweenView())
+                .simultaneousGesture(
+                    TapGesture()
+                        .onEnded {
+                            settingsVM.highlightedUIComponent = .NeuronStreamingSettingsCoreHapticsToggle
+                        }
+                )
+                .onDataChange(of: viewModel.enableCoreHaptics) { newValue in
+                    viewModel.frameSettings.enableCoreHaptics = newValue
+                    viewModel.saveSettings()
+                }
+            }
+            .frame(maxWidth: .infinity, minHeight: SettingsUtil.shared.getMenuBGHeight(), maxHeight: .infinity)
+            .fixedSize(horizontal: false, vertical: true)
+            .background(isHighlighted ? Color.SettingMenuFocus : Color.SettingMenuBG)
+            .cornerRadius(26)
+
+            Spacer().frame(height: 5)
+
+            Text("Enable game vibration using the iPhone's built in haptic motors during streaming".localize())
+                .font(.system(size: 13, weight: .regular))
+                .foregroundStyle(Color.SettingText)
+                .fixedSize(horizontal: false, vertical: true)
+                .lineSpacing(0)
+                .lineLimit(.max)
+                .multilineTextAlignment(.leading)
+                .padding(.bottom, 4)
+                .padding(.leading, spaceBetweenView)
+
+            Spacer()
+                .frame(height: 20)
+        })
+        .autoScrollingWith(id: FrameSettingsUIComponents.FrameSettingsHightlightedComponent.NeuronStreamingSettingsCoreHapticsToggle.description, scrollViewCoordinateSpaceName: scrollViewCoordinateSpaceName, positions: $viewPositions)
+    }
+
     private func printLog(_ msg:String){
         BiancaLogger.shared.logInfo("SettingsLauncherView - " + msg)
     }

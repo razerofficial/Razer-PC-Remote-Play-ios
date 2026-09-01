@@ -13,6 +13,10 @@ static LogLevel LoggerLogLevel = LOG_I;
 
 void LogTagv(LogLevel level, NSString* tag, NSString* fmt, va_list args);
 
+BOOL LogIsEnabled(LogLevel level) {
+    return level >= LoggerLogLevel;
+}
+
 void Log(LogLevel level, NSString* fmt, ...) {
     va_list args;
     va_start(args, fmt);

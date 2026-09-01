@@ -11,7 +11,10 @@
 
 @interface SettingsViewController : UIViewController
 @property (strong, nonatomic) IBOutlet UILabel *bitrateLabel;
+// TODO: Replace with tvOS-compatible control (UISlider not available on tvOS)
+#if !TARGET_OS_TV
 @property (strong, nonatomic) IBOutlet UISlider *bitrateSlider;
+#endif
 @property (strong, nonatomic) IBOutlet UISegmentedControl *framerateSelector;
 @property (strong, nonatomic) IBOutlet UISegmentedControl *resolutionSelector;
 @property (strong, nonatomic) IBOutlet UIView *resolutionDisplayView;

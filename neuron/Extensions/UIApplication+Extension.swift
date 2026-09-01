@@ -34,6 +34,7 @@ extension UIApplication {
 }
 
 // safe area insets
+// safe area insets
 extension UIApplication {
     
     var keyWindowInConnectedScenes: UIWindow? {
@@ -45,6 +46,14 @@ extension UIApplication {
             if let window = UIApplication.shared.keyWindowInConnectedScenes {
                 return window.safeAreaInsets.left // safeAreaInsets.top
             }
+        }
+        return 0
+    }
+    
+    var safeAreaTop: CGFloat {
+        
+        if let window = UIApplication.shared.keyWindowInConnectedScenes {
+            return window.safeAreaInsets.top // safeAreaInsets.top
         }
         return 0
     }

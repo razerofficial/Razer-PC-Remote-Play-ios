@@ -143,10 +143,22 @@ static NSString* DB_NAME = @"Limelight_iOS.sqlite";
     // We must ensure the persistent store is ready to opened
     [self preparePersistentStore];
     
-    if (![_persistentStoreCoordinator addPersistentStoreWithType:storeType configuration:nil URL:[self getStoreURL] options:options error:&error]) {
-        // Log the error
-        Log(LOG_E, @"Critical database error: %@, %@", error, [error userInfo]);
+    NSURL *storeURL = [self getStoreURL];
+    NSLog(@"[AppDelegate] Adding persistent store with URL: %@", storeURL);
+    
+    if (![_persistentStoreCoordinator addPersistentStoreWithType:storeType configuration:nil URL:storeURL options:options error:&error]) {
+        // Use NSLog instead of Log to avoid deadlock
+        NSLog(@"[AppDelegate] Critical database error: %@, %@", error, [error userInfo]);
         
+        // Check for specific permission errors
+        if (error.domain == NSCocoaErrorDomain && error.code == 513) {
+            NSLog(@"[AppDelegate] NSCocoaErrorDomain Code=513: You don't have permission to save the file");
+        }
+        if (error.domain == NSPOSIXErrorDomain && error.code == 1) {
+            NSLog(@"[AppDelegate] NSPOSIXErrorDomain Code=1: Operation not permitted");
+        }
+        
+        NSLog(@"[AppDelegate] Dropping database and trying again...");
         // Drop the database
         [self dropDatabase];
         
@@ -173,6 +185,8 @@ static NSString* DB_NAME = @"Limelight_iOS.sqlite";
 #if TARGET_OS_TV
     // Also delete the copy in the NSUserDefaults on tvOS
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:DB_NAME];
+    BOOL synchronized = [[NSUserDefaults standardUserDefaults] synchronize];
+    NSLog(@"[AppDelegate] NSUserDefaults synchronize result: %@", synchronized ? @"SUCCESS" : @"FAILED");
 #endif
 }
 
@@ -184,6 +198,14 @@ static NSString* DB_NAME = @"Limelight_iOS.sqlite";
     NSString *cacheDirectory = [paths objectAtIndex:0];
     NSString *dbPath = [cacheDirectory stringByAppendingPathComponent:DB_NAME];
     
+    // Use NSLog directly to avoid dispatch_once deadlock with Log() function
+    // Log(LOG_I, @"[AppDelegate] Preparing persistent store for tvOS");
+    // Log(LOG_I, @"[AppDelegate] Cache directory: %@", cacheDirectory);
+    // Log(LOG_I, @"[AppDelegate] Database path: %@", dbPath);
+    NSLog(@"[AppDelegate] Preparing persistent store for tvOS");
+    NSLog(@"[AppDelegate] Cache directory: %@", cacheDirectory);
+    NSLog(@"[AppDelegate] Database path: %@", dbPath);
+    
     // Always prefer the on disk version
     if (![[NSFileManager defaultManager] fileExistsAtPath:dbPath]) {
         // If that is unavailable, inflate it from NSUserDefaults
@@ -193,11 +215,11 @@ static NSString* DB_NAME = @"Limelight_iOS.sqlite";
             [data writeToFile:dbPath atomically:YES];
         }
         else {
-            Log(LOG_I, @"No database on disk or in NSUserDefaults");
+            NSLog(@"No database on disk or in NSUserDefaults");
         }
     }
     else {
-        Log(LOG_I, @"Using cached database");
+        NSLog(@"Using cached database");
     }
 #endif
 }

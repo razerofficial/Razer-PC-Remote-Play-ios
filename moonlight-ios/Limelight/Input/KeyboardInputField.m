@@ -15,4 +15,11 @@
     return UIEditingInteractionConfigurationNone;
 }
 
+- (NSUndoManager *)undoManager {
+    // Return nil to completely disable undo operations
+    // This prevents crashes during dictation on iOS 26 where UIKit
+    // tries to create undo operations that access NSTextStorage via KVO
+    return nil;
+}
+
 @end

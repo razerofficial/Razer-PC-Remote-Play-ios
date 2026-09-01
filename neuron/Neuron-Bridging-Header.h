@@ -24,7 +24,7 @@
 #ifndef Neuron_Bridging_Header_h
 #define Neuron_Bridging_Header_h
 
-#import "RZAboutViewController.h"
+#import "SWRevealViewController.h"
 #import "DiscoveryManager.h"
 #import "PairManager.h"
 #import "DataManager.h"

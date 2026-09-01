@@ -71,37 +71,11 @@ extension DashboardViewModel {
     }
     
     func manuallyAddPC() {
-        
         isShowAddManualHostView = true
-        
-//        let okButton = AlertButton(id: "ok", title: "Add".localize(), type: .confirm)
-//        let cancelButton = AlertButton(id: "cancel", title: "Cancel".localize(), type: .confirm)
-//        addressAlertView = SwiftAlertView(title: "Add PC manually".localize(),
-//                                   message: "Input PC IP address".localize(),
-//                                   alertButtons:[cancelButton,okButton],
-//                                   colorScheme: SwiftUI.ColorScheme.dark)
-//        
-//        addressAlertView?.addTextField { textField in
-//            textField.placeholder = "Enter the IP address of your computer.".localize()
-//        }
-//        
-//        addressAlertView?.respondOnOkClickWhenTextFiledIsEmpty = false
-//        addressAlertView?.isDismissOnActionButtonClicked = false
-//        
-//        addressAlertView?.onButtonClicked { _, buttonId in
-//            if( buttonId == "ok" ){
-//                let address = self.addressAlertView?.textField(at: 0)?.text ?? ""
-//                let isContainPort = RzUtils.checkIPAddressISValid(withIP: address)
-//                if isContainPort == false {
-//                    return
-//                }
-//                self.addressAlertView?.dismiss()
-//                self.onManualIpEnter(address:address)
-//            }else {
-//                self.addressAlertView?.dismiss()
-//            }
-//        }
-//        addressAlertView?.show()
+    }
+    
+    func settingsManuallyAddPC() {
+        isShowAddManualHostViewInSettings = true
     }
     
     func onManualIpEnter(address: String) {

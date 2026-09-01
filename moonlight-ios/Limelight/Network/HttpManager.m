@@ -23,21 +23,45 @@
 #define LONG_TIMEOUT_SEC 60
 #define EXTRA_LONG_TIMEOUT_SEC 180
 
+
+NSString * const RZServerCertificateMismatchNotification = @"ServerCertificateMismatchNotification";
+
+// NSURLSession keeps a strong reference to its delegate until the session is
+// explicitly invalidated. Passing the HttpManager directly therefore created a
+// cycle that kept every HttpManager (and its session) alive for the life of the
+// process. Routing the callbacks through a weak proxy lets -dealloc run, which
+// is where the session finally gets torn down.
+@interface HttpManagerDelegateProxy : NSObject <NSURLSessionDelegate>
+@property (nonatomic, weak) HttpManager* target;
+@end
+
+@implementation HttpManagerDelegateProxy
+
+- (void)URLSession:(NSURLSession *)session didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(nonnull void (^)(NSURLSessionAuthChallengeDisposition, NSURLCredential * __nullable))completionHandler {
+    HttpManager* target = self.target;
+    if (target == nil) {
+        completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, NULL);
+        return;
+    }
+
+    [target URLSession:session didReceiveChallenge:challenge completionHandler:completionHandler];
+}
+
+@end
+
 @implementation HttpManager {
     NSURLSession* _urlSession;
+    HttpManagerDelegateProxy* _delegateProxy;
     NSString* _urlSafeHostName;
     NSString* _baseHTTPURL;
     NSString* _uniqueId;
     NSString* _deviceName;
     NSData* _serverCert;
-    NSMutableData* _respData;
-    NSData* _requestResp;
     dispatch_semaphore_t _requestLock;
-    
+    NSURLSessionDataTask* _currentTask;
+
     TemporaryHost *_host; // May be nil
     NSString* _baseHTTPSURL;
-    
-    NSError* _error;
 }
 
 + (NSData*) fixXmlVersion:(NSData*) xmlData {
@@ -73,10 +97,11 @@
     _deviceName = deviceName;
     _serverCert = serverCert;
     _requestLock = dispatch_semaphore_create(0);
-    _respData = [[NSMutableData alloc] init];
     NSURLSessionConfiguration* config = [NSURLSessionConfiguration ephemeralSessionConfiguration];
-    _urlSession = [NSURLSession sessionWithConfiguration:config delegate:self delegateQueue:nil];
-    
+    _delegateProxy = [[HttpManagerDelegateProxy alloc] init];
+    _delegateProxy.target = self;
+    _urlSession = [NSURLSession sessionWithConfiguration:config delegate:_delegateProxy delegateQueue:nil];
+
     NSString* address = [Utils addressPortStringToAddress:hostAddressPortString];
 //    unsigned short port = [Utils addressPortStringToPort:hostAddressPortString];
     
@@ -94,6 +119,12 @@
     }
     
     return self;
+}
+
+- (void)dealloc {
+    // Release the session's internal resources. All requests are synchronous, so
+    // nothing is in flight by the time we get here.
+    [_urlSession finishTasksAndInvalidate];
 }
 
 - (void)updateCurrentHost {
@@ -154,41 +185,53 @@
             request.response.statusCode = EHOSTDOWN;
             request.response.statusMessage = @"Host is unreachable";
         }
-        
+
         return;
     }
-    
-    [_respData setLength:0];
-    _error = nil;
-    
+
+    // Use local __block variables instead of shared ivars so each call has
+    // isolated storage. The old pattern of reusing _respData/_requestResp/_error
+    // across calls caused heap corruption: _requestResp = self->_respData aliased
+    // both to the same NSMutableData, so the setLength:0 reset at the start of
+    // a recursive call would mutate memory already handed to populateWithData:.
+    __block NSData* responseData = nil;
+    __block NSError* requestError = nil;
+
     Log(LOG_D, @"Making Request: %@", request);
-    [[_urlSession dataTaskWithRequest:request.request completionHandler:^(NSData * __nullable data, NSURLResponse * __nullable response, NSError * __nullable error) {
-        
-        if (error != NULL) {
+    NSURLSessionDataTask* task = [_urlSession dataTaskWithRequest:request.request completionHandler:^(NSData * __nullable data, NSURLResponse * __nullable response, NSError * __nullable error) {
+
+        if (error != nil) {
             Log(LOG_D, @"Connection error: %@", error);
-            self->_error = error;
+            requestError = error;
         }
         else {
             Log(LOG_D, @"Received response: %@", response);
 
-            if (data != NULL) {
-                Log(LOG_D, @"\n\nReceived data: %@\n\n", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
-                [self->_respData appendData:data];
-                if ([[NSString alloc] initWithData:self->_respData encoding:NSUTF8StringEncoding] != nil) {
-                    self->_requestResp = [HttpManager fixXmlVersion:self->_respData];
+            if (data != nil) {
+                // Decoding the body into a string is expensive and happens on every
+                // response. The Log() arguments are evaluated even when the message
+                // is filtered out by level, so guard the allocation explicitly.
+                if (LogIsEnabled(LOG_D)) {
+                    Log(LOG_D, @"\n\nReceived data: %@\n\n", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+                }
+                if ([[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] != nil) {
+                    responseData = [HttpManager fixXmlVersion:data];
                 } else {
-                    self->_requestResp = self->_respData;
+                    responseData = [data copy];
                 }
             }
         }
-        
+
         dispatch_semaphore_signal(self->_requestLock);
-    }] resume];
+    }];
+    _currentTask = task;
+    [task resume];
     dispatch_semaphore_wait(_requestLock, DISPATCH_TIME_FOREVER);
-    
-    if (!_error && request.response) {
-        [request.response populateWithData:_requestResp];
-        
+    _currentTask = nil;
+
+    if (!requestError && request.response) {
+        [request.response populateWithData:responseData];
+
         // If the fallback error code was detected, issue the fallback request
         if (request.response.statusCode == request.fallbackError && request.fallbackRequest != NULL) {
             Log(LOG_D, @"Request failed with fallback error code: %d", request.fallbackError);
@@ -198,11 +241,11 @@
             [self executeRequestSynchronously:request];
         }
     }
-    else if (_error && [_error code] == NSURLErrorServerCertificateUntrusted) {
+    else if (requestError && [requestError code] == NSURLErrorServerCertificateUntrusted) {
         // We must have a pinned cert for HTTPS. If we fail, it must be due to
         // a non-matching cert, not because we had no cert at all.
         assert(_serverCert != nil);
-        
+
         if (request.fallbackRequest) {
             // This will fall back to HTTP on serverinfo queries to allow us to pair again
             // and get the server cert updated.
@@ -213,10 +256,25 @@
             [self executeRequestSynchronously:request];
         }
     }
-    else if (_error && request.response) {
-        request.response.statusCode = [_error code];
-        request.response.statusMessage = [_error localizedDescription];
+    else if (requestError && request.response) {
+        request.response.statusCode = [requestError code];
+        request.response.statusMessage = [requestError localizedDescription];
     }
+}
+
+// Unblocks any in-flight executeRequestSynchronously call immediately (its completion
+// handler fires with an error) instead of waiting out the request's timeout.
+//
+// Deliberately cancels only the current task rather than invalidating _urlSession, for
+// two reasons: dataTaskWithRequest:completionHandler: throws 'Task created in a session
+// that has been invalidated' if called again afterward, and PairManager's own failure
+// path (finishPairing:forResponse:withFallbackError:) relies on being able to make one
+// more request afterward -- the newUnpairRequest cleanup call, which tells the host PC
+// to release its own pairing session. Without that call going through, the host's
+// pairing state stays stuck and rejects the next pairing attempt with "already in
+// progress", even though nothing is in progress on the client anymore.
+- (void) cancelPendingRequests {
+    [_currentTask cancel];
 }
 
 - (NSURLRequest*) createRequestFromString:(NSString*) urlString timeout:(int)timeout {
@@ -358,7 +416,11 @@
     textView.backgroundColor = [UIColor clearColor]; // Background color set to clear
     textView.alpha = 1.0; // Fully visible
     textView.textColor = [UIColor blackColor]; // Text color
+#ifndef TARGET_OS_TV
     textView.editable = NO; // Make it non-editable
+#else
+    NSLog(@"todo tvos tvOS does not support editable");
+#endif
     textView.scrollEnabled = NO; // Disable scrolling
     textView.font = [UIFont systemFontOfSize:14]; // Set font
     textView.textAlignment = NSTextAlignmentCenter; // Center text alignment
@@ -464,14 +526,20 @@
 
 // Returns an array containing the certificate
 - (NSArray*)getCertificate:(SecIdentityRef) identity {
+    if (identity == nil) {
+        return nil;
+    }
+
     SecCertificateRef certificate = nil;
-    
+
     SecIdentityCopyCertificate(identity, &certificate);
-    
+
     if (certificate == nil) {
         return nil;
     } else {
-        return [[NSArray alloc] initWithObjects:(__bridge id)certificate, nil];
+        // SecIdentityCopyCertificate returns a +1 reference, so transfer it to ARC
+        // rather than just bridging it, otherwise the certificate leaks.
+        return [[NSArray alloc] initWithObjects:(__bridge_transfer id)certificate, nil];
     }
 }
 
@@ -502,7 +570,12 @@
     if (status == errSecSuccess && items != NULL && CFArrayGetCount(items) > 0) {
         CFDictionaryRef identityDict = CFArrayGetValueAtIndex(items, 0);
         identityApp = (SecIdentityRef)CFDictionaryGetValue(identityDict, kSecImportItemIdentity);
-        CFRetain(identityApp); // Prevent the SecPKCS12Import from becoming invalid after being released
+        if (identityApp != NULL) {
+            // Prevent the identity from becoming invalid when the import result is released
+            CFRetain(identityApp);
+        } else {
+            Log(LOG_E,@"[HttpManager] P12 contains no identity");
+        }
     } else {
         Log(LOG_E,@"[HttpManager] Error opening Certificate. Status = %d", (int)status);
     }
@@ -537,11 +610,25 @@
             completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, NULL);
             return;
         }
-        
+
+        // CFEqual requires both arguments to be non-NULL. We have no pinned cert
+        // before pairing completes, so treat that as a mismatch instead.
+        if (_serverCert == nil) {
+            Log(LOG_E, @"No pinned server certificate");
+            CFRelease(actualCertData);
+            completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, NULL);
+            return;
+        }
+
         if (!CFEqual(actualCertData, (__bridge CFDataRef)_serverCert)) {
             Log(LOG_E, @"Server certificate mismatch");
             CFRelease(actualCertData);
             completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, NULL);
+            if (_host.pairState == PairStatePaired) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [[NSNotificationCenter defaultCenter] postNotificationName:RZServerCertificateMismatchNotification object:self->_host];
+                });
+            }
             return;
         }
         
@@ -555,10 +642,16 @@
     else if ([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodClientCertificate])
     {
         SecIdentityRef identity = [self getClientCertificate];
+        if (identity == nil) {
+            Log(LOG_E, @"No client certificate available for challenge");
+            completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, NULL);
+            return;
+        }
+
         NSArray* certArray = [self getCertificate:identity];
         NSURLCredential* newCredential = [NSURLCredential credentialWithIdentity:identity certificates:certArray persistence:NSURLCredentialPersistencePermanent];
         completionHandler(NSURLSessionAuthChallengeUseCredential, newCredential);
-        if (identity) CFRelease(identity);
+        CFRelease(identity);
     }
     else
     {

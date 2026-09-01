@@ -44,7 +44,8 @@ import SwiftUI
     @objc var videoRefreshRate: Int = 0
     @objc var automaticallyConfigureGameSettings: Bool = true
     @objc var timeToTerminateApp: Int = 30
-    
+    @objc var enableCoreHaptics: Bool = true
+
     override init() {
         super.init()
     }

@@ -407,7 +407,7 @@ enum PCDisplayStreamingMode: Int, Codable {
         }
     }
     
-    func highlightedUIComponent() -> FrameSettingsUIComponents.FrameSettingsHightlightedComponent {
+    func highlightedUIComponent() -> SettingsUIComponents.ComponentType {
         switch self {
         case .DuplicatePCDisplayMode:
             return .NeuronStreamingSettingsDisplayModeVideoSettingsDisplay

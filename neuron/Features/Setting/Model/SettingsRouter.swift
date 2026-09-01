@@ -65,6 +65,8 @@ class SettingsRouter: NSObject {
     }
     
     @objc static let shared = SettingsRouter()
+    //save root , use for reset of dashboardview
+    @objc var rootNavigationController:UINavigationController?
     //传送navigationController给Setting子页面
     @objc var navigationController:UINavigationController?
     //用于其他页面同时SettingsHostDevicesVC刷新页面
@@ -266,7 +268,7 @@ class SettingsRouter: NSObject {
             make.bottom.equalToSuperview()
         }
         
-        if #available(iOS 26.0, *) {
+        if #available(iOS 26.0, tvOS 26.0, *) {
             
             let codeHeight = 52.0
             

@@ -15,6 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#if !os(tvOS)
 import UIKit
 import RxSwift
 import RxCocoa
@@ -122,3 +123,4 @@ extension WebVC: CustomNavigationBarDelegate {
         //do nothing
     }
 }
+#endif

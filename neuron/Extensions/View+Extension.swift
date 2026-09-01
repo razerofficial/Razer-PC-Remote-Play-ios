@@ -96,14 +96,48 @@ extension View {
     }
     
     //MARK: - 👉 Text style
+//    func titleStyle() -> some View {
+//        self.modifier(Title())
+//    }
+//    
+//    func descriptionStyle() -> some View {
+//        self.modifier(Description())
+//    }
+    
+    func settingsTitleStyle() -> some View {
+        self.robotoFont(style: .body, weight: .regular, size: 13.0, textColor: .white)
+    }
+    
+    func settingsSectionHeaderStyle() -> some View {
+        self.robotoFont(style: .body, weight: .bold, size: 15.0, textColor: .white)
+    }
+    
+    func settingsDescriptionStyle() -> some View {
+        self.robotoFont(style: .body, weight: .regular, size: 13.0, textColor: Color.SettingText)
+    }
+    
+    func ChromaDescroptionStyle() -> some View {
+        self.robotoFont(style: .body, weight: .regular, size: 12.0, textColor: Color.SettingText)
+    }
+    
+    func settingsStyle(textSize:CGFloat, textColor:Color) -> some View {
+        self.robotoFont(style: .body, weight: .regular, size: textSize, textColor: textColor)
+    }
     
     func eraseToAnyView() -> AnyView { AnyView(self) }
+    
+//    public func keyboardAware() -> some View {
+//        ModifiedContent(content: self, modifier: KeyboardAware())
+//    }
     
     func clearModalBackground()->some View {
         self.modifier(ClearBackgroundViewModifier())
     }
     
-    
+//    func keyboardAdaptive() -> some View {
+//        ModifiedContent(content: self, modifier: KeyboardAdaptive())
+//    }
+
     func onDataChange<Value: Equatable>(of value: Value, perform action: @escaping (_ newValue: Value) -> Void) -> some View {
         Logger.debug("onDataChange old Value:\(value)")
         return Group {
@@ -213,13 +247,11 @@ extension View {
     
     @ViewBuilder
     func compatibleGlassEffect(radius: CGFloat? = nil) -> some View {
-        if #available(iOS 26.0, *) {
-            Group {
-                if let radius = radius {
-                    self.glassEffect(in: .rect(cornerRadius: radius ) )
-                } else {
-                    self.glassEffect()
-                }
+        if #available(iOS 26.0, tvOS 26.0, *) {
+            if let radius = radius {
+                self.glassEffect(in: .rect(cornerRadius: radius ) )
+            } else {
+                self.glassEffect()
             }
         } else {
             // Fallback on earlier versions
@@ -229,14 +261,44 @@ extension View {
     
     @ViewBuilder
     func compatibleGlassTouchEffect(radius: CGFloat? = nil) -> some View {
-        if #available(iOS 26.0, *) {
-            Group {
+        if #available(iOS 26.0, tvOS 26.0, *) {
+            //Group {
                 if let radius = radius {
-                    self.glassEffect( .clear.interactive(true) ,in: .rect(cornerRadius: radius ) )
+                    self.glassEffect( .clear.tint(SettingsUtil.shared.glassBgColor()).interactive(true) ,in: .rect(cornerRadius: radius ) )
+                        .overlay {
+                            RoundedRectangle(cornerRadius: radius)
+                                .stroke(
+                                    LinearGradient(
+                                        colors: [
+                                            Color.white.opacity(0.24),
+                                            Color.black.opacity(0.18),
+                                            Color.white.opacity(0.24)
+                                        ],
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    ),
+                                    lineWidth: 1
+                                )
+                        }
                 } else {
-                    self.glassEffect( .clear.interactive(true) )
+                    self.glassEffect( .clear.tint(SettingsUtil.shared.glassBgColor()).interactive(true) )
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 999)
+                                .stroke(
+                                    LinearGradient(
+                                        colors: [
+                                            Color.white.opacity(0.24),
+                                            Color.black.opacity(0.18),
+                                            Color.white.opacity(0.24)
+                                        ],
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    ),
+                                    lineWidth: 1
+                                )
+                        }
                 }
-            }
+           // }
         } else {
             // Fallback on earlier versions
             self
@@ -265,5 +327,42 @@ private struct UIKitAppear: UIViewControllerRepresentable {
         override func viewDidAppear(_ animated: Bool) {
             action?()
         }
+    }
+}
+
+// MARK: - Settings Navigation Back Button
+extension View {
+    // BIA-2260,BIA-2265: Adds a custom back button in compact mode for Settings navigation.
+    // because native navigation bar has weired transition anaimation(jump, resize) when navigationBarHidden from false to true
+    // so we have to use a custom back button to prevent navigationBarHidden glitch on iOS 26 compact mode
+    func settingsCompactBackButton(horizontalSizeClass: UserInterfaceSizeClass?, isFromSetting: Bool = true) -> some View {
+        self
+            .toolbar {
+                if isFromSetting {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button {
+                            let currentComponent = SettingsViewModel.shared.highlightedUIComponent
+                            let pathCount = SettingsViewModel.shared.getCurrentNavigationPathCount()
+                            Logger.debug("[SettingsNavigation] Back button tapped - currentComponent: \(currentComponent), pathCount: \(pathCount)")
+                            
+                            // If in pushed pages, just pop without changing highlightedUIComponent
+                            if pathCount > 0 {
+                                SettingsViewModel.shared.popView()
+                                
+                            } else {
+                                // If at root of detail view, go back to sidebar
+                                let parentMenuItem = currentComponent.getParentMenuItem()
+                                Logger.debug("[SettingsNavigation] Returning to sidebar - setting highlightedUIComponent to: \(parentMenuItem)")
+                                SettingsViewModel.shared.highlightedUIComponent = parentMenuItem
+                                SettingsViewModel.shared.popView()
+                            }
+                        } label: {
+                            Image(systemName: "chevron.left")
+//                                .bold()
+                        }
+                    }
+                }
+            }
+            .navigationBarBackButtonHidden(isFromSetting)
     }
 }

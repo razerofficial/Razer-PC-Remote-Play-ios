@@ -24,5 +24,5 @@ extension Notification.Name {
     static let retryStreamingNotification = Notification.Name("retryStreamingNotification")
     static let debugModeUpdateNotification = Notification.Name("debugModeUpdateNotification")
     static let streamingStatsUpdateNotification = Notification.Name("streamingStatsUpdateNotification")
-
+    static let settingsPageDismissNotification = Notification.Name("settingsPageDismissNotification")
 }

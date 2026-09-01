@@ -226,3 +226,6 @@
 "Advances Settings" = "詳細設定";
 "Edit Profile" = "プロフィール編集";
 "Computer" = "コンピューター";
+//20260508 AI translation
+"iPhone Built-In Haptics" = "iPhone 内蔵ハプティクス";
+"Enable game vibration using the iPhone's built in haptic motors during streaming" = "ストリーミング中に iPhone の内蔵ハプティクスモーターを使用してゲームの振動を有効にします。";

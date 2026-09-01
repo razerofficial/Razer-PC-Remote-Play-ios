@@ -19,7 +19,11 @@ import SwiftUI
 
 struct BlurView: UIViewRepresentable {
     typealias UIViewType = UIVisualEffectView
-    var style : UIBlurEffect.Style = .systemUltraThinMaterialDark
+    #if os(tvOS)
+    var style : UIBlurEffect.Style = .dark
+    #else
+    var style : UIBlurEffect.Style = .systemChromeMaterialDark
+    #endif
     
     func makeUIView(context: Context) -> UIVisualEffectView {
         return UIVisualEffectView(effect: UIBlurEffect(style: style))

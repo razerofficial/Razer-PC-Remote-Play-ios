@@ -19,6 +19,7 @@ import Combine
 import UIKit
 
 extension Publishers {
+    #if !os(tvOS)
     static var keyboardHeight: AnyPublisher<CGFloat, Never> {
         let willShow = NotificationCenter.default.publisher(for: UIApplication.keyboardWillShowNotification)
             .map { $0.keyboardHeight }
@@ -29,10 +30,23 @@ extension Publishers {
         return MergeMany(willShow, willHide)
             .eraseToAnyPublisher()
     }
+    #else
+    static var keyboardHeight: AnyPublisher<CGFloat, Never> {
+        // tvOS doesn't have software keyboard, always return 0
+        return Just(0).eraseToAnyPublisher()
+    }
+    #endif
 }
 
 extension Notification {
+    #if !os(tvOS)
     var keyboardHeight: CGFloat {
         return (userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect)?.height ?? 0
     }
+    #else
+    var keyboardHeight: CGFloat {
+        // tvOS doesn't have software keyboard, always return 0
+        return 0
+    }
+    #endif
 }

@@ -40,7 +40,7 @@
 + (NSData*)rz_readCryptoObject:(NSString*)item {
     Log(LOG_I, NSStringFromSelector(_cmd));
 #if TARGET_OS_TV
-    return [self rz_readCryptoObject:item];
+    return [[NSUserDefaults standardUserDefaults] dataForKey:item];
 #else
     return [[ShareDataDB shared] readDataFromPath:item];
 #endif
@@ -49,9 +49,9 @@
 + (void)rz_writeCryptoObject:(NSString*)item data:(NSData*)data {
     Log(LOG_I, NSStringFromSelector(_cmd));
 #if TARGET_OS_TV
-    return [self rz_writeCryptoObject:item data:data];
+    [[NSUserDefaults standardUserDefaults] setObject:data forKey:item];
 #else
-    return [[ShareDataDB shared] writeData:data toFile:item];
+    [[ShareDataDB shared] writeData:data toFile:item];
 #endif
 }
     

@@ -22,9 +22,13 @@
 #import "SWRevealViewController.h"
 #import "SettingsViewController+Neuron.h"
 #import "ShareDataHost.h"
+#import "RzTemporaryApp.h"
+#import "constant.h"
+#import "Logger.h"
+#import <TargetConditionals.h>
 
 @interface ShareDataDB ()
-
+@property (nonatomic, strong) NSUserDefaults *sharedUserDefaults;
 @end
 
 @implementation ShareDataDB
@@ -33,8 +37,24 @@
     static ShareDataDB *dataDB;
     if (!dataDB) {
         dataDB = [ShareDataDB new];
+        [dataDB initializeSharedUserDefaults];
     }
     return dataDB;
+}
+
+- (void)initializeSharedUserDefaults {
+    self.sharedUserDefaults = [[NSUserDefaults alloc] initWithSuiteName:groupID];
+    if (!self.sharedUserDefaults) {
+        NSLog(@"[ShareDataDB] Failed to initialize App Group UserDefaults with suite name: %@", groupID);
+    }
+}
+
+- (BOOL)isTvOS {
+#if TARGET_OS_TV
+    return YES;
+#else
+    return NO;
+#endif
 }
 
 - (NSURL *)groupUrl {
@@ -43,24 +63,58 @@
 }
 
 - (NSString *)readJsonStringFromPath:(NSString *)item {
-    NSURL *fileUrl = [self.groupUrl URLByAppendingPathComponent:item];
-    NSString *json = [NSString stringWithContentsOfURL:fileUrl encoding:NSUTF8StringEncoding error:nil];
-    return json;
+    if ([self isTvOS]) {
+        // tvOS: read NSData from UserDefaults then convert to json
+        NSData *data = [self readDataFromPath:item];
+        if (data) {
+            NSString *json = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+            return json;
+        }
+        return nil;
+    } else {
+        // iOS: read string directly from file
+        NSURL *fileUrl = [self.groupUrl URLByAppendingPathComponent:item];
+        NSString *json = [NSString stringWithContentsOfURL:fileUrl encoding:NSUTF8StringEncoding error:nil];
+        return json;
+    }
 }
 
 - (NSData *)readDataFromPath:(NSString *)item {
-    NSURL *fileUrl = [self.groupUrl URLByAppendingPathComponent:item];
-    NSData *data = [NSData dataWithContentsOfURL:fileUrl];
-    return data;
+    if ([self isTvOS]) {
+        // tvOS: using UserDefaults
+        NSString *key = [NSString stringWithFormat:@"ShareDB_%@", item];
+        NSData *data = [self.sharedUserDefaults objectForKey:key];
+        
+        return data;
+    } else {
+        // iOS: using file system
+        NSURL *fileUrl = [self.groupUrl URLByAppendingPathComponent:item];
+        
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        if (![fileManager fileExistsAtPath:fileUrl.path]) {
+            return nil;
+        }
+        
+        return [NSData dataWithContentsOfURL:fileUrl];
+    }
 }
 
-- (void)writeData:(NSData *)data toFile:(NSString *)item {
-    NSURL *fileUrl = [self.groupUrl URLByAppendingPathComponent:item];
-    BOOL success = [data writeToURL:fileUrl atomically:YES];
-    if (success == true) {
-        printf("write to sharedb success \n");
-    }else{
-        printf("write to sharedb failed \n");
+- (BOOL)writeData:(NSData *)data toFile:(NSString *)item {
+    if (!data || !item) {
+        return NO;
+    }
+    
+    if ([self isTvOS]) {
+        // tvOS: using UserDefaults
+        NSString *key = [NSString stringWithFormat:@"ShareDB_%@", item];
+        [self.sharedUserDefaults setObject:data forKey:key];
+        BOOL success = [self.sharedUserDefaults synchronize];
+        
+        return success;
+    } else {
+        // iOS: using file system
+        NSURL *fileUrl = [self.groupUrl URLByAppendingPathComponent:item];
+        return [data writeToURL:fileUrl atomically:YES];
     }
 }
 

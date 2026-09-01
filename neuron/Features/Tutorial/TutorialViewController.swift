@@ -138,21 +138,29 @@ class TutorialViewController: RZBaseVC, RZHandleResponderDelegate {
     
 
     func onTermsOfServiceClicked() {
+        #if !os(tvOS)
         let webVC = WebVC()
         webVC.modalPresentationStyle = .fullScreen
         webVC.url = TermOfServiceUrl.toUrl()!
         webVC.lastHandel = self.handel
         webVC.webViewTitle = "Terms of Service".localize()
         present(webVC, animated: true, completion: nil)
+        #else
+        // WebVC is not available on tvOS
+        #endif
     }
     
     func onPrivacyPolicyClicked() {
+        #if !os(tvOS)
         let webVC = WebVC()
         webVC.modalPresentationStyle = .fullScreen
         webVC.url = PrivacyPolicyUrl.toUrl()!
         webVC.lastHandel = self.handel
         webVC.webViewTitle = "Privacy Policy".localize()
         present(webVC, animated: true, completion: nil)
+        #else
+        // WebVC is not available on tvOS
+        #endif
     }
     
     func dismissTutorial() {

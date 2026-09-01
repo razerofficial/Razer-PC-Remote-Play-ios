@@ -16,6 +16,7 @@
  */
 
 import Foundation
+import SwiftUI
 
 class DevOptionVC: RZBaseVC {
     
@@ -209,6 +210,7 @@ class DevOptionVC: RZBaseVC {
     }
     
     func shareStatsFile() {
+        #if !os(tvOS)
         let fileURL = ShareDataDB.shared().fileUrl(fromGroup: statsPath)
         let activityViewController = UIActivityViewController(activityItems: [fileURL], applicationActivities: nil)
 
@@ -217,10 +219,13 @@ class DevOptionVC: RZBaseVC {
             activityViewController.popoverPresentationController?.sourceRect = CGRect(x: 100, y: 100, width: 200, height: 200)
         }
         self.present(activityViewController, animated: true, completion: nil)
+        #else
+        Toast.show(text: "File sharing not available on tvOS")
+        #endif
     }
     
     @objc func exportSettingsAction(_ sender: UITapGestureRecognizer) {
-        
+        #if !os(tvOS)
         let data = ShareDataDB.shared().readData(fromPath: frameSettingsPath)
         ShareDataDB.shared().write(data, toFile: frameSettingsTXTPath)
         let fileURL = ShareDataDB.shared().fileUrl(fromGroup: frameSettingsTXTPath)
@@ -231,6 +236,9 @@ class DevOptionVC: RZBaseVC {
             activityViewController.popoverPresentationController?.sourceRect = CGRect(x: 100, y: 100, width: 200, height: 200)
         }
         self.present(activityViewController, animated: true, completion: nil)
+        #else
+        Toast.show(text: "Settings export not available on tvOS")
+        #endif
     }
     
     @objc func setIsShowSeparateScreenOption(_ sender: UITapGestureRecognizer) {
@@ -268,7 +276,7 @@ class DevOptionVC: RZBaseVC {
         if SettingsRouter.shared.shareLogExcportIng {
             return
         }else {
-            
+            #if !os(tvOS)
             SettingsRouter.shared.shareLogExcportIng = true
             //加锁
             DevLogger.shared.lock()
@@ -289,7 +297,9 @@ class DevOptionVC: RZBaseVC {
                 DevLogger.shared.unLock()
                 SettingsRouter.shared.shareLogExcportIng = false
             }
-
+            #else
+            Toast.show(text: "Log export not available on tvOS")
+            #endif
         }
         
     }
@@ -309,6 +319,7 @@ class DevOptionVC: RZBaseVC {
             return
         }
         
+        #if !os(tvOS)
         let fileURL = URL(fileURLWithPath: pcmPath)
         let activityViewController = UIActivityViewController(activityItems: [fileURL], applicationActivities: nil)
 
@@ -317,6 +328,9 @@ class DevOptionVC: RZBaseVC {
             activityViewController.popoverPresentationController?.sourceRect = CGRect(x: 100, y: 100, width: 200, height: 200)
         }
         self.present(activityViewController, animated: true, completion: nil)
+        #else
+        Toast.show(text: "Audio export not available on tvOS")
+        #endif
     }
     
     @objc func cleanAudioAction(_ sender: UITapGestureRecognizer) {
@@ -384,5 +398,18 @@ extension DevOptionVC {
             let statusText = statsDesText()
             statsDesLabel.text = statusText
         }
+    }
+}
+
+struct DevView: UIViewControllerRepresentable {
+    
+    // 告诉 SwiftUI 用哪个 UIViewController
+    func makeUIViewController(context: Context) -> DevOptionVC {
+        return DevOptionVC()
+    }
+    
+    // 更新逻辑（如果需要响应状态变化）
+    func updateUIViewController(_ uiViewController: DevOptionVC, context: Context) {
+        
     }
 }

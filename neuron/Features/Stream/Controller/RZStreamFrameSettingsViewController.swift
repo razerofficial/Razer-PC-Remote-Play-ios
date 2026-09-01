@@ -40,7 +40,7 @@ class RZStreamFrameSettingsViewController: RZBaseVC {
         view.backgroundColor = .black
         
         handel.reloadCallBack = { [self] in
-            handel.delegate = self
+            handel.delegate = SettingsViewModel.shared
             NeuronFrameSettingsViewModel.shared().highlightedUIComponent = .NeuronStreamingSettingsDisplayModeDeviceOptimized
         }
     }
@@ -54,30 +54,4 @@ class RZStreamFrameSettingsViewController: RZBaseVC {
         lastVC?.updateNextHandel(handel)
     }
 
-}
-
-extension RZStreamFrameSettingsViewController: RZHandleResponderDelegate {
-    
-    func handleClickButton(_ action: GamePadButton) {
-     
-        switch action {
-        case .B:
-            NeuronFrameSettingsViewModel.shared().highlightedUIComponent = .NeuronStreamingSettings
-            handel.stopTracking()
-            lastHandel?.startTracking()
-            lastHandel?.reloadCallBack?()
-        case .left:
-            if NeuronFrameSettingsViewModel.shared().highlightedUIComponent != .NeuronStreamingSettingsDisplayModeSeparateScreen &&  NeuronFrameSettingsViewModel.shared().highlightedUIComponent != .NeuronStreamingSettingsDisplayModeVideoSettingsDisplay && NeuronFrameSettingsViewModel.shared().highlightedUIComponent != .NeuronStreamingSettingsBitrateSlider {
-                NeuronFrameSettingsViewModel.shared().highlightedUIComponent = .NeuronStreamingSettings
-                handel.stopTracking()
-                lastHandel?.startTracking()
-                lastHandel?.reloadCallBack?()
-            }
-        default:
-            break
-        }
-        
-        NeuronFrameSettingsViewModel.shared().handleClickButton(action)
-    }
-    
 }

@@ -57,7 +57,9 @@
     if (touch.timestamp - lastTouchUp.timestamp > DOUBLE_TAP_DEAD_ZONE_DELAY ||
         sqrt(pow((touchLocation.x / view.bounds.size.width) - (lastTouchUpLocation.x / view.bounds.size.width), 2) +
              pow((touchLocation.y / view.bounds.size.height) - (lastTouchUpLocation.y / view.bounds.size.height), 2)) > DOUBLE_TAP_DEAD_ZONE_DELTA) {
+#if !TARGET_OS_TV
         [view updateCursorLocation:touchLocation isMouse:NO];
+#endif
     }
     
     // Press the left button down
@@ -90,7 +92,9 @@
         longPressTimer = nil;
     }
     
+#if !TARGET_OS_TV
     [view updateCursorLocation:[[touches anyObject] locationInView:view] isMouse:NO];
+#endif
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {

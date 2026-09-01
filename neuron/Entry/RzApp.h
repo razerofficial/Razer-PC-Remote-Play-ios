@@ -19,13 +19,13 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class SettingsMenuVC;
+@class SettingsSplitViewController;
 
 @interface RzApp : NSObject
 + (instancetype)shared;
 - (void)startStreaming;
 - (void)maybeStartStreaming;
-- (SettingsMenuVC* )getSettingsMenuVC;
+//- (SettingsSplitViewController* )getSettingsMenuVC;
 - (void)launchDesktopStreaming: (TemporaryHost*) host;
 @end
 

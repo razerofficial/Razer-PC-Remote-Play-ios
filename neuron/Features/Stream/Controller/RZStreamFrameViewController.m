@@ -26,6 +26,7 @@
 #import "Moonlight-Swift.h"
 #import "RzUtils.h"
 #import "Connection.h"
+#import "HapticContext.h"
 
 typedef enum : NSUInteger {
     Origin = 0,
@@ -190,6 +191,7 @@ typedef enum : NSUInteger {
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
+    [HapticContext setHapticsEnabled:YES];
     
     NSString *gameName = ShareDataDB.shared.currentLaunchGame.name ?: @"Desktop";
     long long durationMs = (long long)([[NSDate date] timeIntervalSince1970] * 1000)-startStreamingTime;
@@ -220,9 +222,9 @@ typedef enum : NSUInteger {
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    SettingsMenuVC *mainVC = [[RzApp shared] getSettingsMenuVC];
+    SettingsSplitViewController *mainVC = [[RzApp shared] getSettingsMenuVC];
     SettingsRouter.shared.startingStream = false;
-    [mainVC handelReset];
+    
     //can return some error message here
     if (_shouldReturnToNexus) {
         NSURL *url = [NSURL URLWithString:@"Nexus://"];
@@ -429,6 +431,8 @@ typedef enum : NSUInteger {
 
 - (void)connectionStarted {
     [super connectionStarted];
+    BOOL enableHaptics = [NeuronFrameSettingsViewModel isCoreHapticsEnabled];
+    [HapticContext setHapticsEnabled:enableHaptics];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         if(self->_blurView) {
             [self->_blurView removeFromSuperview];
@@ -519,10 +523,14 @@ typedef enum : NSUInteger {
             [alert addAction:[UIAlertAction actionWithTitle:Localized(@"Help") style:UIAlertActionStyleDefault handler:^(UIAlertAction* action){
                 self->_shouldReturnToNexus = false;
                 self->_shouldReturnToMainVC = true;
+#ifndef TARGET_OS_TV
                 WebVC *webVC = [[WebVC alloc] init];
                 webVC.url = [NSURL URLWithString:FAQUrl];
                 webVC.webViewTitle = NSLocalizedString(@"Connection Error", nil);
                 [[SettingsRouter shared].navigationController pushViewController:webVC animated:YES];
+#else
+                NSLog(@"todo tvos tvOS does not support");
+#endif
             }]];
             
             [alert addAction:[UIAlertAction actionWithTitle:Localized(@"OK") style:UIAlertActionStyleDefault handler:^(UIAlertAction* action){
@@ -671,7 +679,11 @@ typedef enum : NSUInteger {
     self.textView.backgroundColor = [UIColor clearColor]; // Transparent background for container view background visibility
     self.textView.alpha = 1.0; // Visible text view
     self.textView.textColor = [UIColor blackColor];
+#ifndef TARGET_OS_TV
     self.textView.editable = NO;
+#else
+    NSLog(@"todo tvos tvOS does not support editable");
+#endif
     self.textView.scrollEnabled = NO;
     [self.textView setFont:[UIFont systemFontOfSize:14]];
 
@@ -772,7 +784,11 @@ typedef enum : NSUInteger {
             [UIApplication sharedApplication].idleTimerDisabled = NO;
             
             if(!self->_blurView) {
+#ifndef TARGET_OS_TV
                 UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleSystemUltraThinMaterialDark];
+#else
+                UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
+#endif
                 self->_blurView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
                 
                 self->_blurView.frame = self.view.bounds;
@@ -944,7 +960,11 @@ typedef enum : NSUInteger {
 
     // Setup _blurView for overlay usage (hidden by default)
     if (!_blurView) {
+#ifndef TARGET_OS_TV
         UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleSystemUltraThinMaterialDark];
+#else
+        UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
+#endif
         _blurView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
         _blurView.translatesAutoresizingMaskIntoConstraints = NO;
         _blurView.hidden = NO;

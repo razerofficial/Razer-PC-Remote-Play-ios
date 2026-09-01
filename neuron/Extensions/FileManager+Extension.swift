@@ -18,7 +18,9 @@
 import Foundation
 import UIKit
 import CocoaLumberjack
+#if !targetEnvironment(simulator) && !os(tvOS)
 import FirebaseCrashlytics
+#endif
 
 class BiancaLogger{
     
@@ -59,7 +61,9 @@ class BiancaLogger{
     ///Info level log
     @objc static func info(_ msg:String) {
         DDLogInfo("Info: "+msg)
+        #if !targetEnvironment(simulator) && !os(tvOS)
         Crashlytics.crashlytics().log("Info: "+msg)
+        #endif
         DevOptionVC.log("Info: "+msg)
         //DevOptionLog("Info: "+msg)
     }
@@ -67,7 +71,9 @@ class BiancaLogger{
     ///warning level log
     @objc static func warning(_ msg:String) {
         DDLogWarn("⚠️ Warning: "+msg)
+        #if !targetEnvironment(simulator) && !os(tvOS)
         Crashlytics.crashlytics().log("⚠️ Warning: "+msg)
+        #endif
         DevOptionVC.log("⚠️ Warning: "+msg)
         //DevOptionLog("⚠️ Warning: "+msg)
     }
@@ -75,7 +81,9 @@ class BiancaLogger{
     ///error level log
     @objc static func error(_ msg:String) {
         DDLogError("🛑 Error: "+msg)
+        #if !targetEnvironment(simulator) && !os(tvOS)
         Crashlytics.crashlytics().log("🛑 Error: "+msg)
+        #endif
         DevOptionVC.log("🛑 Error: "+msg)
         //DevOptionLog("🛑 Error: "+msg)
     }

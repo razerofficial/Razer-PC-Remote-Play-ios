@@ -19,7 +19,9 @@
 #import "RzApp.h"
 #import "RzSwizzling.h"
 #import "ShareDataDB.h"
+#if !TARGET_OS_TV
 #import "FirebaseCore.h"
+#endif
 #import "Moonlight-Swift.h"
 
 @implementation AppDelegate (Neuron)
@@ -52,8 +54,9 @@
     navVC.navigationBar.tintColor = [UIColor whiteColor];
     navVC.navigationBar.barTintColor = [UIColor blackColor];
     navVC.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
-    navVC.navigationBar.translucent = false;
+    navVC.navigationBar.translucent = true;
     navVC.navigationBar.backgroundColor = [UIColor blackColor];
+    SettingsRouter.shared.rootNavigationController = navVC;
     SettingsRouter.shared.navigationController = navVC;
     self.window.rootViewController = navVC;
     [self.window makeKeyAndVisible];
@@ -70,9 +73,10 @@
         [HostListManger.shared restartDiscovery];
     });
     
+#if !TARGET_OS_TV
     [FIRApp configure];
-    
     [UIApplication sharedApplication].windows.firstObject.windowScene.sizeRestrictions.minimumSize = CGSizeMake(500, 500);
+#endif
     
     return ret;
 }

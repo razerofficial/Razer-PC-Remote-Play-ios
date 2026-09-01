@@ -87,10 +87,21 @@ class DevLogger : NSObject {
         }
         
         // 将字符串转换为 Data 对象
+#if os(tvOS)
+        // tvOS: fix compile error Value of type 'Date' has no member 'toString'
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let timeString = dateFormatter.string(from: Date.now)
+        guard let data = (timeString + " " + text + "\n").data(using: .utf8) else {
+            print("无法将文本转换为数据")
+            return
+        }
+#else
         guard let data = (Date.now.toString(withFormat: "yyyy-MM-dd HH:mm:ss") + " " + text + "\n").data(using: .utf8) else {
             print("无法将文本转换为数据")
             return
         }
+#endif
         
         if !fileManager.fileExists(atPath: filePath) {
             // 如果文件不存在，则创建一个空文件

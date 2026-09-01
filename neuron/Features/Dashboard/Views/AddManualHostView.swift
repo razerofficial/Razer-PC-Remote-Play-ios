@@ -27,6 +27,8 @@ import AVFoundation
 let AddManualHostViewWidth = IsIOS26() ? 478.0 : 582.0
 let AddManualHostViewHeight = IsIOS26() ? 275.0 : 281.0
 
+let NTCloseManualHostView = Notification.Name(rawValue: "NTCloseManualHostView")
+
 struct AddManualHostView: View {
     //@ObservedObject var settingsViewModel:SettingsViewModel
     
@@ -65,7 +67,7 @@ struct AddManualHostView: View {
                     
                     ZStack(){
                         
-                        if #available(iOS 26.0, *) {
+                        if #available(iOS 26.0, tvOS 26.0, *) {
                             Color.clear
                                 .frame(width: viewWidth, height: viewHeight)
                                 .backgroundExtensionEffect()
@@ -77,7 +79,7 @@ struct AddManualHostView: View {
                         
                         VStack(alignment:.leading) {
                             
-                            if #available(iOS 26.0, *) {
+                            if #available(iOS 26.0, tvOS 26.0, *) {
                                 
                                 Spacer().frame(height: 22.0)
                                 
@@ -115,18 +117,18 @@ struct AddManualHostView: View {
                     }
                     .frame(width: viewWidth, height: viewHeight)
                     .onAppear() {
-                        if IsIpad() {
-                            viewWidth = min(AddManualHostViewWidth,geo.size.width)
+                        //if IsIpad() {
+                        viewWidth = min(AddManualHostViewWidth,(geo.size.width - 51.0 * 2.0))
                             //let ratio = geo.size.width / SettingsRouter.shared.wWidth
                             //scale = ratio
-                        }
+                        //}
                     }
                     .valueChanged(value: geo.size.width, onChange: { width in
-                        if IsIpad() {
-                            viewWidth = min(AddManualHostViewWidth,width)
+                        //if IsIpad() {
+                            viewWidth = min(AddManualHostViewWidth,(width  - 51.0 * 2.0 ))
                             //let ratio = width / SettingsRouter.shared.wWidth
                             //scale = ratio
-                        }
+                        //}
                     })
                     .clipped()
                     .cornerRadius(10)
@@ -294,8 +296,10 @@ struct AddManualHostView: View {
                         .focused($isAddressFieldFocused)
                         .introspectTextField { textField in
                             // force disable keyboard's Shortcut Bar
+#if !os(tvOS)
                             textField.inputAssistantItem.leadingBarButtonGroups = []
                             textField.inputAssistantItem.trailingBarButtonGroups = []
+#endif
                             textField.inputAccessoryView = UIView()
                         }
                     
@@ -341,8 +345,10 @@ struct AddManualHostView: View {
                         .focused($isPortFieldFocused)
                         .introspectTextField { textField in
                             // force disable keyboard's Shortcut Bar
+#if !os(tvOS)
                             textField.inputAssistantItem.leadingBarButtonGroups = []
                             textField.inputAssistantItem.trailingBarButtonGroups = []
+#endif
                             textField.inputAccessoryView = UIView()
                         }
                     
@@ -406,8 +412,10 @@ struct AddManualHostView: View {
                         .focused($isAddressFieldFocused)
                         .introspectTextField { textField in
                             // force disable keyboard's Shortcut Bar
+#if !os(tvOS)
                             textField.inputAssistantItem.leadingBarButtonGroups = []
                             textField.inputAssistantItem.trailingBarButtonGroups = []
+#endif
                             textField.inputAccessoryView = UIView()
                         }
                     
@@ -440,8 +448,10 @@ struct AddManualHostView: View {
                         .focused($isPortFieldFocused)
                         .introspectTextField { textField in
                             // force disable keyboard's Shortcut Bar
+#if !os(tvOS)
                             textField.inputAssistantItem.leadingBarButtonGroups = []
                             textField.inputAssistantItem.trailingBarButtonGroups = []
+#endif
                             textField.inputAccessoryView = UIView()
                         }
                     

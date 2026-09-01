@@ -53,6 +53,7 @@ class RZBaseVC : UIViewController {
         handelStop()
     }
 
+    @objc
     func handelStart() {
         if nextHandel == nil { // || ( nextHandel?.shouleTracking() == false )
             handel.startTracking()

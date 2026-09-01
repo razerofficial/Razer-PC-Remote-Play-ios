@@ -22,10 +22,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class NeuronFrameSettings;
 @class NeuronEvent;
+// @class TemporarySettings;
+// @class TemporaryHost;
+@class SWRevealViewController;
+
 @interface ShareDataDB : NSObject
 + (instancetype)shared;
 - (NSData *)readDataFromPath:(NSString *)item;
-- (void)writeData:(NSData *)data toFile:(NSString *)item;
+- (BOOL)writeData:(NSData *)data toFile:(NSString *)item;
 - (RzTemporaryApp *)currentLaunchGame;
 - (void)resetCurrentLaunchGameData;
 - (void)readSettingDataFromShareDB;
@@ -44,6 +48,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSArray *)readManuallyUnpairedHostDataFromShareDB;
 - (void)writeManuallyUnpairedHostDataToshareDB:(NSString *)hostUuid;
 - (void)removePairedHostFromeShareDB:(TemporaryHost *)host;
+- (SWRevealViewController *)getSWRevealViewController;
 - (void)writeNeuronInfo;
 - (void)writeNeuronEvent:(NeuronEvent *)event;
 //- (void)updateHost:(TemporaryHost *)host;

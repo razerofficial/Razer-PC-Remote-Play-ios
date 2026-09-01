@@ -25,6 +25,7 @@
 #import "AppListResponse.h"
 #import "Moonlight-Swift.h"
 #import "RZServerInfoResponse.h"
+#import "SWRevealViewController.h"
 
 @interface RzApp ()
 
@@ -167,14 +168,26 @@
             if ([app.name.uppercaseString isEqualToString:@"DESKTOP"]) {
                 desktop = app;
                 desktop.host = host;
-                host.activeAddress = [[host.activeAddress componentsSeparatedByString:@":"] firstObject];
-                host.localAddress = [[host.localAddress componentsSeparatedByString:@":"] firstObject];
+                //for both ipv4 & ipv6
+                host.activeAddress = [Utils addressPortStringToAddress:host.activeAddress];
+                host.localAddress = [Utils addressPortStringToAddress:host.localAddress];
                 break;
             }
         }
         
-        Log(LOG_I, @"startStreaming: launch %@ desktop", host.name);
         dispatch_async(dispatch_get_main_queue(), ^{
+            if (desktop == nil || desktop.id.length == 0) {
+                Log(LOG_E, @"launchDesktopStreaming: failed to resolve Desktop app from applist. host=%@ status=%d message=%@ appCount=%lu",
+                    host.name,
+                    appListResp.statusCode,
+                    appListResp.statusMessage,
+                    (unsigned long)appListResp.getAppList.count);
+                [SettingsRouter.shared hideStreamLoadingView];
+                self.isLaunchingDesktop = false;
+                return;
+            }
+            
+            Log(LOG_I, @"startStreaming: launch %@ desktop appid=%@", host.name, desktop.id);
 //            UINavigationController *navVC = (UINavigationController*)[UIApplication sharedApplication].delegate.window.rootViewController;
 //            [navVC popToRootViewControllerAnimated:false];
 //            SettingsMenuVC *mainVC = [self getSettingsMenuVC];
@@ -237,16 +250,24 @@
                            hostWidth:width.integerValue];
 }
 
-- (SettingsMenuVC *)getSettingsMenuVC {
-    UINavigationController *rootNav = (UINavigationController *)[UIApplication sharedApplication].delegate.window.rootViewController;
-    SettingsMenuVC *mainVC = nil;
-    for (UIViewController *vc in rootNav.viewControllers) {
-        if ([vc isKindOfClass:[SettingsMenuVC class]]) {
-            mainVC = (SettingsMenuVC *)vc;
-            break;
-        }
-    }
-    return mainVC;
-}
+//- (SettingsSplitViewController *)getSettingsMenuVC {
+//    UINavigationController *rootNav = (UINavigationController *)[UIApplication sharedApplication].delegate.window.rootViewController;
+//    SettingsSplitViewController *mainVC = nil;
+//    for (UIViewController *vc in rootNav.viewControllers) {
+//        if ([vc isKindOfClass:[SettingsSplitViewController class]]) {
+//            mainVC = (SettingsSplitViewController *)vc;
+//            break;
+//        }
+//    }
+//    NSString *className = @"SettingsSplitViewController"; // 类名字符串
+//
+//    // 尝试获取类对象
+//    Class classObject = NSClassFromString(className);
+//
+//    if (classObject) {
+//        mainVC = [[classObject alloc] init];
+//    }
+//    return mainVC;
+//}
 
 @end

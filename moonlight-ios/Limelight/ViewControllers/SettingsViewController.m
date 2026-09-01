@@ -80,8 +80,11 @@ CGSize resolutionTable[RESOLUTION_TABLE_SIZE];
         // which represent the horizontal and vertical scrolling
         // indicators. Ignore any views we don't recognize.
         if (![view isKindOfClass:[UILabel class]] &&
-            ![view isKindOfClass:[UISegmentedControl class]] &&
-            ![view isKindOfClass:[UISlider class]]) {
+            ![view isKindOfClass:[UISegmentedControl class]]
+#if !TARGET_OS_TV
+            && ![view isKindOfClass:[UISlider class]]
+#endif
+            ) {
             continue;
         }
         
@@ -257,10 +260,12 @@ BOOL isCustomResolution(CGSize res) {
     [self.framerateSelector addTarget:self action:@selector(updateBitrate) forControlEvents:UIControlEventValueChanged];
     [self.onscreenControlSelector setSelectedSegmentIndex:onscreenControls];
     [self.onscreenControlSelector setEnabled:!currentSettings.absoluteTouchMode];
+#if !TARGET_OS_TV
     [self.bitrateSlider setMinimumValue:0];
     [self.bitrateSlider setMaximumValue:(sizeof(bitrateTable) / sizeof(*bitrateTable)) - 1];
     [self.bitrateSlider setValue:[self getSliderValueForBitrate:_bitrate] animated:YES];
     [self.bitrateSlider addTarget:self action:@selector(bitrateSliderMoved) forControlEvents:UIControlEventValueChanged];
+#endif
     [self updateBitrateText];
     [self updateResolutionDisplayViewText];
 }
@@ -327,7 +332,9 @@ BOOL isCustomResolution(CGSize res) {
 
     defaultBitrate = round(resolutionFactor * frameRateFactor) * 1000;
     _bitrate = MIN(defaultBitrate, 100000);
+#if !TARGET_OS_TV
     [self.bitrateSlider setValue:[self getSliderValueForBitrate:_bitrate] animated:YES];
+#endif
     
     [self updateBitrateText];
 }
@@ -436,7 +443,11 @@ BOOL isCustomResolution(CGSize res) {
     CGFloat viewFrameWidth = self.resolutionDisplayView.frame.size.width;
     CGFloat viewFrameHeight = self.resolutionDisplayView.frame.size.height;
     CGFloat padding = 10;
+#if TARGET_OS_TV
+    CGFloat fontSize = 14.0; // tvOS doesn't support smallSystemFontSize, use a reasonable default
+#else
     CGFloat fontSize = [UIFont smallSystemFontSize];
+#endif
     
     for (UIView *subview in self.resolutionDisplayView.subviews) {
         [subview removeFromSuperview];
@@ -457,8 +468,10 @@ BOOL isCustomResolution(CGSize res) {
 }
 
 - (void) bitrateSliderMoved {
+#if !TARGET_OS_TV
     assert(self.bitrateSlider.value < (sizeof(bitrateTable) / sizeof(*bitrateTable)));
     _bitrate = bitrateTable[(int)self.bitrateSlider.value];
+#endif
     [self updateBitrateText];
 }
 

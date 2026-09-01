@@ -16,11 +16,14 @@
  */
 
 import SwiftUI
+#if os(tvOS)
+import UIKit
+#endif
 
 let LetterGuideButtonRadius = 24.0
 let LetterGuideButtonHeight = 48.0
-let LetterGuideButtonAddSpace = 10.0
-let LetterGuideButtonTrailingSpace = 18.0
+let LetterGuideButtonAddSpace = 20.0
+let LetterGuideButtonTrailingSpace = 20.0
 
 enum ControllerButtonType {
     case Button_A
@@ -107,6 +110,30 @@ struct LetterGuideButton: View {
         
         let buttonInfo = letterCircleStyle.getLetterCircleInfo(buttonType: buttonType)
         
+        #if os(tvOS)
+        // tvOS: use tvos default focus
+        return Button {
+            if self.action != nil {
+                self.action!()
+            }
+        } label: {
+            HStack {
+                if buttonType != .None {
+                    LetterCircle(letter: buttonInfo.letter, circleColor: buttonInfo.circleColor, letterColor: buttonInfo.letterColor)
+                    Spacer().frame(width: 8)
+                }
+                Text(title)
+                    .font(.system(size: 17, weight: .medium))
+                    .foregroundColor(textColor)
+            }
+            .frame(height: LetterGuideButtonHeight)
+            .padding(.leading, addSpace)
+            .padding(.trailing, trailingSpace)
+            .background(backgroundColor)
+            .cornerRadius(LetterGuideButtonRadius)
+        }
+        .buttonStyle(.borderedProminent)
+        #else   // ios
         return Button {
             if self.action != nil {
                 self.action!()
@@ -132,7 +159,7 @@ struct LetterGuideButton: View {
                     .stroke(isNeedStrokeBorder ? Color.RazerGreen:Color.clear, lineWidth: 2)
             )
         }
-        
+        #endif
     }
 }
 
@@ -150,7 +177,7 @@ struct BlurLetterGuideButton: View {
     
     var body: some View {
         
-        if #available(iOS 26.0, *) {
+        if #available(iOS 26.0, tvOS 26.0, *) {
             LetterGuideButton(
                 buttonType: buttonType,
                 title: title,

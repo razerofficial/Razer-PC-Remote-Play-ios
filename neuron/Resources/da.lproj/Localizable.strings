@@ -225,4 +225,7 @@
 "Mute PC Speakers While Streaming" = "Slå PC-højttalere fra under streaming";
 "Advances Settings" = "Avancerede indstillinger";
 "Edit Profile" = "Rediger profil";
-"Computer" = "Computer";= "Tildel";
+"Computer" = "Computer";
+//20260508 AI translation
+"iPhone Built-In Haptics" = "iPhone indbygget haptics";
+"Enable game vibration using the iPhone's built in haptic motors during streaming" = "Aktiverer spilvibration ved hjælp af iPhonens indbyggede haptic-motorer under streaming.";= "Tildel";

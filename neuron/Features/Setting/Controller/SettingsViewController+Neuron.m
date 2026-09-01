@@ -125,7 +125,9 @@ extern const int bitrateTable[];
     [self.onscreenControlSelector setSelectedSegmentIndex:onscreenControls];
     [self.onscreenControlSelector setEnabled:!currentSettings.absoluteTouchMode];
     [self setValue:currentSettings.bitrate forKey:@"bitrate"];
+#if !TARGET_OS_TV
     [self.bitrateSlider setValue:[self getSliderValueForBitrate:currentSettings.bitrate.integerValue] animated:YES];
+#endif
     [self updateBitrateText];
     [self updateResolutionDisplayViewText];
 }

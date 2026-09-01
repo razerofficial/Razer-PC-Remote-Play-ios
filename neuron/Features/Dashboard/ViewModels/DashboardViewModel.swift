@@ -34,6 +34,14 @@ let HHostCellSpace:CGFloat = 20
 let VHostCellSpace:CGFloat = 10//CGFloat(14 * HScale)
 let HostCellMoveStep = HostCellHeight + VHostCellSpace
 
+enum HostDevicesSection : Int  {
+    case Unknow
+    case PairedSection
+    case NetSection
+    case AddSection
+    case NavSection
+}
+
 class DashboardViewModel: RZHandleResponder {
     
     static let shared = DashboardViewModel()
@@ -67,27 +75,36 @@ class DashboardViewModel: RZHandleResponder {
     @Published var isShowWakeOnLanLoading: Bool = false
     
     @Published var isShowAddManualHostView:Bool = false
+    //fos settings computers page
+    @Published var isShowAddManualHostViewInSettings:Bool = false
     
     //for stage manage
     @Published var portraitBaseScale = 1.0  // SettingsPage: Scale based on physical portrait screen width and height length and which is minium
     @Published var portraitHeight = UIScreen.screenHeight // Current screen Height
     
+    //for settings comupter page
+    @Published var isWaitForHostResponse:Bool = false
+    
     //MARK: - init
     override private init() {
         super.init()
-        delegate = self
+        resetControllerEventDelegate()
         registerObservers()
+    }
+    
+    func resetControllerEventDelegate() {
+        delegate = self
+        startTracking()
     }
     
     func goToSettingVC() {
         DispatchQueue.main.async {
-            let vc = SettingsMenuVC()
-            vc.title = "Settings".localize()
-            SettingsRouter.shared.navigationController?.pushViewController(vc, animated: true)
+            let hostVC = SettingsSplitViewController()
+            hostVC.modalPresentationStyle = .overFullScreen
+            hostVC.overrideUserInterfaceStyle = .dark
+            SettingsRouter.shared.navigationController?.present(hostVC, animated: true)
         }
-//        let vc = SettingsSplitViewController()
-//        vc.modalPresentationStyle = .fullScreen
-//        SettingsRouter.shared.navigationController?.present(vc, animated: true)
+        
         
     }
     
@@ -234,3 +251,4 @@ class DashboardViewModel: RZHandleResponder {
         dismissNoLocalNetworkPermissionAlert()
     }
 }
+

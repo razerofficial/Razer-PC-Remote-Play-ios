@@ -65,7 +65,7 @@ class NeuronFrameSettingsViewModel: NSObject, ObservableObject {
     
     var isAtFrontMost: Bool = false
     
-    @Published var bitrate = 0.0
+    @Published var bitrate = 1.0
     @Published var frameRate: FrameRate = .frameRate60fps
     @Published var framePacingPreference: FramePacingPreference = .lowestLatency
     @Published var touchModel: TouchMode = .touchscreen
@@ -78,6 +78,9 @@ class NeuronFrameSettingsViewModel: NSObject, ObservableObject {
     @Published var MuteHostPC: Bool = true
     @Published var autoQuit: AutoQuit = .after30s
     @Published var videoEncoder: RZPreferredCodec = .Auto
+    @Published var enableCoreHaptics: Bool = true
+    
+    let isCoreHapticsSupported: Bool = CHHapticEngine.capabilitiesForHardware().supportsHaptics
     
     //用于点击选项时候让Setting menu失去焦点
     weak var lastVC:RZStreamFrameSettingsViewController?
@@ -115,6 +118,7 @@ class NeuronFrameSettingsViewModel: NSObject, ObservableObject {
         limitRefreshRate = (frameRate == .frameRate60fps ? true : false)
         autoQuit = AutoQuit(timeToTerminateApp: frameSettings.timeToTerminateApp)
         videoEncoder = RZPreferredCodec(rawValue: frameSettings.preferredCodec) ?? .Auto
+        enableCoreHaptics = frameSettings.enableCoreHaptics
     }
     
     func toggleShowUnAvailibleToast(status: Bool) {
@@ -146,7 +150,11 @@ class NeuronFrameSettingsViewModel: NSObject, ObservableObject {
             components += [.NeuronStreamingSettingsLimitScreenResolutionToSafeAreaToggle]
         }
         components += [.NeuronStreamingSettingsFramePacingPicker, .NeuronStreamingSettingsVideoEncoderPicker]
-        
+
+        if isCoreHapticsSupported {
+            components += [.NeuronStreamingSettingsCoreHapticsToggle]
+        }
+
         return components
     }
     
@@ -189,260 +197,13 @@ class NeuronFrameSettingsViewModel: NSObject, ObservableObject {
     private func printLog(_ msg:String){
         BiancaLogger.shared.logInfo("SettingsLauncherView - " + msg)
     }
-    
-    func handleClickButton(_ action: GamePadButton) {
-        
-        
-        if highlightedUIComponent == .NeuronStreamingSettingsDisplayModeDeviceOptimized {
-            switch action {
-            case .A:
-                updateDisplayMode(.DeviceOptimized)
-//                displayMode = .DeviceOptimized
-//                frameSettings.displayMode = PCDisplayStreamingMode.DeviceOptimized.rawValue
-//                saveSettings()
-            case .B:
-                SettingsRouter.shared.navigationController?.popViewController(animated: true)
-            case .down:
-                self.highlightedUIComponent = .NeuronStreamingSettingsBitrateSlider
-            case .right:
-                self.highlightedUIComponent = .NeuronStreamingSettingsDisplayModeVideoSettingsDisplay
-            default:
-                break
-            }
-            return
-        }
-        
-        if highlightedUIComponent == .NeuronStreamingSettingsDisplayModeSeparateScreen {
-            switch action {
-            case .A:
-                updateDisplayMode(.SeparateScreenMode)
-//                displayMode = .SeparateScreenMode
-//                frameSettings.displayMode = PCDisplayStreamingMode.SeparateScreenMode.rawValue
-//                saveSettings()
-            case .B:
-                SettingsRouter.shared.navigationController?.popViewController(animated: true)
-            case .down:
-                self.highlightedUIComponent = .NeuronStreamingSettingsBitrateSlider
-            case .left:
-                self.highlightedUIComponent = .NeuronStreamingSettingsDisplayModeVideoSettingsDisplay
-            default:
-                break
-            }
-            return
-        }
-        
-        if highlightedUIComponent == .NeuronStreamingSettingsDisplayModeVideoSettingsDisplay {
-            switch action {
-            case .A:
-                updateDisplayMode(.DuplicatePCDisplayMode)
-//                displayMode = .DuplicatePCDisplayMode
-//                frameSettings.displayMode = PCDisplayStreamingMode.DuplicatePCDisplayMode.rawValue
-//                saveSettings()
-
-            case .B:
-                SettingsRouter.shared.navigationController?.popViewController(animated: true)
-            case .down:
-                self.highlightedUIComponent = .NeuronStreamingSettingsBitrateSlider
-            case .left:
-                self.highlightedUIComponent = .NeuronStreamingSettingsDisplayModeDeviceOptimized
-            case .right:
-                self.highlightedUIComponent = isShowSeparateScreenDisplayMode ? .NeuronStreamingSettingsDisplayModeSeparateScreen : .NeuronStreamingSettingsDisplayModeVideoSettingsDisplay
-            default:
-                break
-            }
-            return
-        }
-        
-        if highlightedUIComponent == .NeuronStreamingSettingsLimitScreenResolutionToSafeAreaToggle {
-            switch action {
-            case .A:
-                LimitScreenResolutionTtoSafeArea.toggle()
-            case .B:
-                SettingsRouter.shared.navigationController?.popViewController(animated: true)
-            case .up:
-                if isNeedShowLimitRefreshRateToggle() {
-                    self.highlightedUIComponent = .NeuronStreamingSettingsRefreshRateToggle
-                }else {
-                    self.highlightedUIComponent = .NeuronStreamingSettingsAutoQuitPicker
-                }
-            case .down:
-                self.highlightedUIComponent = .NeuronStreamingSettingsFramePacingPicker
-            default:
-                break
-            }
-            return
-        }
-        
-        if highlightedUIComponent == .NeuronStreamingSettingsRefreshRateToggle {
-            switch action {
-            case .A:
-                limitRefreshRate.toggle()
-            case .B:
-                SettingsRouter.shared.navigationController?.popViewController(animated: true)
-            case .up:
-                self.highlightedUIComponent = .NeuronStreamingSettingsAutoQuitPicker
-            case .down:
-                if isNeedShowLimitScreenResolutionToSafeAreaToggle() {
-                    self.highlightedUIComponent = .NeuronStreamingSettingsLimitScreenResolutionToSafeAreaToggle
-                }else {
-                    self.highlightedUIComponent = .NeuronStreamingSettingsFramePacingPicker
-                }
-            default:
-                break
-            }
-            return
-        }
-        
-        if self.highlightedUIComponent == .NeuronStreamingSettingsBitrateSlider {
-            switch action {
-            case .B:
-                SettingsRouter.shared.navigationController?.popViewController(animated: true)
-            case .up:
-                self.highlightedUIComponent = .NeuronStreamingSettingsDisplayModeDeviceOptimized
-            case .down:
-                if isDeviceSupportHDR() {
-                    self.highlightedUIComponent = .NeuronStreamingSettingsHDRToggle
-                }
-                else if displayMode != .DeviceOptimized {
-                    self.highlightedUIComponent = .NeuronStreamingSettingsMutePCToggle
-                }else {
-                    self.highlightedUIComponent = .NeuronStreamingSettingsTouchScreenPicker
-                }
-            case .left:
-                if bitrate > 0.5 {
-                    bitrate -= 0.5
-                }else {
-                    bitrate = 0
-                }
-            case .right:
-                if bitrate < 149.5 {
-                    bitrate += 0.5
-                }else {
-                    bitrate = 150.0
-                }
-            default:
-                break
-            }
-            return
-        }
-        
-        if highlightedUIComponent == .NeuronStreamingSettingsHDRToggle {
-            switch action {
-            case .A:
-                frameSettings.enableHdr.toggle()
-                highlightedUIComponent = .NeuronStreamingSettingsHDRToggle
-            case .B:
-                self.highlightedUIComponent = .NeuronStreamingSettings
-            case .up:
-                self.highlightedUIComponent = .NeuronStreamingSettingsBitrateSlider
-            case .down:
-                if displayMode != .DeviceOptimized {
-                    self.highlightedUIComponent = .NeuronStreamingSettingsMutePCToggle
-                }else {
-                    self.highlightedUIComponent = .NeuronStreamingSettingsTouchScreenPicker
-                }
-            default:
-                break
-            }
-            return
-        }
-        
-        if highlightedUIComponent == .NeuronStreamingSettingsFramePacingPicker {
-            switch action {
-            case .B:
-                SettingsRouter.shared.navigationController?.popViewController(animated: true)
-            case .up:
-                if isNeedShowLimitScreenResolutionToSafeAreaToggle() {
-                    self.highlightedUIComponent = .NeuronStreamingSettingsLimitScreenResolutionToSafeAreaToggle
-                }else if isNeedShowLimitRefreshRateToggle() {
-                    self.highlightedUIComponent = .NeuronStreamingSettingsRefreshRateToggle
-                }else {
-                    self.highlightedUIComponent = .NeuronStreamingSettingsAutoQuitPicker
-                }
-            case .down:
-                self.highlightedUIComponent = .NeuronStreamingSettingsVideoEncoderPicker
-            default:
-                break
-            }
-            return
-        }
-        
-        if highlightedUIComponent == .NeuronStreamingSettingsMutePCToggle {
-            switch action {
-            case .A:
-                MuteHostPC.toggle()
-            case .B:
-                SettingsRouter.shared.navigationController?.popViewController(animated: true)
-            case .up:
-                if isDeviceSupportHDR() {
-                    self.highlightedUIComponent = .NeuronStreamingSettingsHDRToggle
-                }else {
-                    self.highlightedUIComponent = .NeuronStreamingSettingsBitrateSlider
-                }
-            case .down:
-                self.highlightedUIComponent = .NeuronStreamingSettingsTouchScreenPicker
-            default:
-                break
-            }
-            return
-        }
-        
-        if highlightedUIComponent == .NeuronStreamingSettingsTouchScreenPicker {
-            switch action {
-            case .B:
-                SettingsRouter.shared.navigationController?.popViewController(animated: true)
-            case .up:
-                if displayMode != .DeviceOptimized {
-                    self.highlightedUIComponent = .NeuronStreamingSettingsMutePCToggle
-                }else if isDeviceSupportHDR() {
-                    self.highlightedUIComponent = .NeuronStreamingSettingsHDRToggle
-                }else {
-                    self.highlightedUIComponent = .NeuronStreamingSettingsBitrateSlider
-                }
-            case .down:
-                self.highlightedUIComponent = .NeuronStreamingSettingsAutoQuitPicker
-            default:
-                break
-            }
-            return
-        }
-        
-        if highlightedUIComponent == .NeuronStreamingSettingsAutoQuitPicker {
-            switch action {
-            case .B:
-                SettingsRouter.shared.navigationController?.popViewController(animated: true)
-            case .up:
-                self.highlightedUIComponent = .NeuronStreamingSettingsTouchScreenPicker
-            case .down:
-                
-                if isNeedShowLimitRefreshRateToggle() {
-                    self.highlightedUIComponent = .NeuronStreamingSettingsRefreshRateToggle
-                }else if isNeedShowLimitScreenResolutionToSafeAreaToggle() {
-                    self.highlightedUIComponent = .NeuronStreamingSettingsLimitScreenResolutionToSafeAreaToggle
-                }else {
-                    self.highlightedUIComponent = .NeuronStreamingSettingsFramePacingPicker
-                }
-            default:
-                break
-            }
-            return
-        }
-        
-        if highlightedUIComponent == .NeuronStreamingSettingsVideoEncoderPicker {
-            switch action {
-            case .B:
-                SettingsRouter.shared.navigationController?.popViewController(animated: true)
-            case .up:
-                self.highlightedUIComponent = .NeuronStreamingSettingsFramePacingPicker
-            default:
-                break
-            }
-            return
-        }
-    }
 
     @objc static func isDuplicateDisplayMode() -> Bool {
         return NeuronFrameSettingsViewModel.shared().frameSettings.displayMode == 0
+    }
+
+    @objc static func isCoreHapticsEnabled() -> Bool {
+        return NeuronFrameSettingsViewModel.shared().enableCoreHaptics
     }
 }
 
@@ -466,7 +227,8 @@ class FrameSettingsUIComponents {
         case NeuronStreamingSettingsAutoConfigureSettingsToggle
         case NeuronStreamingSettingsAutoQuitPicker
         case NeuronStreamingSettingsVideoEncoderPicker
-        
+        case NeuronStreamingSettingsCoreHapticsToggle
+
         var description: String {
             switch self{
             case .NeuronStreamingSettings:
@@ -497,7 +259,8 @@ class FrameSettingsUIComponents {
                 return "NeuronStreamingSettingsAutoQuitPicker"
             case .NeuronStreamingSettingsVideoEncoderPicker:
                 return "NeuronStreamingSettingsVideoEncoderPicker"
-
+            case .NeuronStreamingSettingsCoreHapticsToggle:
+                return "NeuronStreamingSettingsCoreHapticsToggle"
             }
         }
     }

@@ -315,7 +315,11 @@
     [_statsUpdateTimer invalidate];
     _statsUpdateTimer = nil;
     
-    [self.navigationController popToRootViewControllerAnimated:YES];
+    if(self.navigationController != nil){
+        [self.navigationController popToRootViewControllerAnimated:YES];
+    }else{
+        [self dismissViewControllerAnimated:true completion:nil];
+    }
 }
 
 // This will fire if the user opens control center or gets a low battery message

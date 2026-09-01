@@ -19,4 +19,6 @@
 +(HapticContext*) createContextForLeftTrigger:(GCController*)gamepad;
 +(HapticContext*) createContextForRightTrigger:(GCController*)gamepad;
 
++(void) setHapticsEnabled:(BOOL)enabled;
+
 @end

@@ -48,7 +48,7 @@ class CustomNavigationBar: UIView {
         // Back button
         backButton = UIButton(type: .system)
         
-        if #available(iOS 26.0, *) {
+        if #available(iOS 26.0, tvOS 26.0, *) {
             var config = UIButton.Configuration.clearGlass()
             config.image = UIImage(systemName: "chevron.backward")
             config.buttonSize = IsIpad() ? .large : .medium

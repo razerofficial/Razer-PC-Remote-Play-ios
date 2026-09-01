@@ -42,7 +42,7 @@ public class SettingsUtil {
     }
     
     func getMenuButtonRightPadding() -> CGFloat {
-        return CGFloat(25)
+        return CGFloat(12)
     }
     
     func getMenuBGHeight() -> CGFloat {
@@ -58,6 +58,18 @@ public class SettingsUtil {
     
     func getNavBarLeftPadding() -> CGFloat {
         return CGFloat(25)
+    }
+    
+    func getNativeNavBarHeight() -> CGFloat {
+        return 44
+    }
+    
+    func getMenuFontLetPadding() -> CGFloat {
+        return CGFloat(15)
+    }
+    
+    func getNavBarHeight() -> CGFloat {
+        return UIApplication.shared.safeAreaTop != 0 ? (UIApplication.shared.safeAreaTop + 44) : 64
     }
     
     private var safeAreaLeft: CGFloat {
@@ -84,4 +96,16 @@ func currentWindowScene() -> UIWindowScene? {
     let firstScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
     let scene = UIApplication.shared.connectedScenes.filter({$0.activationState == .foregroundActive}).compactMap({$0 as? UIWindowScene}).first ?? firstScene
     return scene
+}
+
+func isHorizontalSizeClassRegular() -> Bool {
+    if let window = UIApplication.shared.keyWindowInConnectedScenes {
+        return window.traitCollection.horizontalSizeClass == .regular
+    }
+    return UIScreen.main.traitCollection.horizontalSizeClass == .regular
+}
+
+func dashBoardDeviceLeftSpace() -> CGFloat {
+    let safeAreaLeft = UIWindow.key?.safeAreaInsets.left ?? 0.0
+    return (safeAreaLeft > 0 ? safeAreaLeft : 5.0) + 20.0
 }

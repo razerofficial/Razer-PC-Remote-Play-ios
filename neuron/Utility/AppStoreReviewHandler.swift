@@ -36,6 +36,7 @@ class AppStoreReviewHandler: NSObject {
     private func requestReview() {
         printLog("requestReview")
         
+        #if !os(tvOS)
         //Double check
         if !isAppReviewShowBefore() {
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()) {
@@ -50,6 +51,10 @@ class AppStoreReviewHandler: NSObject {
                }
             }
         }
+        #else
+        // TODO: tvOS does not support SKStoreReviewController.requestReview()
+        printLog("TODO: tvOS does not support SKStoreReviewController.requestReview()")
+        #endif
     }
     
     private func requestReviewManually() {

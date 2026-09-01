@@ -27,6 +27,9 @@ struct DashboardView: View {
     
     @ObservedObject var viewModel: DashboardViewModel
     @Environment(\.colorScheme) var colorScheme
+    #if os(tvOS)
+    @FocusState private var focusedButton: FocusTarget?
+    #endif
     
     var body: some View {
         GeometryReader { geo in
@@ -45,6 +48,7 @@ struct DashboardView: View {
             
             let hasHost = viewModel.pairedHosts.count > 0 || viewModel.netHosts.count > 0
             let spaceTop = IsIpad() ? (hasHost ? 265.0 : 114.0 ): 100.0
+            let leftSpace = dashBoardDeviceLeftSpace() //DeviceLeftSpace
             
             // Dynamic position calculations based on actual geometry
             let settingsTop = IsIpad() ? 59.0 : 50
@@ -80,7 +84,7 @@ struct DashboardView: View {
                                         
                                         HStack(alignment: .top , spacing: dynamicSpacing) {
                                             
-                                            Spacer().frame(width:DeviceLeftSpace)
+                                            Spacer().frame(width:leftSpace)
                                             
                                             ForEach( index..<maxIndex , id:\.self ){ rowIndex in
                                                 
@@ -127,7 +131,7 @@ struct DashboardView: View {
                                         
                                         HStack(alignment: .top , spacing: dynamicSpacing) {
                                             
-                                            Spacer().frame(width:DeviceLeftSpace)
+                                            Spacer().frame(width:leftSpace)
                                             
                                             ForEach( index..<maxIndex , id:\.self ){ rowIndex in
                                                 
@@ -208,8 +212,7 @@ struct DashboardView: View {
                     }
                     
                 }
-                //.frame(width:geo.size.width,height:geo.size.height)
-                .padding(EdgeInsets.init(top: 0, leading: DeviceLeftSpace , bottom: 0 , trailing: DeviceLeftSpace))
+                .padding(EdgeInsets.init(top: 0, leading: leftSpace , bottom: 0 , trailing: leftSpace))
                 .background(Color.black)
                 .introspectScrollView { scroll in
                     viewModel.scroll = scroll
@@ -231,13 +234,12 @@ struct DashboardView: View {
                                     Color.clear
                                         .frame(width: settingFocusWidth , height: settingFocusWidth )
                                         .overlay(content: {
-                                            RoundedRectangle(cornerRadius: 8)
+                                            RoundedRectangle(cornerRadius: IsIOS26() ? settingFocusWidth / 2 : 8.0)
                                                 .stroke(.white.opacity(0.8), lineWidth: 3.0)
                                         })
                                 }
                                 
                                 Image.init(IsIOS26() ? "icon_Settings_glass" : "icon_Settings")
-                                    .accessibilityLabel("Settings".localize())
                                     .background(content: {
                                         if IsIOS26() {
                                             SettingsUtil.shared.glassBgColor()
@@ -245,14 +247,17 @@ struct DashboardView: View {
                                             Color.clear
                                         }
                                     })
-                                    .cornerRadius(8.0)
-                                    .compatibleGlassTouchEffect(radius: 8.0)
+                                    .cornerRadius(IsIOS26() ? settingsWidth / 2 : 8.0)
+                                    .compatibleGlassTouchEffect(radius: IsIOS26() ? settingsWidth / 2 : 8.0)
                             }
                         }
                         .frame(width: settingsWidth,height: settingsWidth)
                         //.position(x: settingsLeft , y:settingsTop)
                         .accessibilitySortPriority(999.0)
                         .accessibilityLabel("Settings".localize())
+                        #if os(tvOS)
+                        .focused($focusedButton, equals: .settings)
+                        #endif
                         
                         Spacer().frame(width:MenuButtonRightSpace)
                     }
@@ -280,6 +285,20 @@ struct DashboardView: View {
             }
             .frame(width: geo.size.width, height: geo.size.height)  // Use actual geometry size
             .edgesIgnoringSafeArea(.all)
+            #if os(tvOS)
+            .onMoveCommand { direction in
+                switch direction {
+                case .up:
+                    focusedButton = .settings
+                case .down:
+                    if focusedButton == .settings {
+                        focusedButton = nil
+                    }
+                default:
+                    break
+                }
+            }
+            #endif
             .fullScreenCover(isPresented: $viewModel.isShowAddManualHostView) {
                 ZStack {                                //keep out of VStack to avoid vertical layout issues
                     ClearFullScreenBackgroundView()     // Keep background transparent
@@ -296,6 +315,10 @@ struct DashboardView: View {
             .valueChanged(value: geo.size.width) { width in
                 if viewModel.dynamicRowLimit != dynamicRowLimit {
                     viewModel.dynamicRowLimit = dynamicRowLimit
+                }
+                
+                if viewModel.currentWindowHeight != geo.size.height {
+                    viewModel.currentWindowHeight = geo.size.height
                 }
             }
             .valueChanged(value: viewModel.isShowAddManualHostView) { show in
@@ -468,6 +491,14 @@ struct DashboardView: View {
     }
     
 }
+
+#if os(tvOS)
+private extension DashboardView {
+    enum FocusTarget {
+        case settings
+    }
+}
+#endif
 
 struct ClearFullScreenBackgroundView: UIViewRepresentable {
     func makeUIView(context: Context) -> UIView {

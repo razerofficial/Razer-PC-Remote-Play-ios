@@ -11,6 +11,8 @@
 #import "StreamConfiguration.h"
 #import "TemporaryHost.h"
 
+extern NSString * const RZServerCertificateMismatchNotification;
+
 @interface HttpManager : NSObject <NSURLSessionDelegate>
 
 - (id) initWithHost:(TemporaryHost*) host;
@@ -31,6 +33,7 @@
 - (NSURLRequest*) newAppAssetRequestWithAppId:(NSString*)appId;
 - (void) executeRequestSynchronously:(HttpRequest*)request;
 - (void) setuniqueId:(NSString*)uniqueId;
+- (void) cancelPendingRequests;
 @end
 
 

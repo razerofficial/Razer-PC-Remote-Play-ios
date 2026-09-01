@@ -26,4 +26,9 @@ typedef enum {
 void Log(LogLevel level, NSString* fmt, ...);
 void LogTag(LogLevel level, NSString* tag, NSString* fmt, ...);
 
+// Returns whether messages at this level are actually emitted. Use it to guard
+// log arguments that are expensive to build, since the arguments are evaluated
+// before Log() gets a chance to drop the message.
+BOOL LogIsEnabled(LogLevel level);
+
 #endif

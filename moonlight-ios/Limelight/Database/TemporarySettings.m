@@ -33,12 +33,19 @@
     }
     [[NSUserDefaults standardUserDefaults] registerDefaults:defaultsToRegister];
     
+    
     self.bitrate = [NSNumber numberWithInteger:[[NSUserDefaults standardUserDefaults] integerForKey:@"bitrate"]];
     assert([self.bitrate intValue] != 0);
     self.framerate = [NSNumber numberWithInteger:[[NSUserDefaults standardUserDefaults] integerForKey:@"framerate"]];
-    assert([self.framerate intValue] != 0);
+    //assert([self.framerate intValue] != 0);
+    if ([self.framerate intValue] == 0){
+        self.framerate = settings.framerate;
+    }
     self.audioConfig = [NSNumber numberWithInteger:[[NSUserDefaults standardUserDefaults] integerForKey:@"audioConfig"]];
-    assert([self.audioConfig intValue] != 0);
+    //assert([self.audioConfig intValue] != 0);
+    if ([self.audioConfig intValue] == 0){
+        self.audioConfig = settings.audioConfig;
+    }
     self.preferredCodec = (typeof(self.preferredCodec))[[NSUserDefaults standardUserDefaults] integerForKey:@"preferredCodec"];
     self.useFramePacing = [[NSUserDefaults standardUserDefaults] integerForKey:@"useFramePacing"] != 0;
     self.playAudioOnPC = [[NSUserDefaults standardUserDefaults] boolForKey:@"audioOnPC"];

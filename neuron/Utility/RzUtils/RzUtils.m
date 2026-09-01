@@ -139,16 +139,6 @@ static TemporaryHost* currentStreamingHost;
     streamConfig.height = [streamSettings.height intValue];
     streamConfig.width = [streamSettings.width intValue];
     printf("[RZStream][streamConfigForStreamApp]Selected resolution: %dx%d\n", streamConfig.width, streamConfig.height);
-    #if TARGET_OS_TV
-    // Don't allow streaming 4K on the Apple TV HD
-    struct utsname systemInfo;
-    uname(&systemInfo);
-    if (strcmp(systemInfo.machine, "AppleTV5,3") == 0 && streamConfig.height >= 2160) {
-       Log(LOG_W, @"4K streaming not supported on Apple TV HD");
-       streamConfig.width = 1920;
-       streamConfig.height = 1080;
-    }
-    #endif
 
     streamConfig.bitRate = [streamSettings.bitrate intValue];
     streamConfig.optimizeGameSettings = streamSettings.optimizeGames;
@@ -304,6 +294,10 @@ static BOOL isNeedContinueLaunchGame = NO;
 }
 
 + (BOOL)isPortrait {
+#if TARGET_OS_TV
+    // tvOS doesn't support UIInterfaceOrientation, default to landscape
+    return NO;
+#else
     for (UIScene *s in [UIApplication sharedApplication].connectedScenes) {
         if (s.activationState == UISceneActivationStateForegroundActive &&
             [s isKindOfClass:[UIWindowScene class]]) {
@@ -314,6 +308,7 @@ static BOOL isNeedContinueLaunchGame = NO;
     }
     // printf("[RzStream][RzUtils][isPortrait] Unable to determine current orientation\n");
     return false; // Default to portrait if undetermined
+#endif
 }
 
 @end

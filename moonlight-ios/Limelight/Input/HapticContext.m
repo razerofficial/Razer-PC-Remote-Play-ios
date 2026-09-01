@@ -12,6 +12,7 @@
 @import GameController;
 
 static BOOL _useCoreHaptics = NO;
+static BOOL _hapticsEnabled = YES;
 
 @implementation HapticContext {
     GCControllerPlayerIndex _playerIndex;
@@ -45,8 +46,16 @@ static BOOL _useCoreHaptics = NO;
 }
 
 
++(void) setHapticsEnabled:(BOOL)enabled {
+    _hapticsEnabled = enabled;
+}
+
 -(void)setMotorAmplitude:(unsigned short)amplitude API_AVAILABLE(ios(14.0), tvos(14.0)) {
     NSError* error;
+
+    if (!_hapticsEnabled) {
+        return;
+    }
 
     // Check if the haptic engine died
     if (_hapticEngine == nil) {

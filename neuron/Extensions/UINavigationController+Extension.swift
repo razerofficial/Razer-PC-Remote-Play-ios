@@ -22,7 +22,9 @@ import UIKit
 extension UINavigationController: UIGestureRecognizerDelegate {
     override open func viewDidLoad() {
         super.viewDidLoad()
+#if !os(tvOS)
         interactivePopGestureRecognizer?.delegate = self
+#endif
         print("UINavigationController : \(self)")
     }
     public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {

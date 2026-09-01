@@ -54,6 +54,12 @@ class DashboardVC: RZBaseVC {
         maybeGotoTutorialPage()
         
         NotificationCenter.default.addObserver(self, selector: #selector(willStartStreaming), name: .START_STREAMING_NEED_SHOW_TUTORIAL, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(resetControllerEventDelegate), name: .settingsPageDismissNotification, object: nil)
+    }
+    
+    @objc
+    func resetControllerEventDelegate() {
+        dashboardViewModel.resetControllerEventDelegate()
     }
     
     override func viewWillAppear(_ animated: Bool) {

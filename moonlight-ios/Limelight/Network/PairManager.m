@@ -29,6 +29,13 @@
     return self;
 }
 
+// Interrupts an in-flight executeRequestSynchronously call so main() can unwind through its
+// normal failure path instead of blocking for the request's full timeout.
+- (void) cancel {
+    [super cancel];
+    [_httpManager cancelPendingRequests];
+}
+
 - (void) main {
     // We have to call startPairing before calling any other _callback functions
     NSString* PIN = [self generatePIN];

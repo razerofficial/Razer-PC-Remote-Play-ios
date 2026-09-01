@@ -17,12 +17,19 @@
 
 import SwiftUI
 
+fileprivate var isPortraitForIos: Bool {
+    (UIWindow.key?.frame.width ?? 0 < UIWindow.key?.frame.height ?? 0) && !IsIpad()
+}
+
 struct TutorialView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
     @ObservedObject var viewModel: TutorialViewModel
     
     @SwiftUI.State var streamingModeDescriptionHeight: CGFloat = 0
+    #if os(tvOS)
+    @FocusState private var focusedButton: FocusTarget?
+    #endif
     
     var windowHeight: CGFloat {
         UIApplication.shared.windows.first?.bounds.height ?? 0
@@ -30,6 +37,14 @@ struct TutorialView: View {
     
     var windowWidth: CGFloat {
         UIApplication.shared.windows.first?.bounds.width ?? 0
+    }
+    
+    var isShowPortraitView: Bool {
+        if IsIpad() {
+            return horizontalSizeClass == .compact || windowWidth < 600
+        } else {
+            return isPortraitForIos
+        }
     }
     
     var horizontalPadding: CGFloat {
@@ -127,12 +142,15 @@ struct TutorialView: View {
                             BlurLetterGuideButton(buttonType: .Button_A, title: "Accept".localize(), backgroundColor: SettingsUtil.shared.lgBtnBgColor()) {
                                 viewModel.onTOSAcceptButtonClicked()
                             }
+                            #if os(tvOS)
+                            .focused($focusedButton, equals: .accept)
+                            #endif
                         case .skip:
                             BlurLetterGuideButton(buttonType: .Button_Y, title: "Skip".localize() ,backgroundColor: SettingsUtil.shared.lgBtnBgColor()) {
                                 viewModel.onDownloadPageSkipButtonClicked()
                             }
                         case .allow:
-                            BlurLetterGuideButton(buttonType: .Button_A, title: "Allow".localize() ,backgroundColor: SettingsUtil.shared.lgBtnBgColor()) {
+                            BlurLetterGuideButton(buttonType: .Button_A, title: "Continue".localize() ,backgroundColor: SettingsUtil.shared.lgBtnBgColor()) {
                                 viewModel.onPermissionAllowButtonClicked()
                             }
                         case .download:
@@ -150,61 +168,108 @@ struct TutorialView: View {
 
         }
         .edgesIgnoringSafeArea(.all)
-
+        #if os(tvOS)
+        .onMoveCommand { direction in
+            guard viewModel.tutorialStep == .tos else { return }
+            switch direction {
+            case .down:
+                if focusedButton == .termsOfService || focusedButton == .privacyPolicy {
+                    focusedButton = .accept
+                }
+            case .up:
+                if focusedButton == .accept {
+                    focusedButton = .termsOfService
+                }
+            default:
+                break
+            }
+        }
+        #endif
     }
     
     var tosView: some View {
+        isShowPortraitView ? tosViewForPortrait.eraseToAnyView() : tosViewForLandscape.eraseToAnyView()
+    }
+    
+    var tosViewForLandscape: some View {
         HStack(spacing: isIpadCompactScreen ? 10 : 60) {
-            Image(IsIpad() ? "streaming_ipad" : "streaming")
+            tosViewImage
+            
+            tosContentView
+        }
+    }
+    var tosViewForPortrait: some View {
+        VStack(spacing: isIpadCompactScreen ? 10 : 60) {
+            Spacer().frame(height: IsIpad() ? windowHeight * 0.1 : 140)
+            tosViewImage
+                .frame(maxWidth: IsIpad() ? windowWidth * 0.6 : .infinity)
+
+            tosContentView
+        }
+        .frame(maxHeight: .infinity, alignment: .top)
+    }
+    
+    var tosViewImage: some View {
+        Image(IsIpad() ? "streaming_ipad" : "streaming")
+            .resizable()
+            .aspectRatio(297/167, contentMode: .fit)
+            .frame(maxWidth: .infinity)
+    }
+    
+    var tosContentView: some View {
+        HStack(spacing: IsIpad() ? 30 : 15) {
+            Image("neuron_icon")
                 .resizable()
-                .aspectRatio(297/167, contentMode: .fit)
-                .frame(maxWidth: .infinity)
-            
-            
-            HStack(spacing: IsIpad() ? 30 : 15) {
-                Image("neuron_icon")
-                    .resizable()
-                    .frame(width: appIconSize, height: appIconSize)
-                    .offset(CGSize(width: 0, height: -10))
-                VStack(alignment: .leading) {
-                    Text("Welcome to &applabel;".localize().kStringByReplaceString(replaceStr:"&applabel;",willReplaceStr:"Razer PC Remote Play"))
-                        .font(Font.dynamic(size: titleSize, weight:.bold))
-                        .foregroundColor(Color.white)
-                    Spacer().frame(height: 5)
-                    Text("To continue using Razer software and services you must first accept the Terms of Service and Privacy Policy agreement".localize())
-                        .font(Font.dynamic(size: descriptiontSize))
-                        .foregroundColor(Color.hex(0x999999))
-                    Spacer().frame(height: 20)
-                    HStack(alignment: .center) {
-                        
-                        Button(action: {
-                            viewModel.onTermsOfServiceClicked()
-                        }) {
-                            Text("Terms of Service".localize())
-                                .font(Font.dynamic(size: descriptiontSize))
-                                .foregroundColor(Color.razerGreen)
-                        }
-                        
-                        Rectangle()
-                            .fill(Color.White)
-                            .frame(width: 1, height: 10)
-                            .padding(.horizontal, 1)
-                        
-                        Button(action: {
-                            viewModel.onPrivacyPolicyClicked()
-                        }) {
-                            Text("Privacy Policy".localize())
-                                .font(Font.dynamic(size: descriptiontSize))
-                                .foregroundColor(Color.razerGreen)
-                        }
+                .frame(width: appIconSize, height: appIconSize)
+                .offset(CGSize(width: 0, height: -10))
+            VStack(alignment: .leading) {
+                Text("Welcome to &applabel;".localize().kStringByReplaceString(replaceStr:"&applabel;",willReplaceStr:"Razer PC Remote Play"))
+                    .font(Font.dynamic(size: titleSize, weight:.bold))
+                    .foregroundColor(Color.white)
+                Spacer().frame(height: 5)
+                Text("To continue using Razer software and services you must first accept the Terms of Service and Privacy Policy agreement".localize())
+                    .font(Font.dynamic(size: descriptiontSize))
+                    .foregroundColor(Color.hex(0x999999))
+                Spacer().frame(height: 20)
+                HStack(alignment: .center) {
+                    
+                    Button(action: {
+                        viewModel.onTermsOfServiceClicked()
+                    }) {
+                        Text("Terms of Service".localize())
+                            .font(Font.dynamic(size: descriptiontSize))
+                            .foregroundColor(Color.RazerGreen)
                     }
+                    #if os(tvOS)
+                    .focused($focusedButton, equals: .termsOfService)
+                    #endif
+                    
+                    Rectangle()
+                        .fill(Color.White)
+                        .frame(width: 1, height: 10)
+                        .padding(.horizontal, 1)
+                    
+                    Button(action: {
+                        viewModel.onPrivacyPolicyClicked()
+                    }) {
+                        Text("Privacy Policy".localize())
+                            .font(Font.dynamic(size: descriptiontSize))
+                            .foregroundColor(Color.RazerGreen)
+                    }
+                    #if os(tvOS)
+                    .focused($focusedButton, equals: .privacyPolicy)
+                    #endif
                 }
             }
-            .frame(maxWidth: .infinity)
         }
+        .frame(maxWidth: .infinity)
     }
     
     var permissionView: some View {
+        isShowPortraitView ? permissionViewForPortrait.eraseToAnyView() : permissionViewForLandscape.eraseToAnyView()
+    }
+    
+    var permissionViewForLandscape: some View {
         let imageWidth = windowWidth * 0.34
         return HStack(spacing: IsIpad() ? windowWidth*0.11 : windowWidth*0.06)  {
             HStack {
@@ -222,208 +287,327 @@ struct TutorialView: View {
                 }
             }.frame(maxWidth: .infinity)
             
-            VStack(alignment: .leading) {
-                Text("To unlock additional functionality, Razer PC Remote Play requires the following permissions:")
-                    .font(Font.dynamic(size: (IsIpad() && horizontalSizeClass == .regular) ? 22 : 18, weight: .bold))
-                    .foregroundColor(Color.white)
-                    .padding(.trailing, isIpadCompactScreen ? 10 : 40)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                
-                HStack(spacing: 0) {
-                    Image("local_network_black")
+            permissionContentView
+        }.edgesIgnoringSafeArea(.horizontal)
+    }
+    var permissionViewForPortrait: some View {
+        VStack(spacing: 40)  {
+            Spacer().frame(height: IsIpad() ? windowHeight * 0.05 : 140)
+            HStack {
+                VStack(alignment: .leading) {
+                    Image("request_permission")
                         .resizable()
-                        .aspectRatio(1, contentMode: .fit)
-                        .frame(width: isIpadCompactScreen ? 33 : 44).padding(.all,isIpadCompactScreen ? 8 : 11)
+                        .scaledToFit()
+//                        .frame(width:  imageWidth, height: imageWidth*0.53)
                         .accessibilityHidden(true)
-                    HStack {
-                        VStack(alignment: .leading) {
-                            Spacer().frame(height: 12)
-                            Text("Local Network".localize())
-                                .fixedSize(horizontal: false, vertical: true)
-                                .font(Font.dynamic(size: IsIpad() && horizontalSizeClass == .regular ? 20 : 18, weight: .bold))
-                                .foregroundColor(Color.black)
-                            Text("Enable seamless streaming between your PC and Nexus.".localize())
-                                .fixedSize(horizontal: false, vertical: true)
-                                .font(Font.dynamic(size: descriptiontSize, weight: .bold))
-                                .foregroundColor(Color.black)
-                            Spacer().frame(height: 12)
-                        }
-                        Spacer()
-                    }
-                    
-                    Spacer()
-                    
-                    Image("tick_green")
-                        .resizable()
-                        .frame(width: 24, height: 24)
-                        .opacity(viewModel.isGrantedLocalNetworkPermission ? 1 : 0)
-                    
-                    Spacer().frame(width: isIpadCompactScreen ? 10 : 40)
+                    Text("Allow Remote Play to access this device’s network.".localize())
+                        .font(Font.dynamic(size: descriptiontSize))
+                        .foregroundColor(Color.white)
+//                        .frame(minWidth: imageWidth, maxWidth: imageWidth, alignment: .leading)
                 }
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.horizontal, 56)
+
+            permissionContentViewForPortrait
+        }
+        .frame(maxHeight: .infinity, alignment: .top)
+        .edgesIgnoringSafeArea(.horizontal)
+    }
+
+    func permissionNetworkRow(leadingPadding: CGFloat, trailingPadding: CGFloat) -> some View {
+        HStack(spacing: 0) {
+            Image("local_network_black")
+                .resizable()
+                .aspectRatio(1, contentMode: .fit)
+                .frame(width: isIpadCompactScreen ? 33 : 44)
+                .padding(.all, isIpadCompactScreen ? 8 : 11)
+                .padding(.leading, leadingPadding)
+                .accessibilityHidden(true)
+            HStack {
+                VStack(alignment: .leading) {
+                    Spacer().frame(height: 12)
+                    Text("Local Network".localize())
+                        .fixedSize(horizontal: false, vertical: true)
+                        .font(Font.dynamic(size: IsIpad() && horizontalSizeClass == .regular ? 20 : 18, weight: .bold))
+                        .foregroundColor(Color.black)
+                    Text("Enable seamless streaming between your PC and Nexus.".localize())
+                        .fixedSize(horizontal: false, vertical: true)
+                        .font(Font.dynamic(size: descriptiontSize, weight: .bold))
+                        .foregroundColor(Color.black)
+                    Spacer().frame(height: 12)
+                }
+                Spacer()
+            }
+
+            Spacer()
+
+            Image("tick_green")
+                .resizable()
+                .frame(width: 24, height: 24)
+                .opacity(viewModel.isGrantedLocalNetworkPermission ? 1 : 0)
+
+            Spacer().frame(width: trailingPadding)
+        }
+    }
+
+    var permissionContentView: some View {
+        VStack(alignment: .leading) {
+            Text("To unlock additional functionality, Razer PC Remote Play requires the following permissions:")
+                .font(Font.dynamic(size: (IsIpad() && horizontalSizeClass == .regular) ? 22 : 18, weight: .bold))
+                .foregroundColor(Color.white)
+                .padding(.trailing, isIpadCompactScreen ? 10 : 40)
+                .frame(maxWidth: .infinity, alignment: .leading)
+
+            permissionNetworkRow(leadingPadding: 0, trailingPadding: isIpadCompactScreen ? 10 : 40)
                 .background(Color.White)
                 .cornerRadius(10, corners: .topLeft)
                 .cornerRadius(10, corners: .bottomLeft)
                 .edgesIgnoringSafeArea(.trailing)
-            }.padding(.bottom, 20)
-                .frame(maxWidth: .infinity)
-        }.edgesIgnoringSafeArea(.horizontal)
+        }.padding(.bottom, 20)
+            .frame(maxWidth: .infinity)
+    }
+
+    var permissionContentViewForPortrait: some View {
+        VStack(alignment: .leading) {
+            Text("To unlock additional functionality, Razer PC Remote Play requires the following permissions:")
+                .font(Font.dynamic(size: (IsIpad() && horizontalSizeClass == .regular) ? 22 : 18, weight: .bold))
+                .foregroundColor(Color.white)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal, 18)
+
+            permissionNetworkRow(leadingPadding: 6, trailingPadding: 18)
+                .background(Color.White)
+        }.padding(.bottom, 20)
+            .frame(maxWidth: .infinity)
     }
     
     var downloadNexusView: some View {
+        isShowPortraitView ? downloadNexusViewForPortrait.eraseToAnyView() : downloadNexusViewForLandscape.eraseToAnyView()
+    }
+    
+    var downloadNexusViewForLandscape: some View {
         HStack(spacing: IsIpad() ? (horizontalSizeClass == .compact ? 10 : windowWidth*0.11) : 0) {
-            HStack {
-                Image(IsIpad() ? "nexus_screenshot_ipad" : "nexus_screenshot")
-                    .resizable()
-                    .aspectRatio(IsIpad() ? 989/549 : 297/167, contentMode: .fit)
-                    .frame(width: windowWidth*0.3)
-            }.frame(maxWidth: .infinity)
-            
-            HStack(spacing: IsIpad() ? (horizontalSizeClass == .compact ? 10 : 30) : 15) {
-                Image("nexus_icon")
-                    .resizable()
-                    .frame(width: appIconSize, height: appIconSize)
-                    .offset(CGSize(width: 0, height: -20))
-                VStack(alignment: .leading) {
-                    Text("Download &nexus;".localize().kStringByReplaceString(replaceStr: "&nexus;", willReplaceStr: "Razer Nexus"))
-                        .font(Font.dynamic(size: titleSize, weight:.bold))
-                        .foregroundColor(Color.white)
-                    Spacer().frame(height: 5)
-                    Text("Remote Play is designed to enhance PC gaming on your mobile device through seamless integration with Razer Nexus.".localize())
-                        .font(Font.dynamic(size: descriptiontSize))
-                        .foregroundColor(Color.hex(0x999999))
-                    Spacer().frame(height: 20)
-                    Image("appstore")
-                        .resizable()
-                        .aspectRatio(118/40, contentMode: .fit)
-                        .frame(width: isIpadCompactScreen ? 80 : 118)
-                        
-                }
-            }
-            .frame(maxWidth: .infinity)
+            downloadNexusViewImage
+            downloadNexusContentView
         }
+    }
+    var downloadNexusViewForPortrait: some View {
+        VStack(spacing: 40) {
+            Spacer().frame(height: IsIpad() ? windowHeight * 0.05 : 140)
+            downloadNexusViewImageForPortrait
+            downloadNexusContentView
+        }
+        .frame(maxHeight: .infinity, alignment: .top)
+    }
+
+    var downloadNexusViewImage: some View {
+        HStack {
+            Image(IsIpad() ? "nexus_screenshot_ipad" : "nexus_screenshot")
+                .resizable()
+                .aspectRatio(IsIpad() ? 989/549 : 297/167, contentMode: .fit)
+                .frame(width: windowWidth*0.3)
+        }.frame(maxWidth: .infinity)
+    }
+
+    var downloadNexusViewImageForPortrait: some View {
+        HStack {
+            Spacer()
+            Image(IsIpad() ? "nexus_screenshot_ipad" : "nexus_screenshot")
+                .resizable()
+                .scaledToFit()
+                .frame(maxWidth: IsIpad() ? windowWidth * 0.6 : .infinity)
+                .accessibilityHidden(true)
+            Spacer()
+        }.frame(maxWidth: .infinity)
+    }
+    
+    var downloadNexusContentView: some View {
+        HStack(spacing: IsIpad() ? (horizontalSizeClass == .compact ? 10 : 30) : 15) {
+            Image("nexus_icon")
+                .resizable()
+                .frame(width: appIconSize, height: appIconSize)
+                .offset(CGSize(width: 0, height: -20))
+            VStack(alignment: .leading) {
+                Text("Download &nexus;".localize().kStringByReplaceString(replaceStr: "&nexus;", willReplaceStr: "Razer Nexus"))
+                    .font(Font.dynamic(size: titleSize, weight:.bold))
+                    .foregroundColor(Color.white)
+                Spacer().frame(height: 5)
+                Text("Remote Play is designed to enhance PC gaming on your mobile device through seamless integration with Razer Nexus.".localize())
+                    .font(Font.dynamic(size: descriptiontSize))
+                    .foregroundColor(Color.hex(0x999999))
+                Spacer().frame(height: 20)
+                Image("appstore")
+                    .resizable()
+                    .aspectRatio(118/40, contentMode: .fit)
+                    .frame(width: isIpadCompactScreen ? 80 : 118)
+                    
+            }
+        }
+        .frame(maxWidth: .infinity)
+
     }
     
     var streamingModeView: some View {
+        isShowPortraitView ? streamingModeViewForPortrait.eraseToAnyView() : streamingModeViewForLandscape.eraseToAnyView()
+    }
+    
+    var streamingModeViewForLandscape: some View {
         HStack(spacing: IsIpad() ? (horizontalSizeClass == .compact ? 20 : windowWidth*0.11) : 0) {
-            
-            HStack {
-                Image(IsIpad() ? "streaming_ipad" : "streaming")
-                    .resizable()
-                    .aspectRatio(297/167, contentMode: .fit)
-                    .frame(width: windowWidth*0.33)
-            }.frame(maxWidth: .infinity, maxHeight: .infinity)
-            
-            HStack {
-                VStack(alignment: .leading) {
-
-                    Text("Streaming Display Mode".localize())
-                        .font(Font.dynamic(size: IsIpad() && horizontalSizeClass == .regular ? 22 : 20, weight:.bold))
-                        .foregroundColor(Color.white)
-
-                    Spacer().frame(height: 11)
-                    HStack(spacing: 10) {
-                        VStack {
-                            Image(viewModel.currentDisplayMode == .phoneOnly ? "tutorial_pc_phone_only_dark" : "tutorial_pc_phone_only")
-                                .resizable()
-                                .aspectRatio(74/65, contentMode: .fit)
-                                .frame(width: 74 * streamingModelWidthRatio)
-                                .layoutPriority(2)
-                            Text("[iPhone/iPad] Optimized".localize().replacingOccurrences(of: "[iPhone/iPad]", with: IsIpad() ? "iPad" : "iPhone"))
-                                .font(Font.dynamic(size: descriptiontSize))
-                                .foregroundColor(Color.white)
-                                .minimumScaleFactor(0.5)
-                                .lineLimit(3)
-                                .multilineTextAlignment(.center)
-                                .layoutPriority(1)
-                            Spacer().frame(minHeight: 10)
-                            Image(viewModel.currentDisplayMode == .phoneOnly ? "tutorial_pc_model_selected" : "tutorial_pc_model_unselected")
-                                .resizable()
-                                .aspectRatio(1, contentMode: .fit)
-                                .frame(width: 22 * streamingModelWidthRatio)
-                                .layoutPriority(2)
-                            Spacer().frame(height: 10 * streamingModelWidthRatio)
-                        }.padding(.horizontal, 10)
-                            .frame(width: 137*streamingModelWidthRatio, height: 168*streamingModelWidthRatio)
-                            .background(viewModel.currentDisplayMode == .phoneOnly ? Color.white.opacity(0.25) : Color.hex(0x222222))
-                            .cornerRadius(10, corners: .allCorners)
-                            .onTapGesture {
-                                viewModel.currentDisplayMode = .phoneOnly
-                            }
-                        
-                        VStack {
-                            Image("tutorial_pc_duplicate")
-                                .resizable()
-                                .aspectRatio(74/65, contentMode: .fit)
-                                .frame(width: 74 * streamingModelWidthRatio)
-                                .layoutPriority(2)
-                            Text("Duplicate PC Display".localize())
-                                .font(Font.dynamic(size: descriptiontSize))
-                                .foregroundColor(Color.white)
-                                .minimumScaleFactor(0.5)
-                                .lineLimit(3)
-                                .multilineTextAlignment(.center)
-                                .layoutPriority(1)
-                            Spacer().frame(minHeight: 10)
-                            Image(viewModel.currentDisplayMode == .duplicate ? "tutorial_pc_model_selected" : "tutorial_pc_model_unselected")
-                                .resizable()
-                                .aspectRatio(1, contentMode: .fit)
-                                .frame(width: 22 * streamingModelWidthRatio)
-                                .layoutPriority(2)
-                            Spacer().frame(height: 10 * streamingModelWidthRatio)
-                        }.padding(.horizontal, 10)
-                            .frame(width: 137*streamingModelWidthRatio, height: 168*streamingModelWidthRatio)
-                            .background(viewModel.currentDisplayMode == .duplicate ? Color.white.opacity(0.25) : Color.hex(0x222222))
-                            .cornerRadius(10, corners: .allCorners)
-                            .onTapGesture {
-                                viewModel.currentDisplayMode = .duplicate
-                            }
-                        
-                    }
-                    ZStack(alignment: .topLeading) {
-                        Text(viewModel.displayModelDescription)
-                            .font(Font.dynamic(size: descriptiontSize))
-                            .foregroundColor(Color.white)
-                            .minimumScaleFactor(0.5)
-                            .frame(width: .infinity, height: streamingModeDescriptionHeight, alignment: .topLeading)
-                        
-                        //just for layout, no need show
-                        Text(IsIpad() && horizontalSizeClass == .regular ?
-                             "Your PC will create a virtual display matching your [iPhone/iPad]’s resolution and refresh rate of %1$s at %2$sHz and stream it to your [iPhone/iPad].\n\nAny screen connected to your PC will be temporarily disabled while streaming.".localize() :
-                                "Your PC will create a virtual display matching your [iPhone/iPad]’s resolution and refresh rate of %1$s at %2$sHz and stream it to your [iPhone/iPad].\n\nAny screen connected to your PC will be temporarily disabled while streaming.")
-                            .font(.system(size: descriptiontSize))
-                            .padding(.trailing)
-                            .foregroundColor(Color.red)
-                            .fixedSize(horizontal: false, vertical: false)
-                            .hidden()
-                            .background(
-                                GeometryReader { geo in
-                                    Color.clear
-                                        .preference(key: HeightPreferenceKey.self,
-                                                                  value: geo.size.height)
-                                }
-                            )
-                            .onPreferenceChange(HeightPreferenceKey.self) { newHeight in
-                                streamingModeDescriptionHeight = newHeight
-                            }
- 
-                    }
-                    
-                    if !IsIpad() {
-                        Spacer().frame(height: 30)
-                    }
-                    
-                }//VStack
-                .frame(maxHeight: .infinity)
-                
-                
-                Spacer()
-            }//HStack
-            .frame(maxHeight: .infinity)
-            
+            streamingModeViewImage
+            streamingModeContentView
         }
         .frame(height: windowHeight)
     }
+    var streamingModeViewForPortrait: some View {
+        VStack(spacing: 40) {
+            Spacer().frame(height: IsIpad() ? windowHeight * 0.05 : 140)
+            streamingModeViewImageForPortrait
+            streamingModeContentViewForPortrait
+        }
+        .frame(maxHeight: .infinity, alignment: .top)
+    }
+
+    var streamingModeViewImage: some View {
+        HStack {
+            Image(IsIpad() ? "streaming_ipad" : "streaming")
+                .resizable()
+                .aspectRatio(297/167, contentMode: .fit)
+                .frame(width: windowWidth*0.33)
+        }.frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+
+    var streamingModeViewImageForPortrait: some View {
+        HStack {
+            Spacer()
+            Image(IsIpad() ? "streaming_ipad" : "streaming")
+                .resizable()
+                .scaledToFit()
+                .frame(maxWidth: IsIpad() ? windowWidth * 0.6 : .infinity)
+                .accessibilityHidden(true)
+            Spacer()
+        }.frame(maxWidth: .infinity)
+    }
     
+    var streamingModeContentView: some View {
+        streamingModeContentViewBody(fillHeight: true)
+    }
+
+    var streamingModeContentViewForPortrait: some View {
+        streamingModeContentViewBody(fillHeight: false)
+    }
+
+    func streamingModeContentViewBody(fillHeight: Bool) -> some View {
+        HStack{
+            VStack(alignment: .leading) {
+
+                Text("Streaming Display Mode".localize())
+                    .font(Font.dynamic(size: IsIpad() && horizontalSizeClass == .regular ? 22 : 20, weight:.bold))
+                    .foregroundColor(Color.white)
+
+                Spacer().frame(height: 11)
+                HStack(spacing: 10) {
+                    VStack {
+                        Image(viewModel.currentDisplayMode == .phoneOnly ? "tutorial_pc_phone_only_dark" : "tutorial_pc_phone_only")
+                            .resizable()
+                            .aspectRatio(74/65, contentMode: .fit)
+                            .frame(width: 74 * streamingModelWidthRatio)
+                            .layoutPriority(2)
+                        Text("[iPhone/iPad] Optimized".localize().replacingOccurrences(of: "[iPhone/iPad]", with: IsIpad() ? "iPad" : "iPhone"))
+                            .font(Font.dynamic(size: descriptiontSize))
+                            .foregroundColor(Color.white)
+                            .minimumScaleFactor(0.5)
+                            .lineLimit(3)
+                            .multilineTextAlignment(.center)
+                            .layoutPriority(1)
+                        Spacer().frame(minHeight: 10)
+                        Image(viewModel.currentDisplayMode == .phoneOnly ? "tutorial_pc_model_selected" : "tutorial_pc_model_unselected")
+                            .resizable()
+                            .aspectRatio(1, contentMode: .fit)
+                            .frame(width: 22 * streamingModelWidthRatio)
+                            .layoutPriority(2)
+                        Spacer().frame(height: 10 * streamingModelWidthRatio)
+                    }.padding(.horizontal, 10)
+                        .frame(width: 137*streamingModelWidthRatio, height: 168*streamingModelWidthRatio)
+                        .background(viewModel.currentDisplayMode == .phoneOnly ? Color.white.opacity(0.25) : Color.hex(0x222222))
+                        .cornerRadius(10, corners: .allCorners)
+                        .onTapGesture {
+                            viewModel.currentDisplayMode = .phoneOnly
+                        }
+                    
+                    VStack {
+                        Image("tutorial_pc_duplicate")
+                            .resizable()
+                            .aspectRatio(74/65, contentMode: .fit)
+                            .frame(width: 74 * streamingModelWidthRatio)
+                            .layoutPriority(2)
+                        Text("Duplicate PC Display".localize())
+                            .font(Font.dynamic(size: descriptiontSize))
+                            .foregroundColor(Color.white)
+                            .minimumScaleFactor(0.5)
+                            .lineLimit(3)
+                            .multilineTextAlignment(.center)
+                            .layoutPriority(1)
+                        Spacer().frame(minHeight: 10)
+                        Image(viewModel.currentDisplayMode == .duplicate ? "tutorial_pc_model_selected" : "tutorial_pc_model_unselected")
+                            .resizable()
+                            .aspectRatio(1, contentMode: .fit)
+                            .frame(width: 22 * streamingModelWidthRatio)
+                            .layoutPriority(2)
+                        Spacer().frame(height: 10 * streamingModelWidthRatio)
+                    }.padding(.horizontal, 10)
+                        .frame(width: 137*streamingModelWidthRatio, height: 168*streamingModelWidthRatio)
+                        .background(viewModel.currentDisplayMode == .duplicate ? Color.white.opacity(0.25) : Color.hex(0x222222))
+                        .cornerRadius(10, corners: .allCorners)
+                        .onTapGesture {
+                            viewModel.currentDisplayMode = .duplicate
+                        }
+                    
+                }
+                ZStack(alignment: .topLeading) {
+                    Text(viewModel.displayModelDescription)
+                        .font(Font.dynamic(size: descriptiontSize))
+                        .foregroundColor(Color.white)
+                        .minimumScaleFactor(0.5)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .frame(height: streamingModeDescriptionHeight, alignment: .topLeading)
+                    
+                    //just for layout, no need show
+                    Text(IsIpad() && horizontalSizeClass == .regular ?
+                         "Your PC will create a virtual display matching your [iPhone/iPad]’s resolution and refresh rate of %1$s at %2$sHz and stream it to your [iPhone/iPad].\n\nAny screen connected to your PC will be temporarily disabled while streaming.".localize() :
+                            "Your PC will create a virtual display matching your [iPhone/iPad]’s resolution and refresh rate of %1$s at %2$sHz and stream it to your [iPhone/iPad].\n\nAny screen connected to your PC will be temporarily disabled while streaming.")
+                        .font(.system(size: descriptiontSize))
+                        .padding(.trailing)
+                        .foregroundColor(Color.red)
+                        .fixedSize(horizontal: false, vertical: false)
+                        .hidden()
+                        .background(
+                            GeometryReader { geo in
+                                Color.clear
+                                    .preference(key: HeightPreferenceKey.self,
+                                                              value: geo.size.height)
+                            }
+                        )
+                        .onPreferenceChange(HeightPreferenceKey.self) { newHeight in
+                            streamingModeDescriptionHeight = newHeight
+                        }
+
+                }
+                
+                if !IsIpad() {
+                    Spacer().frame(height: 30)
+                }
+                
+            }//VStack
+            .frame(maxHeight: fillHeight ? .infinity : nil)
+
+
+            Spacer()
+        }//HStack
+        .frame(maxHeight: fillHeight ? .infinity : nil)
+
+    }
+
     ///StreamingModeDescription Height
     private struct HeightPreferenceKey: PreferenceKey {
         static var defaultValue: CGFloat = 0
@@ -433,3 +617,13 @@ struct TutorialView: View {
     }
     
 }
+
+#if os(tvOS)
+private extension TutorialView {
+    enum FocusTarget {
+        case accept
+        case termsOfService
+        case privacyPolicy
+    }
+}
+#endif

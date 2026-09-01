@@ -172,8 +172,12 @@ public class SwiftAlertView: UIView {
         super.init(frame: CGRect(x: 0, y: 0, width: kDefaultWidth, height: kDefaultHeight))
         applyWindowScale()
         // observe keyboard show/hide notifications to move up the alert view
+        #if !os(tvOS)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+        #else
+        // tvOS doesn't have software keyboard, so there are no notifications to observe
+        #endif
         
         // cache params
         self.title = title
@@ -288,7 +292,7 @@ public class SwiftAlertView: UIView {
                 alertButton.view!.backgroundColor = focusColor
             } else{
                 var bgColor = color(light: lightModeBackgroundColor, dark: darkModeBackgroundColor)
-                if #available(iOS 26.0, *) {
+                if #available(iOS 26.0, tvOS 26.0, *) {
                     bgColor = color(light: UIColor(red: 192.0/255, green: 195.0/255, blue: 199.0/255, alpha: 0.1),
                                     dark: UIColor(red: 75.0/255, green: 77.0/255, blue: 79.0/255, alpha: 0.1))
                 }
@@ -432,8 +436,10 @@ public class SwiftAlertView: UIView {
         
         isShowing = false
         // stop observing keyboard notifications
+        #if !os(tvOS)
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+        #endif
 
         self.delegate?.willDismissAlertView?(self)
 
@@ -537,7 +543,7 @@ extension SwiftAlertView {
         layer.cornerRadius = CGFloat(cornerRadius)
         
         //ios26
-        if #available(iOS 26.0, *) {
+        if #available(iOS 26.0, tvOS 26.0, *) {
             self.cornerConfiguration = .uniformCorners(radius: 34.0)
             isHideSeparator = true
         }
@@ -566,7 +572,7 @@ extension SwiftAlertView {
             buttonView.setTitle(alertButton.title, for: .normal)
             alertButton.view = buttonView
             //GlassEffect
-            if #available(iOS 26.0, *) {
+            if #available(iOS 26.0, tvOS 26.0, *) {
 //                var config = UIButton.Configuration.glass()
 //                config.title = alertButton.title
 //                buttonView.configuration = config
@@ -580,7 +586,7 @@ extension SwiftAlertView {
     private func setUpDefaultAppearance() {
         self.backgroundColor = lightModeBackgroundColor// UIColor(red: 245.0/255, green: 245.0/255, blue: 245.0/255, alpha: 1)
         
-        if #available(iOS 26.0, *) {
+        if #available(iOS 26.0, tvOS 26.0, *) {
             
             self.backgroundColor = .clear
             
@@ -623,7 +629,7 @@ extension SwiftAlertView {
             titleLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
             titleLabel.textColor = UIColor.black
             titleLabel.font = UIFont.boldSystemFont(ofSize: 17)
-            if #available(iOS 26.0, *) {
+            if #available(iOS 26.0, tvOS 26.0, *) {
                 titleLabel.textAlignment = NSTextAlignment.left
             } else {
                 titleLabel.textAlignment = NSTextAlignment.center
@@ -640,7 +646,7 @@ extension SwiftAlertView {
             //if title == nil {
             //    messageLabel.font = UIFont.boldSystemFont(ofSize: 17)
             //}
-            if #available(iOS 26.0, *) {
+            if #available(iOS 26.0, tvOS 26.0, *) {
                 messageLabel.textAlignment = .left
             } else {
                 messageLabel.textAlignment = .center
@@ -656,7 +662,7 @@ extension SwiftAlertView {
             //if title == nil {
             //    messageLabel.font = UIFont.boldSystemFont(ofSize: 17)
             //}
-            if #available(iOS 26.0, *) {
+            if #available(iOS 26.0, tvOS 26.0, *) {
                 messageLabel.textAlignment = .left
             } else {
                 messageLabel.textAlignment = .center
@@ -698,7 +704,7 @@ extension SwiftAlertView {
             //}
             
             //
-            if #available(iOS 26.0, *) {
+            if #available(iOS 26.0, tvOS 26.0, *) {
                let bgColor = color(light: UIColor(red: 192.0/255, green: 195.0/255, blue: 199.0/255, alpha: 0.1),
                                 dark: UIColor(red: 75.0/255, green: 77.0/255, blue: 79.0/255, alpha: 0.1))
                 alertButton.view?.backgroundColor = bgColor
@@ -795,7 +801,7 @@ extension SwiftAlertView {
             var midSpace = 0.0
             var buttonBottomSpace = 0.0
             //ios26
-            if #available(iOS 26.0, *) {
+            if #available(iOS 26.0, tvOS 26.0, *) {
                 letfSpace = 14.0
                 midSpace = 16.0
                 buttonWidth = buttonWidth - letfSpace - midSpace / 2.0
@@ -826,7 +832,7 @@ extension SwiftAlertView {
             var buttonBottomSpace = 0.0
             var buttonSpace = 0.0
             //ios26
-            if #available(iOS 26.0, *) {
+            if #available(iOS 26.0, tvOS 26.0, *) {
                 letfSpace = 14.0
                 buttonWidth = buttonWidth - letfSpace * 2.0
                 buttonBottomSpace = 14.0
@@ -854,7 +860,7 @@ extension SwiftAlertView {
             var midSpace = 0.0
             var buttonBottomSpace = 0.0
             //ios26
-            if #available(iOS 26.0, *) {
+            if #available(iOS 26.0, tvOS 26.0, *) {
                 letfSpace = 14.0
                 midSpace = 16.0
                 buttonWidth = buttonWidth - letfSpace - midSpace / 2.0
@@ -1053,6 +1059,7 @@ extension SwiftAlertView: UITextFieldDelegate {
     // }
 
     // MARK: - Keyboard Handling
+    #if !os(tvOS)
     @objc private func keyboardWillShow(_ notification: Notification) {
         guard let userInfo = notification.userInfo,
               let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect,
@@ -1091,6 +1098,7 @@ extension SwiftAlertView: UITextFieldDelegate {
             }
         }
     }
+    #endif
 }
 
 extension SwiftAlertView {
